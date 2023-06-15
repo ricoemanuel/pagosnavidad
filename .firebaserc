@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "innovationhubes": {
+      "hosting": {
+        "innovationhubes": [
+          "innovationhubes"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "innovationhubes"
+  }
+}

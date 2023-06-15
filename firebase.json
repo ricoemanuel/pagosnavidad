@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "innovationhubes",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}

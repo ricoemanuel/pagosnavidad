@@ -97,8 +97,18 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2,
+            "browserTarget": "innovationhubes:build:production"
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "605158b7-8ada-4086-9888-d8af702cc5a9"
   }
 }
