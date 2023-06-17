@@ -8,9 +8,9 @@ import { FormClientesComponent } from './components/form-clientes/form-clientes.
 
 const routes: Routes = [
   {path:"", redirectTo: "app-login", pathMatch: "full"},
-  {path:"app-form-clientes",component:FormClientesComponent},
   {path:"list-login",component: LoginComponent},
-  {path:"**",redirectTo: "app-form-clientes", pathMatch: "full"},
+  {path:"app-form-clientes",component:FormClientesComponent},
+  {path:"**",redirectTo: "list-login", pathMatch: "full"},
 ];
 
 @NgModule({

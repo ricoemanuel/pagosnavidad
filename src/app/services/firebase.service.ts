@@ -14,8 +14,8 @@ export class FirebaseService {
   authf=getAuth()
   constructor(private auth:Auth, private firestore: Firestore) { }
   login(objeto:any){
-    let email=objeto["email"]
-    let password=objeto["password"]
+    let email=objeto.email
+    let password=objeto.password
     return signInWithEmailAndPassword(this.auth,email,password)
   }
   userObserver(){
