@@ -1,29 +1,48 @@
+<app-navbar></app-navbar>
+<br>
 <div class="container">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center mb-4">Formulario de clientes</h5>
-        <form>
-          <div class="form-group">
-            <label for="name">Nombre</label>
-            <input type="text" class="form-control" id="name" placeholder="Ingresa el nombre">
+        <h4 class="card-title text-center mb-4">Formulario de clientes</h4>
+        <div class="error-box bg-danger text-white text-center">
+          <span *ngIf="submitted && createCliente.invalid">TODOS LOS CAMPOS SON OBLIGATORIOS</span>
+        </div>
+        <form class="mt-4" [formGroup]="createCliente" (ngSubmit)="addCliente()">
+          <div class="row">
+            <div class="col">
+              <label for="name"><strong>Nombre</strong></label>
+              <input type="text" class="form-control" id="name" formControlName="nombre" placeholder="Ingresa el nombre">
+            </div>
+            <div class="col">
+              <label for="name"><strong>Apellido</strong></label>
+              <input type="text" class="form-control" id="apellido" formControlName="apellido" placeholder="Ingresa el apellido">
+            </div>
           </div>
           <div class="form-group">
-            <label for="email">Correo electrónico</label>
-            <input type="email" class="form-control" id="email" placeholder="Ingresa el correo electrónico">
+            <label for="email"><strong>Correo electrónico</strong></label>
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Ingresa el correo electrónico">
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="name"><strong>Id</strong></label>
+              <input type="text" class="form-control" id="id" formControlName="id" placeholder="Ingresa el id">
+            </div>
+            <div class="col">
+              <label for="phone"><strong>Teléfono</strong></label>
+              <input type="tel" class="form-control" id="phone" formControlName="telefono" placeholder="Ingresa el número de teléfono">
+            </div>
+          </div>   
+          <div class="form-group">
+            <label for="address"><strong>Dirección</strong></label>
+            <input type="text" class="form-control" id="address" formControlName="direccion" placeholder="Ingresa la dirección">
           </div>
           <div class="form-group">
-            <label for="phone">Teléfono</label>
-            <input type="tel" class="form-control" id="phone" placeholder="Ingresa el número de teléfono">
-          </div>
-          <div class="form-group">
-            <label for="address">Dirección</label>
-            <input type="text" class="form-control" id="address" placeholder="Ingresa la dirección">
-          </div>
-          <div class="form-group">
-            <label for="city">Ciudad</label>
-            <input type="text" class="form-control" id="city" placeholder="Ingresa la ciudad">
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+            <label for="city"><strong>Ciudad</strong></label>
+            <input type="text" class="form-control" id="city" formControlName="ciudad" placeholder="Ingresa la ciudad">
+          </div><br>
+          <div class="text-center">
+            <button type="submit" class="btn btn-danger">Guardar</button>
+          </div>   
         </form>
       </div>
     </div>
