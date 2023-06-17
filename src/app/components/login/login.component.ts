@@ -13,7 +13,6 @@ export class LoginComponent {
   contrasena = ""
   constructor(private router: Router, private firebase: FirebaseService) { }
   async iniciar() {
-
     let email = this.correo
     let password = this.contrasena
     this.firebase.login({ email, password }).then(usuario => {
@@ -21,6 +20,7 @@ export class LoginComponent {
       localStorage.setItem("user", usuario.user.uid)
       window.location.reload()
     }).catch(e => {
+      console.log(e)
       if (e.code == "auth/invalid-email") {
         // Swal.fire({
         //   icon: 'error',
