@@ -3,7 +3,7 @@ import { Auth,signInWithEmailAndPassword,signOut } from '@angular/fire/auth';
 import { getAuth } from "firebase/auth";
 
 import { Firestore, addDoc, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +31,13 @@ export class FirebaseService {
   addCliente(cliente: any) {
     const addclientes =collection(this.firestore, "clientes")
     return addDoc(addclientes,cliente)
+  }
+
+  getClientes() {
+    const entradaRef = collection(this.firestore, "clientes");
+
+    return collectionData(entradaRef, { idField: 'id' }).pipe(
+      map(clientes => clientes.map(evento => ({ id: evento['id'], ...evento })))
+    );
   }
 }
