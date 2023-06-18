@@ -12,6 +12,7 @@ import { provideFunctions,getFunctions } from '@angular/fire/functions';
 import { LoginComponent } from './components/login/login.component';
 import { FormClientesComponent } from './components/form-clientes/form-clientes.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ClientesListaComponent } from './components/clientes-lista/clientes-lista.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     AppComponent,
     LoginComponent,
     FormClientesComponent,
-    NavbarComponent
+    NavbarComponent,
+    ClientesListaComponent
   ],
   imports: [
     BrowserModule,
