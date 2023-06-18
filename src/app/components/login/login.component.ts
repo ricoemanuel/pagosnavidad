@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -8,10 +8,17 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   correo = ""
   contrasena = ""
   constructor(private router: Router, private firebase: FirebaseService) { }
+  ngOnInit(): void {
+    let user=localStorage.getItem("user")
+    
+    if(user!==null){
+      this.router.navigate(["/clientes"])
+    }
+  }
   async iniciar() {
     let email = this.correo
     let password = this.contrasena

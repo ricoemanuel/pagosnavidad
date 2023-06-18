@@ -32,6 +32,6 @@ export class ClientesListaComponent implements OnInit {
 
   agregarCliente() {
     // Lógica para agregar un nuevo cliente
-    this.router.navigate(['/app-form-clientes']);
+    this.router.navigate(['/registrarcliente']);
   }
 }

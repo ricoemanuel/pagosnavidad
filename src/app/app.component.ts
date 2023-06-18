@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from './services/firebase.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,16 @@ import { FirebaseService } from './services/firebase.service';
 })
 export class AppComponent implements OnInit{
   ngOnInit(): void {
-    console.log(this.firebase.userObserver())
-    console.log(localStorage.getItem("user"));
+    console.log(this.user);
+    if(this.user===null){
+      this.route.navigate(["/login"])
+    }else{
+      this.route.navigate(['/clientes'])
+    }
     
   }
-  constructor(private firebase:FirebaseService){}
+  constructor(private firebase:FirebaseService, private route:Router){
+  }
   title = 'innovationhubes';
+  user=localStorage.getItem("user")
 }

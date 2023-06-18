@@ -1,1 +1,6 @@
-<router-outlet></router-outlet>
+<div *ngIf="user!==null">
+    <app-navbar></app-navbar>
+</div>
+<div *ngIf="user===null">
+    <app-login></app-login>
+</div>

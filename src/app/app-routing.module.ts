@@ -8,11 +8,11 @@ import { ClientesListaComponent } from './components/clientes-lista/clientes-lis
 
 
 const routes: Routes = [
-  {path:"", redirectTo: "app-login", pathMatch: "full"},
-  {path:"app-clientes-lista",component:ClientesListaComponent},
-  {path:"app-form-clientes",component:FormClientesComponent},
-  {path:"list-login",component: LoginComponent},
-  {path:"**",redirectTo: "app-clientes-lista", pathMatch: "full"},
+  //{path:"", redirectTo: "app-login", pathMatch: "full"},
+  {path:"clientes",component:ClientesListaComponent},
+  {path:"registrarcliente",component:FormClientesComponent},
+  {path:"login",component: LoginComponent},
+  {path:"**",redirectTo: "clientes", pathMatch: "full"},
 ];
 
 @NgModule({
