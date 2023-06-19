@@ -1,11 +1,12 @@
 <div class="container">
   <mat-horizontal-stepper [linear]="true">
-    <mat-step [stepControl]="createCliente">
+    <!-- Primer paso - Información personal -->
+    <mat-step [stepControl]="createClientePersonal">
       <ng-template matStepLabel>Información personal</ng-template>
       <div class="error-box bg-danger text-white text-center">
-        <span *ngIf="submitted && createCliente.invalid">TODOS LOS CAMPOS SON OBLIGATORIOS</span>
+        <span *ngIf="submitted && createClientePersonal.invalid">TODOS LOS CAMPOS SON OBLIGATORIOS</span>
       </div>
-      <form [formGroup]="createCliente" class="form">
+      <form [formGroup]="createClientePersonal" class="form">
         <div class="row">
           <mat-form-field appearance="fill">
             <mat-label>Nombre</mat-label>
@@ -24,30 +25,25 @@
             <input matInput formControlName="nit" placeholder="Ingresa el id" required>
           </mat-form-field>
         </div>
-        <div class="row">
-
-          <!-- <input type="file" style="display: none" #fileInput accept=".jpg, .jpeg, .png"
-            (change)="onFileSelected(fileInput)">
-          <button mat-button mat-raised-button (click)="fileInput.click()">Elegir archivo</button>
-          <span>{{ selectedFileName }}</span> -->
-
-        </div>
       </form>
       <div class="footer">
         <div class="footer__right">
-          <button mat-button matStepperNext><mat-icon>arrow_forward</mat-icon></button>
+          <button mat-button matStepperNext [disabled]="createClientePersonal.invalid">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
         </div>
       </div>
     </mat-step>
-    <mat-step>
+
+    <!-- Segundo paso - Contacto -->
+    <mat-step [stepControl]="createClienteContacto">
       <ng-template matStepLabel>Contacto</ng-template>
-      <form [formGroup]="createCliente">
+      <form [formGroup]="createClienteContacto">
         <div class="row">
           <mat-form-field appearance="fill">
             <mat-label>Correo electrónico</mat-label>
             <input matInput formControlName="email" placeholder="Ingresa el correo electrónico" required>
           </mat-form-field>
-
         </div>
         <div class="row">
           <mat-form-field appearance="fill">
@@ -70,37 +66,48 @@
       </form>
       <div class="footer">
         <div class="footer__left">
-          <button mat-button matStepperPrevious><mat-icon>arrow_back</mat-icon></button>
+          <button mat-button matStepperPrevious>
+            <mat-icon>arrow_back</mat-icon>
+          </button>
         </div>
         <div class="footer__right">
-          <button mat-button matStepperNext><mat-icon>arrow_forward</mat-icon></button>
+          <button mat-button matStepperNext [disabled]="createClienteContacto.invalid">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
         </div>
       </div>
     </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Cartera</ng-template>
-      <form [formGroup]="createCliente">
-        <div class="row">
-          <mat-form-field appearance="fill">
-            <mat-label>Cupo</mat-label>
-            <input matInput formControlName="cupo" placeholder="Ingresa el cupo" required>
-          </mat-form-field>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="fill">
-            <mat-label>Deuda</mat-label>
-            <input matInput formControlName="deuda" placeholder="Ingresa la deuda" required>
-          </mat-form-field>
-        </div>
-      </form>
-      <div class="footer">
-        <div class="footer__left">
-          <button mat-button matStepperPrevious><mat-icon>arrow_back</mat-icon></button>
-        </div>
-        <div class="footer__right">
-          <button mat-button (click)="addEditarCliente()"><mat-icon>check_circle</mat-icon></button>
-        </div>
-      </div>
-    </mat-step>
-  </mat-horizontal-stepper>
+
+<!-- Segundo paso - Cartera -->
+<mat-step [stepControl]="createClienteCartera">
+  <ng-template matStepLabel>Cartera</ng-template>
+  <form [formGroup]="createClienteCartera">
+    <div class="row">
+      <mat-form-field appearance="fill">
+        <mat-label>Cupo</mat-label>
+        <input matInput formControlName="cupo" placeholder="Ingresa el cupo" required>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="fill">
+        <mat-label>Deuda</mat-label>
+        <input matInput formControlName="deuda" placeholder="Ingresa la deuda" required>
+      </mat-form-field>
+    </div>
+  </form>
+  <div class="footer">
+    <div class="footer__left">
+      <button mat-button matStepperPrevious>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <div class="footer__right">
+      <button mat-button (click)="addEditarCliente()" [disabled]="createClienteCartera.invalid">
+        <mat-icon>check_circle</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-step>
+</mat-horizontal-stepper>
 </div>
+

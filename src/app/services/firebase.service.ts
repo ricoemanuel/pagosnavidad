@@ -61,4 +61,42 @@ export class FirebaseService {
     const clienteRef = doc(this.firestore, "clientes", id);
     return setDoc(clienteRef, data);
   } 
+
+  //Productos
+  productos: Observable<any[]> | undefined;
+
+  addProducto(producto: any) {
+    const addProductos = collection(this.firestore, "productos");
+    return addDoc(addProductos, producto);
+  }
+
+  getProductos() {
+    const productosRef = collection(this.firestore, "productos");
+
+    return collectionData(productosRef, { idField: 'id' }).pipe(
+      map(productos => productos.map(producto => ({ id: producto['id'], ...producto })))
+    );
+  }
+
+  eliminarProducto(id: string) {
+    const productoRef = doc(this.firestore, "productos", id);
+    return deleteDoc(productoRef);
+  }
+
+  async getProducto(id: string) {
+    const productoRef = doc(this.firestore, "productos", id);
+    const productoSnapshot = await getDoc(productoRef);
+    
+    if (productoSnapshot.exists()) {
+      const productoData = productoSnapshot.data();
+      return productoData;
+    } else {
+      return null;
+    }
+  }
+
+  actualizarProducto(id: string, data: any) {
+    const productoRef = doc(this.firestore, "productos", id);
+    return setDoc(productoRef, data);
+  }
 }

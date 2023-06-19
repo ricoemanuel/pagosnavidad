@@ -24,6 +24,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
+import { FormProductosComponent } from './components/form-productos/form-productos.component';
+import { ProductosListaComponent } from './components/productos-lista/productos-lista.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { MatInputModule } from '@angular/material/input';
     LoginComponent,
     FormClientesComponent,
     NavbarComponent,
-    ClientesListaComponent
+    ClientesListaComponent,
+    FormProductosComponent,
+    ProductosListaComponent
   ],
   imports: [
     BrowserModule,

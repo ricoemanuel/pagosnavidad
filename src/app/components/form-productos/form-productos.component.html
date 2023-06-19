@@ -1,0 +1,65 @@
+<br>
+<div class="container">
+    <mat-horizontal-stepper [linear]="true">
+      <!-- Primer paso - Características -->
+      <mat-step [stepControl]="createProductoCaracteristicas">
+        <ng-template matStepLabel>Características</ng-template>
+        <div class="error-box bg-danger text-white text-center">
+          <span *ngIf="submitted && createProductoCaracteristicas.invalid">TODOS LOS CAMPOS SON OBLIGATORIOS</span>
+        </div>
+        <form [formGroup]="createProductoCaracteristicas" class="form">
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>NIT</mat-label>
+              <input matInput formControlName="nit" placeholder="Ingresa el NIT" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Descripción</mat-label>
+              <input matInput formControlName="descripcion" placeholder="Ingresa la descripción" required>
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="footer">
+          <div class="footer__right">
+            <button mat-button matStepperNext [disabled]="createProductoCaracteristicas.invalid">
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-step>
+  
+      <!-- Segundo paso - Costos -->
+      <mat-step [stepControl]="createProductoCostos">
+        <ng-template matStepLabel>Costos</ng-template>
+        <form [formGroup]="createProductoCostos">
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Precio de compra</mat-label>
+              <input matInput formControlName="precioCompra" placeholder="Ingresa el precio de compra" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Precio de venta</mat-label>
+              <input matInput formControlName="precioVenta" placeholder="Ingresa el precio de venta" required>
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="footer">
+          <div class="footer__left">
+            <button mat-button matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+          </div>
+          <div class="footer__right">
+            <button mat-button (click)="addEditarProducto()" [disabled]="createProductoCostos.invalid">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+  
