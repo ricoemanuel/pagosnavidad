@@ -23,13 +23,17 @@ export class ClientesListaComponent implements OnInit {
   }
 
   editarCliente(cliente: any) {
-    // Lógica para editar el cliente
+    this.router.navigate(['/editarcliente', cliente.id]);
   }
 
   eliminarCliente(cliente: any) {
-    // Lógica para eliminar el cliente
+    const nit = cliente.id; 
+    this.firebaseService.eliminarCliente(nit).then(() => {
+      this.getClientes();
+    }).catch(error => {
+      console.log('Error al eliminar el cliente:', error);
+    });
   }
-
   agregarCliente() {
     // Lógica para agregar un nuevo cliente
     this.router.navigate(['/registrarcliente']);

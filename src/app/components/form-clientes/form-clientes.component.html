@@ -3,11 +3,11 @@
 <div class="container">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title text-center mb-4">Formulario de clientes</h4>
+        <h4 class="card-title text-center mb-4">{{titulo}}</h4>
         <div class="error-box bg-danger text-white text-center">
           <span *ngIf="submitted && createCliente.invalid">TODOS LOS CAMPOS SON OBLIGATORIOS</span>
         </div>
-        <form class="mt-4" [formGroup]="createCliente" (ngSubmit)="addCliente()">
+        <form class="mt-4" [formGroup]="createCliente" (ngSubmit)="addEditarCliente()">
           <div class="row">
             <div class="col">
               <label for="name"><strong>Nombre</strong></label>
@@ -24,14 +24,24 @@
           </div>
           <div class="row">
             <div class="col">
-              <label for="name"><strong>Id</strong></label>
-              <input type="text" class="form-control" id="id" formControlName="id" placeholder="Ingresa el id">
+              <label for="id"><strong>Id</strong></label>
+              <input type="text" class="form-control" id="id" formControlName="nit" placeholder="Ingresa el id">
             </div>
             <div class="col">
               <label for="phone"><strong>Teléfono</strong></label>
               <input type="tel" class="form-control" id="phone" formControlName="telefono" placeholder="Ingresa el número de teléfono">
             </div>
-          </div>   
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="cupo"><strong>Cupo</strong></label>
+              <input type="text" class="form-control" id="cupo" formControlName="cupo" placeholder="Ingresa el cupo">
+            </div>
+            <div class="col">
+              <label for="deuda"><strong>Deuda</strong></label>
+              <input type="text" class="form-control" id="deuda" formControlName="deuda" placeholder="Ingresa la deuda">
+            </div>
+          </div>
           <div class="form-group">
             <label for="address"><strong>Dirección</strong></label>
             <input type="text" class="form-control" id="address" formControlName="direccion" placeholder="Ingresa la dirección">

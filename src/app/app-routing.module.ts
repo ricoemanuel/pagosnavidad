@@ -11,6 +11,7 @@ const routes: Routes = [
   //{path:"", redirectTo: "app-login", pathMatch: "full"},
   {path:"clientes",component:ClientesListaComponent},
   {path:"registrarcliente",component:FormClientesComponent},
+  {path:"editarcliente/:id",component:FormClientesComponent},
   {path:"login",component: LoginComponent},
   {path:"**",redirectTo: "clientes", pathMatch: "full"},
 ];

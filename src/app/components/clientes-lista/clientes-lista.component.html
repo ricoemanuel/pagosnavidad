@@ -1,8 +1,7 @@
-
-<br>
+<br>s
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <div class="d-flex justify-content-between align-items-center">
@@ -13,29 +12,37 @@
           </div>
         </div>
         <div class="card-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>ID</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let cliente of clientes">
-                <td>{{ cliente.nombre }}</td>
-                <td>{{ cliente.apellido }}</td>
-                <td>{{ cliente.id }}</td>
-                <td>
-                  <div class="btn-group">
-                    <button class="btn btn-success" (click)="editarCliente(cliente)"><i class="fa fa-pencil"></i> Editar</button>
-                    <button class="btn btn-secondary" (click)="eliminarCliente(cliente)"><i class="fa fa-trash"></i> Eliminar</button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Nombre</th>
+                  <th style="width: 25%;">Apellido</th>
+                  <th style="width: 25%;">ID</th>
+                  <th style="width: 25%;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let cliente of clientes">
+                  <td>{{ cliente.nombre }}</td>
+                  <td>{{ cliente.apellido }}</td>
+                  <td>{{ cliente.nit }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <div class="row">
+                        <div class="col-md-6 col-lg-5">
+                          <button type="button" class="btn btn-success" (click)="editarCliente(cliente)">Editar</button>
+                        </div>
+                        <div class="col-md-6 col-lg-4 mt-2 mt-md-0">
+                          <button type="button" class="btn btn-secondary" (click)="eliminarCliente(cliente)">Eliminar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

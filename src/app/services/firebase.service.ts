@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Auth,signInWithEmailAndPassword,signOut } from '@angular/fire/auth';
 import { getAuth } from "firebase/auth";
 
-import { Firestore, addDoc, collection, collectionData } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, deleteDoc,doc, getDoc, setDoc } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -40,4 +40,25 @@ export class FirebaseService {
       map(clientes => clientes.map(evento => ({ id: evento['id'], ...evento })))
     );
   }
+  eliminarCliente(id: string) {
+    const clienteRef = doc(this.firestore, "clientes", id);
+    return deleteDoc(clienteRef);
+  }
+
+  async getCliente(id: string) {
+    const clienteRef = doc(this.firestore, "clientes", id);
+    const clienteSnapshot = await getDoc(clienteRef);
+  
+    if (clienteSnapshot.exists()) {
+      const clienteData = clienteSnapshot.data();
+      return clienteData;
+    } else {
+      return null;
+    }
+  }
+
+  actualizarEmpleado(id: string, data: any) {
+    const clienteRef = doc(this.firestore, "clientes", id);
+    return setDoc(clienteRef, data);
+  } 
 }
