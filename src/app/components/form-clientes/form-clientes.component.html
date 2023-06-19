@@ -1,60 +1,106 @@
-
-<br>
 <div class="container">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title text-center mb-4">{{titulo}}</h4>
-        <div class="error-box bg-danger text-white text-center">
-          <span *ngIf="submitted && createCliente.invalid">TODOS LOS CAMPOS SON OBLIGATORIOS</span>
-        </div>
-        <form class="mt-4" [formGroup]="createCliente" (ngSubmit)="addEditarCliente()">
-          <div class="row">
-            <div class="col">
-              <label for="name"><strong>Nombre</strong></label>
-              <input type="text" class="form-control" id="name" formControlName="nombre" placeholder="Ingresa el nombre">
-            </div>
-            <div class="col">
-              <label for="name"><strong>Apellido</strong></label>
-              <input type="text" class="form-control" id="apellido" formControlName="apellido" placeholder="Ingresa el apellido">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="email"><strong>Correo electrónico</strong></label>
-            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Ingresa el correo electrónico">
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="id"><strong>Id</strong></label>
-              <input type="text" class="form-control" id="id" formControlName="nit" placeholder="Ingresa el id">
-            </div>
-            <div class="col">
-              <label for="phone"><strong>Teléfono</strong></label>
-              <input type="tel" class="form-control" id="phone" formControlName="telefono" placeholder="Ingresa el número de teléfono">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label for="cupo"><strong>Cupo</strong></label>
-              <input type="text" class="form-control" id="cupo" formControlName="cupo" placeholder="Ingresa el cupo">
-            </div>
-            <div class="col">
-              <label for="deuda"><strong>Deuda</strong></label>
-              <input type="text" class="form-control" id="deuda" formControlName="deuda" placeholder="Ingresa la deuda">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="address"><strong>Dirección</strong></label>
-            <input type="text" class="form-control" id="address" formControlName="direccion" placeholder="Ingresa la dirección">
-          </div>
-          <div class="form-group">
-            <label for="city"><strong>Ciudad</strong></label>
-            <input type="text" class="form-control" id="city" formControlName="ciudad" placeholder="Ingresa la ciudad">
-          </div><br>
-          <div class="text-center">
-            <button type="submit" class="btn btn-danger">Guardar</button>
-          </div>   
-        </form>
+  <mat-horizontal-stepper [linear]="true">
+    <mat-step [stepControl]="createCliente">
+      <ng-template matStepLabel>Información personal</ng-template>
+      <div class="error-box bg-danger text-white text-center">
+        <span *ngIf="submitted && createCliente.invalid">TODOS LOS CAMPOS SON OBLIGATORIOS</span>
       </div>
-    </div>
-  </div>
-  
+      <form [formGroup]="createCliente" class="form">
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" placeholder="Ingresa el nombre" required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="apellido" placeholder="Ingresa el apellido" required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="nit" placeholder="Ingresa el id" required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+
+          <!-- <input type="file" style="display: none" #fileInput accept=".jpg, .jpeg, .png"
+            (change)="onFileSelected(fileInput)">
+          <button mat-button mat-raised-button (click)="fileInput.click()">Elegir archivo</button>
+          <span>{{ selectedFileName }}</span> -->
+
+        </div>
+      </form>
+      <div class="footer">
+        <div class="footer__right">
+          <button mat-button matStepperNext><mat-icon>arrow_forward</mat-icon></button>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Contacto</ng-template>
+      <form [formGroup]="createCliente">
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput formControlName="email" placeholder="Ingresa el correo electrónico" required>
+          </mat-form-field>
+
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="telefono" placeholder="Ingresa el número de teléfono" required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="ciudad" placeholder="Ingresa la ciudad" required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="direccion" placeholder="Ingresa la dirección" required>
+          </mat-form-field>
+        </div>
+      </form>
+      <div class="footer">
+        <div class="footer__left">
+          <button mat-button matStepperPrevious><mat-icon>arrow_back</mat-icon></button>
+        </div>
+        <div class="footer__right">
+          <button mat-button matStepperNext><mat-icon>arrow_forward</mat-icon></button>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Cartera</ng-template>
+      <form [formGroup]="createCliente">
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Cupo</mat-label>
+            <input matInput formControlName="cupo" placeholder="Ingresa el cupo" required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Deuda</mat-label>
+            <input matInput formControlName="deuda" placeholder="Ingresa la deuda" required>
+          </mat-form-field>
+        </div>
+      </form>
+      <div class="footer">
+        <div class="footer__left">
+          <button mat-button matStepperPrevious><mat-icon>arrow_back</mat-icon></button>
+        </div>
+        <div class="footer__right">
+          <button mat-button (click)="addEditarCliente()"><mat-icon>check_circle</mat-icon></button>
+        </div>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

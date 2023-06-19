@@ -111,5 +111,11 @@ export class FormClientesComponent {
       console.log(error);
     });
   }
+//   selectedFileName: string | undefined;
+
+// onFileSelected(input: HTMLInputElement): void {
+//   const file= input.files?.item(0);
+//   this.selectedFileName = file?.name || '';
+// }
   
 }
