@@ -1,39 +1,59 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
+
+export interface Empresa {
+  nit: string;
+  nombre: string;
+  ciudad: string;
+  email: string;
+  fechaActualizacion:Date,
+  fechaCreacion:Date,
+  telefono:string
+}
 
 @Component({
   selector: 'app-empresas-list',
   templateUrl: './empresas-list.component.html',
   styleUrls: ['./empresas-list.component.scss']
 })
-export class EmpresasListComponent implements OnInit {
-  empresas: any[] = [];
-  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
-  constructor(private router: Router, private firebaseService: FirebaseService) { }
+export class EmpresasListComponent implements OnInit,AfterViewInit {
+  
+  dataSource: MatTableDataSource<Empresa>;
+  displayedColumns: string[] = ['nit', 'nombre', 'ciudad', 'acciones'];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  
 
-  ngOnInit() {
-    if(!this.esAdmin){
-      this.router.navigate(["/clientes"])
-    }
-    this.getEmpresas();
+  constructor(private firebaseService: FirebaseService,private router: Router) {
+    this.dataSource = new MatTableDataSource<Empresa>();
+    this.dataSource.paginator = this.paginator;
   }
 
+  ngOnInit(): void {
+    this.getEmpresas();
+  }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    
+  }
   getEmpresas() {
     this.firebaseService.getEmpresas().subscribe(empresas => {
-      this.empresas = empresas;
+      this.dataSource.data = empresas;
+      
     });
   }
 
-  editarEmpresa(empresa: any) {
-    this.router.navigate(['/admin/editarempresa', empresa.id]);
-  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-  agregarEmpresa() {
-    // Lógica para agregar un nuevo cliente
-    this.router.navigate(['/admin/registrarempresa']);
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
-  agregarUsuario(nit:string){
-    
+  editarEmpresa(cliente: any) {
+    this.router.navigate(['/admin/editarempresa', cliente.id]);
   }
 }

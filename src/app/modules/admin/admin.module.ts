@@ -15,7 +15,11 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmpresasListComponent } from './components/empresas-list/empresas-list.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
+import {MatTableModule} from '@angular/material/table';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatPaginatorModule} from '@angular/material/paginator';
 @NgModule({
   declarations: [
     FormempresasComponent,
@@ -32,7 +36,11 @@ import { EmpresasListComponent } from './components/empresas-list/empresas-list.
     MatStepperModule,
     MatInputModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxDatatableModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatPaginatorModule
   ]
 })
 export class AdminModule { }
