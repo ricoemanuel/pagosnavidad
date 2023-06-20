@@ -18,9 +18,9 @@ export class FirebaseService {
     let password=objeto.password
     return signInWithEmailAndPassword(this.auth,email,password)
   }
-  userObserver(){
-    let usuario=this.auth.currentUser
-    return usuario
+  userObserver(id:string){
+    const userRef = doc(this.firestore, "usuarios", id);
+    return getDoc(userRef);
   }
   cerrarSesion(){
     return signOut(this.auth)
@@ -98,5 +98,36 @@ export class FirebaseService {
   actualizarProducto(id: string, data: any) {
     const productoRef = doc(this.firestore, "productos", id);
     return setDoc(productoRef, data);
+  }
+
+  //empresas
+  empresas: Observable<any[]> | undefined;
+
+  getEmpresas() {
+    const empresasRef = collection(this.firestore, "empresas");
+    return collectionData(empresasRef, { idField: 'id' }).pipe(
+      map(empresas => empresas.map((empresa:any) => ({ id: empresa.id, ...empresa })))
+    );
+  }
+
+  eliminarEmpresa(id: string) {
+    const empresaRef = doc(this.firestore, "empresas", id);
+    return deleteDoc(empresaRef);
+  }
+
+  async getEmpresa(id: string) {
+    const empresaRef = doc(this.firestore, "empresas", id);
+    const empresaSnapshot = await getDoc(empresaRef);
+    if (empresaSnapshot.exists()) {
+      const productoData = empresaSnapshot.data();
+      return productoData;
+    } else {
+      return null;
+    }
+  }
+
+  setEmpresa( data: any) {
+    const empresaref = doc(this.firestore, "empresas", data.nit);
+    return setDoc(empresaref, data);
   }
 }

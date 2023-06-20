@@ -8,15 +8,20 @@ import { FormProductosComponent } from './components/form-productos/form-product
 
 //Components
 const routes: Routes = [
-  { path: "", redirectTo: "clientes", pathMatch: "full" },
+  
   { path: "clientes", component: ClientesListaComponent },
   { path: "registrarcliente", component: FormClientesComponent },
   { path: "editarcliente/:id", component: FormClientesComponent },
   { path: "productos", component: ProductosListaComponent },
   { path: "registrarproducto", component: FormProductosComponent },
+  {
+    path:'admin',
+    loadChildren: ()=>
+      import('./modules/admin/admin.module').then((res)=> res.AdminModule)
+  },
   { path: "editarproducto/:id", component: FormProductosComponent },
   { path: "login", component: LoginComponent },
-  { path: "**", redirectTo: "clientes", pathMatch: "full" },
+  { path: "", redirectTo: "clientes", pathMatch: "full" },
 ];
 
 

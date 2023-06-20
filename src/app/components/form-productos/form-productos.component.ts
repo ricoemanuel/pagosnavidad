@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -8,13 +8,13 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   templateUrl: './form-productos.component.html',
   styleUrls: ['./form-productos.component.scss']
 })
-export class FormProductosComponent {
+export class FormProductosComponent implements OnInit{
   createProductoCaracteristicas: FormGroup;
   createProductoCostos: FormGroup;
   submitted = false;
   id: string | null;
   titulo = "Registrar producto";
-
+  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
   constructor(
     private fb: FormBuilder,
     private _productoService: FirebaseService,
@@ -35,6 +35,9 @@ export class FormProductosComponent {
   }
 
   ngOnInit(): void {
+    if(this.esAdmin){
+      this.router.navigate(["/admin"])
+    }
     this.esProducto();
   }
 

@@ -9,10 +9,13 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class ClientesListaComponent implements OnInit {
   clientes: any[] = [];
-
+  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
   constructor(private router: Router, private firebaseService: FirebaseService) { }
 
   ngOnInit() {
+    if(this.esAdmin){
+      this.router.navigate(["/admin"])
+    }
     this.getClientes();
   }
 

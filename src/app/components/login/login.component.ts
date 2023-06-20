@@ -11,12 +11,17 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class LoginComponent implements OnInit{
   correo = ""
   contrasena = ""
+  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
   constructor(private router: Router, private firebase: FirebaseService) { }
   ngOnInit(): void {
     let user=localStorage.getItem("user")
-    
     if(user!==null){
-      this.router.navigate(["/clientes"])
+      if(this.esAdmin){
+        this.router.navigate(["/admin"])
+      }else{
+        this.router.navigate(["/clientes"])
+      }
+      
     }
   }
   async iniciar() {

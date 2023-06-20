@@ -8,17 +8,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
+  title = 'innovationhubes';
+  user=localStorage.getItem("user")
+  
   ngOnInit(): void {
-    console.log(this.user);
-    if(this.user===null){
-      this.route.navigate(["/login"])
-    }else{
-      this.route.navigate(['/clientes'])
-    }
-    
+    this.esAdmin()
   }
   constructor(private firebase:FirebaseService, private route:Router){
   }
-  title = 'innovationhubes';
-  user=localStorage.getItem("user")
+  async esAdmin(){
+    let user=await this.firebase.userObserver(this.user||'')
+    let data:any=user.data()
+    data.tipo==="admin"?localStorage.setItem("esAdmin","true"):localStorage.setItem("esAdmin","false")
+  }
 }

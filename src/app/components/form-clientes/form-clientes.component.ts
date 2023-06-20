@@ -15,7 +15,7 @@ export class FormClientesComponent {
   submitted = false;
   id: string | null;
   titulo = "Registrar cliente";
-
+  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
   constructor(
     private fb: FormBuilder,
     private _clienteService: FirebaseService,
@@ -44,6 +44,9 @@ export class FormClientesComponent {
   }
 
   ngOnInit(): void {
+    if(this.esAdmin){
+      this.router.navigate(["/admin"])
+    }
     this.esCliente();
   }
 

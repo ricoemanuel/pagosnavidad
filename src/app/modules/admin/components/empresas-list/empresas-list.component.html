@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Lista de empresas</h4>
+        <button class="btn btn-danger" (click)="agregarEmpresa()">Agregar Nueva Empresa</button>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Nombre</th>
+                <th style="width: 25%;">ciudad</th>
+                <th style="width: 25%;">ID</th>
+                <th style="width: 25%;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let empresa of empresas">
+                <td>{{ empresa.nombre }}</td>
+                <td>{{ empresa.ciudad }}</td>
+                <td>{{ empresa.nit }}</td>
+                <td>
+                    <div class="btn-group">
+                        <div class="row">
+                          <div class="col-md-6 col-lg-5">
+                            <button type="button" class="btn btn-success" (click)="editarEmpresa(empresa)">Editar</button>
+                          </div>
+                          <div class="col-md-6 col-lg-4 mt-2 mt-md-0">
+                            <button type="button" class="btn btn-secondary" (click)="agregarUsuario(empresa.nit)">Agregar usuario</button>
+                          </div>
+                        </div>
+                      </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
