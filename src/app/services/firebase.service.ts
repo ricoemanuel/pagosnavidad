@@ -35,11 +35,11 @@ export class FirebaseService {
 
   getClientes() {
     const entradaRef = collection(this.firestore, "clientes");
-
     return collectionData(entradaRef, { idField: 'id' }).pipe(
-      map(clientes => clientes.map(evento => ({ id: evento['id'], ...evento })))
+      map(clientes => clientes.map((cliente:any) => ({ id: cliente['id'], ...cliente })))
     );
   }
+
   eliminarCliente(id: string) {
     const clienteRef = doc(this.firestore, "clientes", id);
     return deleteDoc(clienteRef);
@@ -72,9 +72,8 @@ export class FirebaseService {
 
   getProductos() {
     const productosRef = collection(this.firestore, "productos");
-
     return collectionData(productosRef, { idField: 'id' }).pipe(
-      map(productos => productos.map(producto => ({ id: producto['id'], ...producto })))
+      map(productos => productos.map((producto:any) => ({ id: producto['id'], ...producto })))
     );
   }
 

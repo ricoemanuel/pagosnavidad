@@ -1,0 +1,42 @@
+.buscador {
+  display: flex;
+  justify-content: center;
+
+  & mat-form-field {
+  width: 80% !important;
+    margin: 0 auto;
+  }
+}
+.add {
+  position: relative;
+
+  & button {
+    position: absolute;
+    right: 20px;
+    top: -68px;
+    @media (max-width: 767px) { // Vista de celular
+      right: -15px;
+      
+    }
+
+    @media (min-width: 768px) and (max-width: 1023px) { // Vista de tablet
+      right: -18px;
+      
+    }
+  }
+}
+
+.datatable {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 9px;
+}
+
+
+
+
+
+
+

@@ -15,7 +15,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ClientesListaComponent } from './components/clientes-lista/clientes-lista.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatListModule} from '@angular/material/list';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
@@ -49,6 +50,8 @@ import { ProductosListaComponent } from './components/productos-lista/productos-
     MatToolbarModule,
     MatStepperModule,
     MatInputModule,
+    MatPaginatorModule,
+    MatTableModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

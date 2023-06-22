@@ -1,19 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
+
+export interface Cliente {
+  nombre: string;
+  apellido: string;
+  email: string;
+  nit: string;
+  telefono: string;
+  cupo: string;
+  deuda: string;
+  direccion: string;
+  ciudad: string;
+  fechaCreacion: Date;
+  fechaActualizacion: Date;
+}
 
 @Component({
   selector: 'app-clientes-lista',
   templateUrl: './clientes-lista.component.html',
   styleUrls: ['./clientes-lista.component.scss']
 })
-export class ClientesListaComponent implements OnInit {
-  clientes: any[] = [];
-  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
-  constructor(private router: Router, private firebaseService: FirebaseService) { }
+export class ClientesListaComponent implements OnInit, AfterViewInit {
+
+  dataSource: MatTableDataSource<Cliente>;
+  displayedColumns: string[] = ['nit', 'nombre', 'apellido', 'email', 'acciones'];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  esAdmin: boolean = localStorage.getItem("esAdmin") === "true" ? true : false
+
+  constructor(private firebaseService: FirebaseService, private router: Router) {
+    this.dataSource = new MatTableDataSource<Cliente>();
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   ngOnInit() {
-    if(this.esAdmin){
+    if (this.esAdmin) {
       this.router.navigate(["/admin"])
     }
     this.getClientes();
@@ -21,7 +48,7 @@ export class ClientesListaComponent implements OnInit {
 
   getClientes() {
     this.firebaseService.getClientes().subscribe(clientes => {
-      this.clientes = clientes;
+      this.dataSource.data = clientes;
     });
   }
 
@@ -30,15 +57,20 @@ export class ClientesListaComponent implements OnInit {
   }
 
   eliminarCliente(cliente: any) {
-    const nit = cliente.id; 
+    const nit = cliente.id;
     this.firebaseService.eliminarCliente(nit).then(() => {
       this.getClientes();
     }).catch(error => {
       console.log('Error al eliminar el cliente:', error);
     });
   }
-  agregarCliente() {
-    // Lógica para agregar un nuevo cliente
-    this.router.navigate(['/registrarcliente']);
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
