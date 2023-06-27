@@ -14,7 +14,7 @@ export class FormProductosComponent implements OnInit{
   submitted = false;
   id: string | null;
   titulo = "Registrar producto";
-  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
+  esAdmin: Promise<boolean> = this._productoService.esAdmin()
   constructor(
     private fb: FormBuilder,
     private _productoService: FirebaseService,
@@ -34,8 +34,8 @@ export class FormProductosComponent implements OnInit{
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
 
-  ngOnInit(): void {
-    if(this.esAdmin){
+  async ngOnInit(): Promise<void> {
+    if(await this.esAdmin){
       this.router.navigate(["/admin"])
     }
     this.esProducto();

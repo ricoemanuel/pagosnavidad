@@ -1,24 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FirebaseService } from './services/firebase.service';
 import { Router } from '@angular/router';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, OnChanges{
   title = 'innovationhubes';
-  user=localStorage.getItem("user")
-  
+  user:string|null=null
+  load:boolean=false
+  ngOnChanges(changes: SimpleChanges) {
+    alert(true)
+  }
   ngOnInit(): void {
-    this.esAdmin()
+    
+    this.getUser()
+    setTimeout(() => {
+      this.load = true; // Ocultar el indicador de carga
+    }, 1500);
   }
   constructor(private firebase:FirebaseService, private route:Router){
   }
-  async esAdmin(){
-    let user=await this.firebase.userObserver(this.user||'')
-    let data:any=user.data()
-    data.tipo==="admin"?localStorage.setItem("esAdmin","true"):localStorage.setItem("esAdmin","false")
+  async getUser(){
+    this.firebase.getAuthState().subscribe(res=>{
+      if(res){
+        this.user=res.uid
+        
+      }
+    })
   }
 }

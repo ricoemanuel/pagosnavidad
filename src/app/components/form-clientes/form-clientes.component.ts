@@ -15,7 +15,7 @@ export class FormClientesComponent {
   submitted = false;
   id: string | null;
   titulo = "Registrar cliente";
-  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
+  esAdmin: Promise<boolean> = this._clienteService.esAdmin()
   constructor(
     private fb: FormBuilder,
     private _clienteService: FirebaseService,
@@ -43,8 +43,8 @@ export class FormClientesComponent {
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
 
-  ngOnInit(): void {
-    if(this.esAdmin){
+  async ngOnInit(): Promise<void> {
+    if(await this.esAdmin){
       this.router.navigate(["/admin"])
     }
     this.esCliente();

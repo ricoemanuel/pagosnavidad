@@ -28,7 +28,7 @@ export class ClientesListaComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Cliente>;
   displayedColumns: string[] = ['nit', 'nombre', 'apellido', 'email', 'acciones'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  esAdmin: boolean = localStorage.getItem("esAdmin") === "true" ? true : false
+  esAdmin: Promise<boolean> = this.firebaseService.esAdmin()
 
   constructor(private firebaseService: FirebaseService, private router: Router) {
     this.dataSource = new MatTableDataSource<Cliente>();
@@ -39,8 +39,9 @@ export class ClientesListaComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngOnInit() {
-    if (this.esAdmin) {
+  async ngOnInit() {
+    if (await this.esAdmin) {
+      
       this.router.navigate(["/admin"])
     }
     this.getClientes();
