@@ -24,6 +24,8 @@ export class NavbarComponent implements OnDestroy {
   
   cerrarSesion() {
     this.firebase.cerrarSesion()
+    localStorage.clear()
+    localStorage.setItem("logot","true")
     window.location.reload()
   }
 }

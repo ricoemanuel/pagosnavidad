@@ -11,6 +11,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,10 +21,13 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { RegistrarUsuariosComponent } from './components/registrar-usuarios/registrar-usuarios.component';
 @NgModule({
   declarations: [
     FormempresasComponent,
-    EmpresasListComponent
+    EmpresasListComponent,
+    RegistrarUsuariosComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -40,7 +44,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     NgxDatatableModule,
     MatTableModule,
     MatFormFieldModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule
   ]
 })
 export class AdminModule { }

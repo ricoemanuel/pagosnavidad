@@ -56,4 +56,7 @@ export class EmpresasListComponent implements OnInit,AfterViewInit {
   editarEmpresa(cliente: any) {
     this.router.navigate(['/admin/editarempresa', cliente.id]);
   }
+  agregarUsuario(cliente: any) {
+    this.router.navigate(['/admin/crearUsuario', cliente.id]);
+  }
 }

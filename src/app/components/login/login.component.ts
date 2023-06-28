@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { user } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -21,13 +22,17 @@ export class LoginComponent implements OnInit{
         }else{
           this.router.navigate(["/clientes"])
         }
+      }else{
+        localStorage.clear()
       }
     })
   }
   async iniciar() {
     let email = this.correo
     let password = this.contrasena
-    this.firebase.login({ email, password }).then(usuario => {
+    let userObj={email,password}
+    localStorage.setItem("currentUser",JSON.stringify(userObj))
+    this.firebase.login(userObj).then(usuario => {
       window.location.reload()
     }).catch(e => {
       console.log(e)

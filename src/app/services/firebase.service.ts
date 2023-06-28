@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, authState } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, signOut, authState, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, setDoc } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
@@ -16,6 +16,12 @@ export class FirebaseService {
     let password = objeto.password
     return signInWithEmailAndPassword(this.auth, email, password)
   }
+  
+  singup(objeto: any) {
+    let email = objeto.email
+    let password = objeto.password
+    return createUserWithEmailAndPassword(this.auth, email, password)
+  }
   userObserver(id: string) {
     const userRef = doc(this.firestore, "usuarios", id);
     return getDoc(userRef);
@@ -29,13 +35,16 @@ export class FirebaseService {
   esAdmin(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.getAuthState().subscribe(async res => {
-        if (res) {
-          let user = await this.userObserver(res.uid);
-          let data: any = user.data();
-          resolve(data.tipo === "admin");
-        } else {
-          resolve(false);
+        if(localStorage.getItem("registrando")==="false"){
+          if (res) {
+            let user = await this.userObserver(res.uid);
+            let data: any = user.data();
+            resolve(data.tipo === "admin");
+          } else {
+            resolve(false);
+          } 
         }
+        
       });
     });
   }
@@ -141,5 +150,38 @@ export class FirebaseService {
   setEmpresa(data: any) {
     const empresaref = doc(this.firestore, "empresas", data.nit);
     return setDoc(empresaref, data);
+  }
+  //usuarios
+  usuarios: Observable<any[]> | undefined;
+
+
+  getUsuarios() {
+    const entradaRef = collection(this.firestore, "usuarios");
+    return collectionData(entradaRef, { idField: 'id' }).pipe(
+      map(usuarios => usuarios.map((usuario: any) => ({ id: usuario['id'], ...usuario })))
+    );
+  }
+
+  eliminarUsuario(id: string) {
+    const usuarioRef = doc(this.firestore, "usuarios", id);
+    return deleteDoc(usuarioRef);
+  }
+
+  async getUsuario(id: string) {
+    const usuarioRef = doc(this.firestore, "usuarios", id);
+    const usuarioSnapshot = await getDoc(usuarioRef);
+
+    if (usuarioSnapshot.exists()) {
+      const usuarioData = usuarioSnapshot.data();
+      return usuarioData;
+    } else {
+      return null;
+    }
+  }
+
+  SetUsuario(id: string, data: any) {
+    console.log(id)
+    const usuarioRef = doc(this.firestore, "usuarios", id);
+    return setDoc(usuarioRef, data);
   }
 }

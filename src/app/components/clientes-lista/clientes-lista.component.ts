@@ -41,7 +41,7 @@ export class ClientesListaComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     if (await this.esAdmin) {
-      
+      console.log(true)
       this.router.navigate(["/admin"])
     }
     this.getClientes();
