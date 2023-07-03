@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
       this.load = true; // Ocultar el indicador de carga
     }, 1500);
 
-
   }
   async getUser() {
     this.firebase.getAuthState().subscribe(res => {

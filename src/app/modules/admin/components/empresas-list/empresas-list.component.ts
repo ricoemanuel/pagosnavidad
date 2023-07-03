@@ -24,6 +24,7 @@ export class EmpresasListComponent implements OnInit,AfterViewInit {
   dataSource: MatTableDataSource<Empresa>;
   displayedColumns: string[] = ['nit', 'nombre', 'ciudad', 'acciones'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  esAdmin: any
   
 
   constructor(private firebaseService: FirebaseService,private router: Router) {
@@ -31,7 +32,11 @@ export class EmpresasListComponent implements OnInit,AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.esAdmin=await this.firebaseService.esAdmin()
+    if(!this.esAdmin){
+      this.router.navigate(["/clientes"])
+    }
     this.getEmpresas();
   }
   ngAfterViewInit() {

@@ -6,15 +6,18 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnDestroy {
+export class NavbarComponent implements OnDestroy,OnInit {
   mobileQuery: MediaQueryList;
-  esAdmin: Promise<boolean> = this.firebase.esAdmin()
+  esAdmin: any
   private _mobileQueryListener: () => void;
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private firebase: FirebaseService, ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+  }
+  async ngOnInit(): Promise<void> {
+    this.esAdmin=await this.firebase.esAdmin()
   }
   
 

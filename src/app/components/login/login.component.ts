@@ -12,10 +12,11 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class LoginComponent implements OnInit{
   correo = ""
   contrasena = ""
-  esAdmin: Promise<boolean> = this.firebase.esAdmin()
+  esAdmin: any
   constructor(private router: Router, private firebase: FirebaseService) { }
   ngOnInit(): void {
     this.firebase.getAuthState().subscribe(async res=>{
+      this.esAdmin=await this.firebase.esAdmin()
       if(res){
         if(await this.esAdmin){
           this.router.navigate(["/admin"])

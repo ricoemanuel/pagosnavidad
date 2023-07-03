@@ -17,7 +17,7 @@ export class RegistrarUsuariosComponent {
   id: string | null;
   cedula: string | null;
   titulo = "Registrar Usuario";
-  esAdmin: Promise<boolean> = this._UsuarioService.esAdmin()
+  esAdmin: any
   constructor(
     private fb: FormBuilder,
     private _UsuarioService: FirebaseService,
@@ -45,9 +45,9 @@ export class RegistrarUsuariosComponent {
   }
 
   async ngOnInit(): Promise<void> {
-    
-    if(await !this.esAdmin){
-      this.router.navigate(["/Usuarios"])
+    this.esAdmin=await this._UsuarioService.esAdmin()
+    if(!this.esAdmin){
+      this.router.navigate(["/clientes"])
     }
     this.esUsuario();
   }
@@ -81,7 +81,7 @@ export class RegistrarUsuariosComponent {
       fechaActualizacion: new Date()
     };
     
-    let password="2123123"+Usuario.nombre+Usuario.apellido+"$$"
+    let password="123456"
     let email=Usuario.email
     localStorage.setItem("registrando","true")
     let user=await this._UsuarioService.singup({email,password})

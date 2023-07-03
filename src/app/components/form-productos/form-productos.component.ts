@@ -14,7 +14,7 @@ export class FormProductosComponent implements OnInit{
   submitted = false;
   id: string | null;
   titulo = "Registrar producto";
-  esAdmin: Promise<boolean> = this._productoService.esAdmin()
+  esAdmin: any
   constructor(
     private fb: FormBuilder,
     private _productoService: FirebaseService,
@@ -22,7 +22,7 @@ export class FormProductosComponent implements OnInit{
     private aRoute: ActivatedRoute
   ) {
     this.createProductoCaracteristicas = this.fb.group({
-      nit: ["", Validators.required],
+      codigo: ["", Validators.required],
       descripcion: ["", Validators.required]
     });
 
@@ -35,7 +35,8 @@ export class FormProductosComponent implements OnInit{
   }
 
   async ngOnInit(): Promise<void> {
-    if(await this.esAdmin){
+    this.esAdmin=await this._productoService.esAdmin()
+    if(this.esAdmin){
       this.router.navigate(["/admin"])
     }
     this.esProducto();
@@ -55,17 +56,19 @@ export class FormProductosComponent implements OnInit{
     }
   }
 
-  addProducto() {
+  async addProducto() {
+    let empresa= await this._productoService.getCurrentEmpresa()
     const producto: any = {
-      nit: this.createProductoCaracteristicas.value.nit,
+      codigo: this.createProductoCaracteristicas.value.codigo,
       descripcion: this.createProductoCaracteristicas.value.descripcion,
       precioCompra: this.createProductoCostos.value.precioCompra,
       precioVenta: this.createProductoCostos.value.precioVenta,
       fechaCreacion: new Date(),
-      fechaActualizacion: new Date()
+      fechaActualizacion: new Date(),
+      empresa:empresa
     };
 
-    this._productoService.addProducto(producto)
+    this._productoService.setProducto(producto.codigo,producto)
       .then(() => {
         console.log("Producto registrado con éxito");
         this.router.navigate(['/productos']);
@@ -83,7 +86,7 @@ export class FormProductosComponent implements OnInit{
         .then(data => {
           if (data) {
             this.createProductoCaracteristicas.patchValue({
-              nit: data['nit'],
+              codigo: data['codigo'],
               descripcion: data['descripcion']
             });
 
@@ -101,14 +104,14 @@ export class FormProductosComponent implements OnInit{
 
   editarProducto(id: string) {
     const producto: any = {
-      nit: this.createProductoCaracteristicas.value.nit,
+      codigo: this.createProductoCaracteristicas.value.codigo,
       descripcion: this.createProductoCaracteristicas.value.descripcion,
       precioCompra: this.createProductoCostos.value.precioCompra,
       precioVenta: this.createProductoCostos.value.precioVenta,
       fechaActualizacion: new Date()
     };
 
-    this._productoService.actualizarProducto(id, producto)
+    this._productoService.setProducto(id, producto)
       .then(() => {
         this.router.navigate(['/productos']);
       })

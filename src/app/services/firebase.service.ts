@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, signOut, authState, createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, setDoc } from '@angular/fire/firestore';
-import { Observable, map } from 'rxjs';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from '@angular/fire/firestore';
+import { Observable, from, map, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class FirebaseService {
     let password = objeto.password
     return signInWithEmailAndPassword(this.auth, email, password)
   }
-  
+
   singup(objeto: any) {
     let email = objeto.email
     let password = objeto.password
@@ -35,16 +35,17 @@ export class FirebaseService {
   esAdmin(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.getAuthState().subscribe(async res => {
-        if(localStorage.getItem("registrando")==="false"){
+        if (localStorage.getItem("registrando") === "false") {
           if (res) {
             let user = await this.userObserver(res.uid);
             let data: any = user.data();
+            console.log(data.tipo === "admin")
             resolve(data.tipo === "admin");
           } else {
             resolve(false);
-          } 
+          }
         }
-        
+
       });
     });
   }
@@ -98,6 +99,18 @@ export class FirebaseService {
       map(productos => productos.map((producto: any) => ({ id: producto['id'], ...producto })))
     );
   }
+  getProductosByempresa(): Observable<any[]> {
+    return from(this.getCurrentEmpresa()).pipe(
+      switchMap(empresa => {
+        const productosRef = collection(this.firestore, 'productos');
+        const queryRef = query(productosRef, where('empresa', '==', empresa));
+  
+        return collectionData(queryRef, { idField: 'id' }).pipe(
+          map(productos => productos.map((producto: any) => ({ id: producto.id, ...producto })))
+        );
+      })
+    );
+  }
 
   eliminarProducto(id: string) {
     const productoRef = doc(this.firestore, "productos", id);
@@ -116,7 +129,7 @@ export class FirebaseService {
     }
   }
 
-  actualizarProducto(id: string, data: any) {
+  setProducto(id: string, data: any) {
     const productoRef = doc(this.firestore, "productos", id);
     return setDoc(productoRef, data);
   }
@@ -145,6 +158,21 @@ export class FirebaseService {
     } else {
       return null;
     }
+  }
+  async getCurrentEmpresa() {
+    return new Promise<any>((resolve, reject) => {
+      this.getAuthState().subscribe(async res => {
+        if (res) {
+          let user = await this.userObserver(res.uid);
+          let data: any = user.data();
+          resolve(data.empresa);
+        } else {
+          resolve("false");
+        }
+
+
+      });
+    });
   }
 
   setEmpresa(data: any) {

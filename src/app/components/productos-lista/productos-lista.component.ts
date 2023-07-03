@@ -20,9 +20,9 @@ export interface Producto {
 })
 export class ProductosListaComponent implements OnInit,AfterViewInit {
   dataSource: MatTableDataSource<Producto>;
-  displayedColumns: string[] = ['nit', 'descripcion', 'precioCompra', 'precioCompra', 'acciones'];
+  displayedColumns: string[] = ['codigo', 'descripcion', 'precioCompra', 'precioVenta', 'acciones'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  esAdmin: boolean = localStorage.getItem("esAdmin") === "true" ? true : false
+  esAdmin: any
   
   constructor(private router: Router, private firebaseService: FirebaseService) { 
     this.dataSource = new MatTableDataSource<Producto>();
@@ -33,7 +33,8 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.esAdmin=await this.firebaseService.esAdmin()
     if (this.esAdmin) {
       this.router.navigate(["/admin"])
     }
@@ -41,7 +42,7 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
   }
 
   getProductos() {
-    this.firebaseService.getProductos().subscribe(productos => {
+    this.firebaseService.getProductosByempresa().subscribe(productos => {
       this.dataSource.data = productos;
     });
   }
