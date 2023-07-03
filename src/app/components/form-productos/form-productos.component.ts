@@ -15,6 +15,7 @@ export class FormProductosComponent implements OnInit{
   id: string | null;
   titulo = "Registrar producto";
   esAdmin: any
+  dataProducto:any
   constructor(
     private fb: FormBuilder,
     private _productoService: FirebaseService,
@@ -48,12 +49,12 @@ export class FormProductosComponent implements OnInit{
     if (this.createProductoCaracteristicas.invalid || this.createProductoCostos.invalid) {
       return;
     }
-
-    if (this.id === null) {
-      this.addProducto();
-    } else {
-      this.editarProducto(this.id);
-    }
+    console.log(this.id)
+     if (this.id === null) {
+       this.addProducto();
+     } else {
+       this.editarProducto(this.id);
+     }
   }
 
   async addProducto() {
@@ -85,6 +86,7 @@ export class FormProductosComponent implements OnInit{
       this._productoService.getProducto(this.id)
         .then(data => {
           if (data) {
+            this.dataProducto=data
             this.createProductoCaracteristicas.patchValue({
               codigo: data['codigo'],
               descripcion: data['descripcion']
@@ -103,12 +105,16 @@ export class FormProductosComponent implements OnInit{
   }
 
   editarProducto(id: string) {
+    console.log(this.dataProducto)
     const producto: any = {
-      codigo: this.createProductoCaracteristicas.value.codigo,
+      codigo: this.dataProducto.codigo,
       descripcion: this.createProductoCaracteristicas.value.descripcion,
       precioCompra: this.createProductoCostos.value.precioCompra,
       precioVenta: this.createProductoCostos.value.precioVenta,
-      fechaActualizacion: new Date()
+      fechaActualizacion: new Date(),
+      fechaCreacion: this.dataProducto.fechaCreacion,
+      empresa:this.dataProducto.empresa
+      
     };
 
     this._productoService.setProducto(id, producto)
