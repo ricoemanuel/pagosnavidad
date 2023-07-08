@@ -12,16 +12,22 @@
   
     & button {
       position: absolute;
-      right: 20px;
+      right: 74px;
       top: -68px;
-      @media (max-width: 767px) { // Vista de celular
-        right: -15px;
-        
+      width: 30px;
+      background-color: transparent;
+      border: transparent;
+  
+      @media (max-width: 767px) {
+        // Vista de celular
+        right: 6px;
+  
       }
   
-      @media (min-width: 768px) and (max-width: 1023px) { // Vista de tablet
-        right: -18px;
-        
+      @media (min-width: 768px) and (max-width: 1023px) {
+        // Vista de tablet
+        right: 45px;
+  
       }
     }
   }

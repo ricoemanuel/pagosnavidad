@@ -29,6 +29,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormProductosComponent } from './components/form-productos/form-productos.component';
 import { ProductosListaComponent } from './components/productos-lista/productos-lista.component';
 
+import { MatExpansionModule } from '@angular/material/expansion';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +56,7 @@ import { ProductosListaComponent } from './components/productos-lista/productos-
     MatPaginatorModule,
     MatTableModule,
     MatSelectModule,
+    MatExpansionModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

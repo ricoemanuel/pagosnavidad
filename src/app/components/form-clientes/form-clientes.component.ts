@@ -44,8 +44,9 @@ export class FormClientesComponent {
   }
 
   async ngOnInit(): Promise<void> {
-    this.esAdmin=this._clienteService.esAdmin()
+    this.esAdmin=await this._clienteService.esAdmin()
     if (this.esAdmin) {
+      
       this.router.navigate(["/admin"])
     }
     this.esCliente();

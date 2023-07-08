@@ -1,7 +1,11 @@
 <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
   <mat-toolbar color="primary" class="example-toolbar">
     <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-
+    <h4>{{Title}}</h4>
+    <div class="logout">
+      <mat-icon (click)="cerrarSesion()">highlight_off</mat-icon>
+    </div>
+    
   </mat-toolbar>
 
   <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
@@ -12,12 +16,40 @@
           <a mat-list-item routerLink="/admin">Empresas</a>
         </div>
         <div *ngIf="!esAdmin">
-          <a mat-list-item routerLink="/productos">Productos</a>
-          <a mat-list-item routerLink="/clientes">Clientes</a>
+          <mat-accordion class="example-headers-align" multi>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title><mat-icon>money</mat-icon>Ventas</mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <a mat-list-item>Registrar una venta</a>
+              <a mat-list-item>Hacer un pedido</a>
+              <a mat-list-item>Ver listado de ventas</a>
+            </mat-nav-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title><mat-icon>toc</mat-icon>Productos</mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <a mat-list-item routerLink="/productos">Listado de productos</a>
+            </mat-nav-list>
+          </mat-expansion-panel>
+          
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title><mat-icon>supervised_user_circle</mat-icon>Clientes</mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <a mat-list-item routerLink="/clientes">Listado de clientes</a>
+            </mat-nav-list>
+          </mat-expansion-panel>
+        </mat-accordion>
         </div>
-        <a mat-list-item (click)="cerrarSesion()">Cerrar sesión</a>
       </mat-nav-list>
     </mat-sidenav>
+ 
+  
 
     <mat-sidenav-content>
       <router-outlet></router-outlet>

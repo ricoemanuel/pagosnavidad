@@ -6,7 +6,7 @@ import { RegistrarUsuariosComponent } from './components/registrar-usuarios/regi
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'empresas',
     component:EmpresasListComponent
   },
   {
@@ -21,6 +21,7 @@ const routes: Routes = [
     path: 'crearUsuario/:id',
     component:RegistrarUsuariosComponent
   },
+  { path: "", redirectTo: "empresas", pathMatch: "full" },
   
 ];
 

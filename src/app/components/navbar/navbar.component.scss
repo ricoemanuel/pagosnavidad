@@ -31,4 +31,31 @@
   }
   .mat-toolbar{
     background-color: rgb(232, 94, 94);
+    & h4{
+      text-transform: capitalize;
+    }
+    & button{
+      & mat-icon{
+        position: absolute;
+        top:9px;
+      }
+    }
+    & .logout{
+        position: absolute;
+        right: 2px;
+        height: inherit;
+        width: 50px;
+      & mat-icon{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+        height: inherit;
+        font-size: 45px;
+      }
+      & mat-icon:hover{
+        cursor: pointer;
+      }
+    }
+    
   }
