@@ -14,7 +14,7 @@ export class FormempresasComponent implements OnInit{
   submitted = false;
   id: string | null;
   titulo = "Registrar empresa";
-  esAdmin:boolean=localStorage.getItem("esAdmin")==="true"?true:false
+  esAdmin: any
   existeEmpresa:boolean=false
   fechaCreacion!:Date
   constructor(
@@ -37,7 +37,8 @@ export class FormempresasComponent implements OnInit{
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.esAdmin=await this.empresaservice.esAdmin()
     if(!this.esAdmin){
       this.router.navigate(["/clientes"])
     }

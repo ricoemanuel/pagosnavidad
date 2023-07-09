@@ -31,6 +31,9 @@ import { ProductosListaComponent } from './components/productos-lista/productos-
 
 import { MatExpansionModule } from '@angular/material/expansion';
 
+
+import {MatMenuModule} from '@angular/material/menu';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,6 +60,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatTableModule,
     MatSelectModule,
     MatExpansionModule,
+    MatMenuModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

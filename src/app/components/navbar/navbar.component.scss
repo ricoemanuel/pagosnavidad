@@ -1,61 +1,91 @@
 .example-container {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  
-  .example-is-mobile .example-toolbar {
-    position: fixed;
-    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-    z-index: 2;
-  }
-  
-  h1.example-app-name {
-    margin-left: 8px;
-  }
-  
-  .example-sidenav-container {
-    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
+}
+
+h1.example-app-name {
+  margin-left: 8px;
+}
+
+.example-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
        causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-    flex: 1;
-  }
-  
-  .example-is-mobile .example-sidenav-container {
-    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+  flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
        `<body>` to be our scrolling element for mobile layouts. */
-    flex: 1 0 auto;
+  flex: 1 0 auto;
+}
+
+.mat-toolbar {
+  background-color: #16172c;
+
+  & h4 {
+    text-transform: capitalize;
   }
-  .mat-toolbar{
-    background-color: rgb(232, 94, 94);
-    & h4{
-      text-transform: capitalize;
+
+  & button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & mat-icon {
+      position: absolute;
+      top: 9px;
     }
-    & button{
-      & mat-icon{
-        position: absolute;
-        top:9px;
-      }
-    }
-    & .logout{
-        position: absolute;
-        right: 2px;
-        height: inherit;
-        width: 50px;
-      & mat-icon{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: fit-content;
-        height: inherit;
-        font-size: 45px;
-      }
-      & mat-icon:hover{
-        cursor: pointer;
-      }
-    }
-    
   }
+
+  & .logout {
+    position: absolute;
+    right: 2px;
+    height: inherit;
+    width: 50px;
+
+    & mat-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      font-size: 45px;
+    }
+
+    & mat-icon:hover {
+      cursor: pointer;
+    }
+  }
+
+}
+
+mat-sidenav-container {
+  & mat-accordion {
+    background-color: #6b7a8f;
+  }
+
+  & mat-expansion-panel {
+    background-color: #6b7a8f;
+
+  }
+
+  & mat-panel-title {
+    color: white;
+  }
+& mat-sidenav{
+  background-color: #d9ddf17d;
+}
+  & ::ng-deep .mdc-list-item__primary-text {
+    color: white !important;
+  }
+
+}

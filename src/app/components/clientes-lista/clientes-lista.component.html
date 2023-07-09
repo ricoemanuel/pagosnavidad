@@ -5,11 +5,6 @@
     <input matInput (keyup)="applyFilter($event)" #input>
   </mat-form-field>
 </div>
-<div class="add">
-  <button  routerLink="/registrarcliente">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>
 <div class="mat-elevation-z8 overflow-auto col-md-11 datatable">
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="nit">

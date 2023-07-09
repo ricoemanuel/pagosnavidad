@@ -63,9 +63,10 @@ export class NavbarComponent implements OnDestroy, OnInit {
   }
   asignarRuta(ruta:string[]):void{
     if(ruta.length===2){
-      this.Title=ruta[1]
+      ruta[1]==='registrarproducto'?this.Title='Registrar producto':this.Title=ruta[1]
+      ruta[1]==='registrarcliente'?this.Title='Registrar cliente':this.Title=ruta[1]
      }else{
-      this.Title=ruta[2]
+      ruta[2]==='registrarempresa'?this.Title='Registrar empresa':this.Title=ruta[2]
      }
   }
 }
