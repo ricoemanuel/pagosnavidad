@@ -5,6 +5,7 @@ import { FormClientesComponent } from './components/form-clientes/form-clientes.
 import { ClientesListaComponent } from './components/clientes-lista/clientes-lista.component';
 import { ProductosListaComponent } from './components/productos-lista/productos-lista.component';
 import { FormProductosComponent } from './components/form-productos/form-productos.component';
+import { RegistrarVentaComponent } from './components/registrar-venta/registrar-venta.component';
 
 //Components
 const routes: Routes = [
@@ -22,6 +23,8 @@ const routes: Routes = [
   { path: "editarproducto/:id", component: FormProductosComponent },
   { path: "login", component: LoginComponent },
   { path: "", redirectTo: "clientes", pathMatch: "full" },
+  { path: "nuevaventa", component: RegistrarVentaComponent },
+  
 ];
 
 

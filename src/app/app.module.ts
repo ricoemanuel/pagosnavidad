@@ -33,6 +33,13 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 
 import {MatMenuModule} from '@angular/material/menu';
+import { RegistrarVentaComponent } from './components/registrar-venta/registrar-venta.component';
+
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
+import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { RendererFactory2 } from '@angular/core';
+
 
 @NgModule({
   declarations: [
@@ -42,7 +49,8 @@ import {MatMenuModule} from '@angular/material/menu';
     NavbarComponent,
     ClientesListaComponent,
     FormProductosComponent,
-    ProductosListaComponent
+    ProductosListaComponent,
+    RegistrarVentaComponent
   ],
   imports: [
     BrowserModule,
@@ -61,11 +69,14 @@ import {MatMenuModule} from '@angular/material/menu';
     MatSelectModule,
     MatExpansionModule,
     MatMenuModule,
+    MatAutocompleteModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideFunctions(() => getFunctions()),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    BrowserModule,
+    ModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

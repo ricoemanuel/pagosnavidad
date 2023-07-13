@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -23,7 +24,9 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
   displayedColumns: string[] = ['codigo', 'descripcion', 'precioCompra', 'precioVenta', 'acciones'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   esAdmin: any
-  
+  @Input() showconfig!:string;
+  @Output() myEvent = new EventEmitter();
+  cantidad=new FormControl()
   constructor(private router: Router, private firebaseService: FirebaseService) { 
     this.dataSource = new MatTableDataSource<Producto>();
     this.dataSource.paginator = this.paginator;
@@ -39,6 +42,10 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
       this.router.navigate(["/admin"])
     }
     this.getProductos();
+    if(this.showconfig){
+      console.log(this.showconfig)
+      this.displayedColumns=['codigo', 'descripcion', 'precioVenta','cantidad', 'acciones'];
+    }
   }
 
   getProductos() {
@@ -66,5 +73,9 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  emitProduct(producto:any){
+    let cantidad=this.cantidad.value
+    this.myEvent.emit({producto,cantidad});
   }
 }

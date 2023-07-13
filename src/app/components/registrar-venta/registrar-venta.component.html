@@ -1,0 +1,16 @@
+<div class="container">
+    <form [formGroup]="venta">
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Producto</mat-label>
+                    <input (click)="openPopup(productos)" matInput formControlName="producto" required>
+                    
+                  </mat-form-field>
+            </div>
+        </div>
+    </form>
+</div>
+<ng-template #productos>
+    <app-productos-lista (myEvent)="handleEvent($event)" [showconfig]="'venta'"></app-productos-lista>
+</ng-template>

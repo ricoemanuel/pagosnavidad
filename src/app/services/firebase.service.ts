@@ -104,14 +104,14 @@ export class FirebaseService {
       switchMap(empresa => {
         const productosRef = collection(this.firestore, 'productos');
         const queryRef = query(productosRef, where('empresa', '==', empresa));
-  
+
         return collectionData(queryRef, { idField: 'id' }).pipe(
           map(productos => productos.map((producto: any) => ({ id: producto.id, ...producto })))
         );
       })
     );
   }
-
+  
   eliminarProducto(id: string) {
     const productoRef = doc(this.firestore, "productos", id);
     return deleteDoc(productoRef);
