@@ -111,7 +111,7 @@ export class FirebaseService {
       })
     );
   }
-  
+
   eliminarProducto(id: string) {
     const productoRef = doc(this.firestore, "productos", id);
     return deleteDoc(productoRef);
@@ -212,4 +212,54 @@ export class FirebaseService {
     const usuarioRef = doc(this.firestore, "usuarios", id);
     return setDoc(usuarioRef, data);
   }
+
+  // Proveedores
+  proveedores: Observable<any[]> | undefined;
+
+  addProveedor(proveedor: any) {
+    const proveedoresCollection = collection(this.firestore, "proveedores");
+    return addDoc(proveedoresCollection, proveedor);
+  }
+
+  getProveedores() {
+    const proveedoresRef = collection(this.firestore, "proveedores");
+    return collectionData(proveedoresRef, { idField: 'id' }).pipe(
+      map(proveedores => proveedores.map((proveedor: any) => ({ id: proveedor['id'], ...proveedor })))
+    );
+  }
+
+  eliminarProveedor(id: string) {
+    const proveedorRef = doc(this.firestore, "proveedores", id);
+    return deleteDoc(proveedorRef);
+  }
+
+  async getProveedor(id: string) {
+    const proveedorRef = doc(this.firestore, "proveedores", id);
+    const proveedorSnapshot = await getDoc(proveedorRef);
+
+    if (proveedorSnapshot.exists()) {
+      const proveedorData = proveedorSnapshot.data();
+      return proveedorData;
+    } else {
+      return null;
+    }
+  }
+
+  setProveedor(id: string, data: any) {
+    const proveedorRef = doc(this.firestore, "proveedores", id);
+    return setDoc(proveedorRef, data);
+  }
+  getProveedoresByEmpresa(): Observable<any[]> {
+    return from(this.getCurrentEmpresa()).pipe(
+      switchMap(empresa => {
+        const proveedoresRef = collection(this.firestore, 'proveedores');
+        const queryRef = query(proveedoresRef, where('empresa', '==', empresa));
+
+        return collectionData(queryRef, { idField: 'id' }).pipe(
+          map(proveedores => proveedores.map((proveedor: any) => ({ id: proveedor.id, ...proveedor })))
+        );
+      })
+    );
+  }
+
 }
