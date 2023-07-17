@@ -39,6 +39,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { RendererFactory2 } from '@angular/core';
+import { FormProveedoresComponent } from './components/form-proveedores/form-proveedores.component';
+import { ProveedoresListaComponent } from './components/proveedores-lista/proveedores-lista.component';
 
 
 @NgModule({
@@ -50,7 +52,9 @@ import { RendererFactory2 } from '@angular/core';
     ClientesListaComponent,
     FormProductosComponent,
     ProductosListaComponent,
-    RegistrarVentaComponent
+    RegistrarVentaComponent,
+    FormProveedoresComponent,
+    ProveedoresListaComponent
   ],
   imports: [
     BrowserModule,

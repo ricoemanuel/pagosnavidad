@@ -6,6 +6,8 @@ import { ClientesListaComponent } from './components/clientes-lista/clientes-lis
 import { ProductosListaComponent } from './components/productos-lista/productos-lista.component';
 import { FormProductosComponent } from './components/form-productos/form-productos.component';
 import { RegistrarVentaComponent } from './components/registrar-venta/registrar-venta.component';
+import { ProveedoresListaComponent } from './components/proveedores-lista/proveedores-lista.component';
+import { FormProveedoresComponent } from './components/form-proveedores/form-proveedores.component';
 
 //Components
 const routes: Routes = [
@@ -15,6 +17,9 @@ const routes: Routes = [
   { path: "editarcliente/:id", component: FormClientesComponent },
   { path: "productos", component: ProductosListaComponent },
   { path: "registrarproducto", component: FormProductosComponent },
+  {path: "proveedores", component: ProveedoresListaComponent},
+  {path: "editarproveedor/:id",component: FormProveedoresComponent},
+  {path: "registrarproveedor",component: FormProveedoresComponent},
   {
     path:'admin',
     loadChildren: ()=>
