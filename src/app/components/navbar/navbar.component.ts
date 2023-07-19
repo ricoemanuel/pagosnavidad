@@ -66,6 +66,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
       ruta[1]==='registrarproducto'?this.Title='Registrar producto':this.Title=ruta[1]
       ruta[1]==='registrarcliente'?this.Title='Registrar cliente':this.Title=ruta[1]
       ruta[1]==='registrarproveedor'?this.Title='Registrar proveedor':this.Title=ruta[1]
+      ruta[1]==='nuevaventa'?this.Title='nueva venta':this.Title=ruta[1]
      }else{
       ruta[2]==='registrarempresa'?this.Title='Registrar empresa':this.Title=ruta[2]
      }

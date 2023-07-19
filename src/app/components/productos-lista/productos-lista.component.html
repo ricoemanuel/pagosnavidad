@@ -32,9 +32,21 @@
       <th mat-header-cell *matHeaderCellDef> Cantidad </th>
       <td mat-cell *matCellDef="let element"> 
         <mat-form-field class="example-full-width" style="width: 80px;">
-          
-          <input [formControl]="cantidad" matInput  required>
-          
+          <input 
+          [formControl]="$any(cantidad).controls[element.codigo]" 
+          (keyup.enter)="emitProduct(element)"
+          matInput required>
+        </mat-form-field>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="descuento">
+      <th mat-header-cell *matHeaderCellDef> Descuento </th>
+      <td mat-cell *matCellDef="let element"> 
+        <mat-form-field class="example-full-width" style="width: 80px;">
+          <input 
+          [formControl]="$any(descuento).controls[element.codigo]" 
+          (keyup.enter)="emitProduct(element)"
+          matInput required>
         </mat-form-field>
       </td>
     </ng-container>

@@ -1,0 +1,28 @@
+.buscador {
+    display: flex;
+    justify-content: center;
+
+    & mat-form-field {
+        width: 80% !important;
+        margin: 0 auto;
+    }
+}
+
+.datatable {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    border-radius: 9px;
+}
+.container{
+    & .button-container {
+        display: grid;
+        place-items: center; 
+        & mat-icon{
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+        }
+      }
+}

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -26,10 +26,12 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
   esAdmin: any
   @Input() showconfig!:string;
   @Output() myEvent = new EventEmitter();
-  cantidad=new FormControl()
-  constructor(private router: Router, private firebaseService: FirebaseService) { 
+  cantidad!:FormGroup
+  descuento!:FormGroup
+  constructor(private router: Router, private firebaseService: FirebaseService,private fb: FormBuilder) { 
     this.dataSource = new MatTableDataSource<Producto>();
     this.dataSource.paginator = this.paginator;
+    
   }
 
   ngAfterViewInit() {
@@ -44,13 +46,19 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
     this.getProductos();
     if(this.showconfig){
       console.log(this.showconfig)
-      this.displayedColumns=['codigo', 'descripcion', 'precioVenta','cantidad', 'acciones'];
+      this.displayedColumns=['codigo', 'descripcion', 'precioVenta','cantidad','descuento'];
     }
   }
 
   getProductos() {
     this.firebaseService.getProductosByempresa().subscribe(productos => {
       this.dataSource.data = productos;
+      this.cantidad = this.fb.group({});
+      this.descuento = this.fb.group({});
+      productos.forEach((producto) => {
+        this.cantidad.addControl(producto.codigo, new FormControl(''));
+        this.descuento.addControl(producto.codigo, new FormControl(''));
+      });
     });
   }
 
@@ -75,7 +83,12 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
     }
   }
   emitProduct(producto:any){
-    let cantidad=this.cantidad.value
-    this.myEvent.emit({producto,cantidad});
+    let codigo=producto.codigo
+    let cantidad=this.cantidad.value[codigo]
+    let descuento=this.descuento.value[codigo]
+    if(cantidad!==""){
+      this.myEvent.emit({producto,cantidad,descuento});
+    }
+    
   }
 }
