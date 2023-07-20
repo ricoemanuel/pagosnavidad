@@ -46,7 +46,7 @@ export class ProductosListaComponent implements OnInit,AfterViewInit {
     this.getProductos();
     if(this.showconfig){
       console.log(this.showconfig)
-      this.displayedColumns=['codigo', 'descripcion', 'precioVenta','cantidad','descuento'];
+      this.displayedColumns=['codigo', 'descripcion', 'precioVenta','cantidad','descuento','acciones'];
     }
   }
 

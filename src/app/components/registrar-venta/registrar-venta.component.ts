@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 
 @Component({
@@ -44,17 +44,17 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
   handleEvent(eventData: any) {
     eventData.descuento === "" ? eventData.descuento = 0 : eventData.descuento = parseFloat(eventData.descuento)
     eventData.cantidad = parseFloat(eventData.cantidad)
-    if (!Number.isNaN(eventData.descuento) && !Number.isNaN(eventData.cantidad)) {
-      const existingProductIndex = this.dataSource.data.findIndex((item) => item.producto.codigo === eventData.producto.codigo);
-      if (existingProductIndex !== -1) {
-        this.dataSource.data[existingProductIndex].cantidad = eventData.cantidad;
-        this.dataSource.data[existingProductIndex].descuento = eventData.descuento;
-      } else {
-        this.dataSource.data.push(eventData);
-      }
-      this.dataSource.data = [...this.dataSource.data];
-      this.RetoCardmodalRef?.hide();
-    }
+     if (!Number.isNaN(eventData.descuento) && !Number.isNaN(eventData.cantidad)) {
+       const existingProductIndex = this.dataSource.data.findIndex((item) => item.producto.codigo === eventData.producto.codigo);
+       if (existingProductIndex !== -1) {
+         this.dataSource.data[existingProductIndex].cantidad = eventData.cantidad;
+         this.dataSource.data[existingProductIndex].descuento = eventData.descuento;
+       } else {
+         this.dataSource.data.push(eventData);
+       }
+       this.dataSource.data = [...this.dataSource.data];
+       this.RetoCardmodalRef?.hide();
+     }
 
   }
   editarProducto(element: any) {
@@ -68,25 +68,49 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  @ViewChild('factura') pdfTable!: ElementRef;
+  @ViewChild('factura',{ static: false }) pdfTable!: ElementRef;
   exportPDF() {
-    const pdfTable = this.pdfTable.nativeElement;
+    const doc:any = new jsPDF();
+    let yPosition = 20;
+    const headerText = 'Grupo sincro\nTeléfono: 2222222\nCiudad: Bello';
+    doc.setFontSize(18);
+    doc.setFontSize(12);
+    doc.setTextColor(100);
+    // Prepare the data for the table
+    const tableData = this.dataSource.data.map(product => [
+      product.cantidad,
+      product.descuento,
+      product.producto.codigo,
+      product.producto.precioVenta,
+      product.producto.descripcion
+    ]);
+    // Calculate the number of rows that fit in one page
+    const rowHeight = 6; // Adjust the row height as needed
+    const maxRowsPerPage = Math.floor((doc.internal.pageSize.getHeight() - yPosition) / rowHeight);
 
-    html2canvas(pdfTable).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
+    // Generate the table in multiple pages
+    let currentPage = 1;
+    let remainingRows = tableData.length;
 
-      const pdf = new jsPDF({
-        orientation: "p",
-        unit: "mm",
-        format: "letter",
+    while (remainingRows > 0) {
+      if (currentPage !== 1) {
+        doc.addPage();
+      }
+
+      doc.text(headerText, 15, 20);
+      doc.setFillColor(217, 217, 217);
+      doc.autoTable({
+        startY: yPosition + 30,
+        head: [['Cantidad', 'Descuento', 'Código', 'Precio', 'Descripción']],
+        body: tableData.slice((currentPage - 1) * maxRowsPerPage, currentPage * maxRowsPerPage),
       });
 
-      const width = pdf.internal.pageSize.getWidth() * 0.8; // Ancho del contenido al 80% de la página
-      const height = (canvas.height * width) / canvas.width;
-      pdf.addImage(imgData, "PNG", 10, 10, width, height); // Ajusta la posición y tamaño del contenido en el PDF
+      currentPage++;
+      remainingRows -= maxRowsPerPage;
+    }
 
-      pdf.save("example.pdf");
-    });
-
+    doc.save('productos.pdf');
   }
+  
+
 }
