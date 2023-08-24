@@ -8,6 +8,7 @@ import { FormProductosComponent } from './components/form-productos/form-product
 import { RegistrarVentaComponent } from './components/registrar-venta/registrar-venta.component';
 import { ProveedoresListaComponent } from './components/proveedores-lista/proveedores-lista.component';
 import { FormProveedoresComponent } from './components/form-proveedores/form-proveedores.component';
+import { VentasListaComponent } from './components/ventas-lista/ventas-lista.component';
 
 //Components
 const routes: Routes = [
@@ -29,7 +30,7 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "", redirectTo: "clientes", pathMatch: "full" },
   { path: "nuevaventa", component: RegistrarVentaComponent },
-  
+  { path: "ventas", component: VentasListaComponent },
 ];
 
 

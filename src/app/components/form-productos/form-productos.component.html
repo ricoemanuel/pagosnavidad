@@ -11,13 +11,26 @@
           <div class="row">
             <mat-form-field appearance="fill">
               <mat-label>Código</mat-label>
-              <input matInput formControlName="codigo" placeholder="Ingresa el código" required>
+              <input [readonly]="id" matInput formControlName="codigo" placeholder="Ingresa el código" required>
             </mat-form-field>
           </div>
           <div class="row">
             <mat-form-field appearance="fill">
-              <mat-label>Descripción</mat-label>
-              <input matInput formControlName="descripcion" placeholder="Ingresa la descripción" required>
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="nombre" placeholder="Ingresa el nombre" required>
+            </mat-form-field>
+          </div>
+          
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Referencia Fábrica</mat-label>
+              <input matInput formControlName="referenciaFabrica" placeholder="Ingresa la descripción" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Tipo</mat-label>
+              <input matInput formControlName="tipo" placeholder="Ingresa el tipo" required>
             </mat-form-field>
           </div>
         </form>
@@ -31,19 +44,31 @@
       </mat-step>
   
       <!-- Segundo paso - Costos -->
-      <mat-step [stepControl]="createProductoCostos">
-        <ng-template matStepLabel>Costos</ng-template>
-        <form [formGroup]="createProductoCostos">
+      <mat-step [stepControl]="datosInventario">
+        <ng-template matStepLabel>Datos del inventario</ng-template>
+        <form [formGroup]="datosInventario">
           <div class="row">
             <mat-form-field appearance="fill">
-              <mat-label>Precio de compra</mat-label>
-              <input matInput formControlName="precioCompra" placeholder="Ingresa el precio de compra" required>
+              <mat-label>Grupo del inventario</mat-label>
+              <input matInput formControlName="grupoInventario" placeholder="Ingresa el grupo del inventario" required>
             </mat-form-field>
           </div>
           <div class="row">
             <mat-form-field appearance="fill">
-              <mat-label>Precio de venta</mat-label>
-              <input matInput formControlName="precioVenta" placeholder="Ingresa el precio de venta" required>
+              <mat-label>Estado</mat-label>
+              <input matInput formControlName="estado" placeholder="Ingresa el estado" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Impuesto a cargo</mat-label>
+              <input matInput formControlName="impuestoCargo" placeholder="Ingresa el impuesto a cargo" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Inventariable</mat-label>
+              <input matInput formControlName="inventariable" placeholder="Ingresa el inventariable" required>
             </mat-form-field>
           </div>
         </form>
@@ -54,7 +79,57 @@
             </button>
           </div>
           <div class="footer__right">
-            <button mat-button (click)="addEditarProducto()" [disabled]="createProductoCostos.invalid">
+            <button mat-button matStepperNext [disabled]="datosInventario.invalid">
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+            <!-- <button mat-button (click)="addEditarProducto()" [disabled]="datosInventario.invalid">
+              <mat-icon>check_circle</mat-icon>
+            </button> -->
+          </div>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="datosAdicionales">
+        <ng-template matStepLabel>Datos del inventario</ng-template>
+        <form [formGroup]="datosAdicionales">
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Es incluido</mat-label>
+              <input matInput formControlName="esIncluido" placeholder="Ingresa si es incluido" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Saldo cantidades</mat-label>
+              <input matInput formControlName="saldoCantidades" placeholder="Ingresa el saldo cantidades" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>precioVenta1</mat-label>
+              <input matInput formControlName="precioVenta1" placeholder="Ingresa el precio de venta" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Precio de compra</mat-label>
+              <input matInput formControlName="precioDeCompra" placeholder="Ingresa el precio de compra" required>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Descripción larga</mat-label>
+              <input matInput formControlName="descripcionLarga" placeholder="Ingresa la descripcion larga" required>
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="footer">
+          <div class="footer__left">
+            <button mat-button matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+          </div>
+          <div class="footer__right">
+            <button mat-button (click)="addEditarProducto()" [disabled]="datosInventario.invalid">
               <mat-icon>check_circle</mat-icon>
             </button>
           </div>

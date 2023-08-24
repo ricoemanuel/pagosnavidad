@@ -1,22 +1,11 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Cliente } from 'src/app/entities/cliente';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { ClientesService } from 'src/app/services/observers/clientes.service';
 
-export interface Cliente {
-  nombre: string;
-  apellido: string;
-  email: string;
-  nit: string;
-  telefono: string;
-  cupo: string;
-  deuda: string;
-  direccion: string;
-  ciudad: string;
-  fechaCreacion: Date;
-  fechaActualizacion: Date;
-}
 
 @Component({
   selector: 'app-clientes-lista',
@@ -26,11 +15,12 @@ export interface Cliente {
 export class ClientesListaComponent implements OnInit, AfterViewInit {
 
   dataSource: MatTableDataSource<Cliente>;
-  displayedColumns: string[] = ['nit', 'nombre', 'apellido', 'email', 'acciones'];
+  displayedColumns: string[] = ['nit', 'nombre','acciones'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   esAdmin: any
-
-  constructor(private firebaseService: FirebaseService, private router: Router) {
+  @Input() showconfig!: string;
+  @Output() myEvent = new EventEmitter();
+  constructor(private firebaseService: FirebaseService, private router: Router,private Clientes:ClientesService) {
     this.dataSource = new MatTableDataSource<Cliente>();
     this.dataSource.paginator = this.paginator;
   }
@@ -48,7 +38,7 @@ export class ClientesListaComponent implements OnInit, AfterViewInit {
   }
 
   getClientes() {
-    this.firebaseService.getClientes().subscribe(clientes => {
+    this.Clientes.provideCliente().subscribe((clientes:any) => {
       this.dataSource.data = clientes;
     });
   }

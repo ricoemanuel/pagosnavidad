@@ -6,6 +6,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FacturaService } from 'src/app/services/factura.service';
+import { Cliente } from 'src/app/entities/cliente';
+import { Producto } from 'src/app/entities/producto';
 
 
 
@@ -23,7 +25,7 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   displayedColumns: string[] = ['codigo', 'descripcion', 'precioVenta', 'cantidad', 'descuento', 'total'];
-
+  cliente!:Cliente;
   constructor(
     private fb: FormBuilder,
     private firebase: FirebaseService,
@@ -42,26 +44,33 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
       class: 'modal-lg'
     });
   }
-  handleEvent(eventData: any) {
+  AnadirProducto(eventData: any) {
     eventData.descuento === "" ? eventData.descuento = 0 : eventData.descuento = parseFloat(eventData.descuento)
     eventData.cantidad = parseFloat(eventData.cantidad)
-    this.dataSource.data = [...this.dataSource.data];
-    this.dataSource.data.push(eventData);
-    // if (!Number.isNaN(eventData.descuento) && !Number.isNaN(eventData.cantidad)) {
-    //   const existingProductIndex = this.dataSource.data.findIndex((item) => item.producto.codigo === eventData.producto.codigo);
-    //   if (existingProductIndex !== -1) {
-    //     this.dataSource.data[existingProductIndex].cantidad = eventData.cantidad;
-    //     this.dataSource.data[existingProductIndex].descuento = eventData.descuento;
-    //   } else {
-    //     this.dataSource.data.push(eventData);
-    //   }
-    //   this.dataSource.data = [...this.dataSource.data];
-    //   this.RetoCardmodalRef?.hide();
-    // }
+     if (!Number.isNaN(eventData.descuento) && !Number.isNaN(eventData.cantidad)) {
+       const existingProductIndex = this.dataSource.data.findIndex((item) => item.producto.codigo === eventData.producto.codigo);
+       if (existingProductIndex !== -1) {
+         this.dataSource.data[existingProductIndex].cantidad = eventData.cantidad;
+         this.dataSource.data[existingProductIndex].descuento = eventData.descuento;
+       } else {
+         this.dataSource.data.push(eventData);
+       }
+       this.dataSource.data = [...this.dataSource.data];
+       
+     }
 
   }
-  editarProducto(element: any) {
-
+  
+  handleProducto(eventData:any[]){
+    eventData.forEach((producto:any)=>{
+      this.AnadirProducto(producto)
+    })
+    this.RetoCardmodalRef?.hide();
+    console.log(this.dataSource.data)
+  }
+  handleCliente(eventData:Cliente){
+    this.cliente=eventData
+    this.RetoCardmodalRef?.hide();
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -71,6 +80,8 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  
+    
   
 
 

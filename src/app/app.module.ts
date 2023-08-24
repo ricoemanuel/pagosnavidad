@@ -41,6 +41,7 @@ import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { RendererFactory2 } from '@angular/core';
 import { FormProveedoresComponent } from './components/form-proveedores/form-proveedores.component';
 import { ProveedoresListaComponent } from './components/proveedores-lista/proveedores-lista.component';
+import { VentasListaComponent } from './components/ventas-lista/ventas-lista.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { ProveedoresListaComponent } from './components/proveedores-lista/provee
     ProductosListaComponent,
     RegistrarVentaComponent,
     FormProveedoresComponent,
-    ProveedoresListaComponent
+    ProveedoresListaComponent,
+    VentasListaComponent
   ],
   imports: [
     BrowserModule,

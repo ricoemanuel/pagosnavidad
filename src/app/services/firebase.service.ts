@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, signOut, authState, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from '@angular/fire/firestore';
 import { Observable, from, map, switchMap } from 'rxjs';
+import { Empresa } from '../entities/empresa';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,32 @@ export class FirebaseService {
       map(clientes => clientes.map((cliente: any) => ({ id: cliente['id'], ...cliente })))
     );
   }
+  getClientesByempresa(): Observable<any[]> {
+    console.log("clientes observados")
+    return from(this.getCurrentEmpresa()).pipe(
+      switchMap(empresa => {
+        const clientesRef = collection(this.firestore, 'clientes');
+        const queryRef = query(clientesRef, where('empresa', '==', empresa));
+
+        return collectionData(queryRef, { idField: 'id' }).pipe(
+          map(clientes => clientes.map((cliente: any) => ({ id: cliente.id, ...cliente })))
+        );
+      })
+    );
+  }
+  getVentasByempresa(): Observable<any[]> {
+    console.log("ventas observadas")
+    return from(this.getCurrentEmpresa()).pipe(
+      switchMap(empresa => {
+        const ventasRef = collection(this.firestore, 'ventas');
+        const queryRef = query(ventasRef, where('empresa', '==', empresa));
+
+        return collectionData(queryRef, { idField: 'id' }).pipe(
+          map(ventas => ventas.map((venta: any) => ({ id: venta.id, ...venta })))
+        );
+      })
+    );
+  }
 
   eliminarCliente(id: string) {
     const clienteRef = doc(this.firestore, "clientes", id);
@@ -104,10 +131,10 @@ export class FirebaseService {
       switchMap(empresa => {
         const productosRef = collection(this.firestore, 'productos');
         const queryRef = query(productosRef, where('empresa', '==', empresa));
-
+        console.log("query done Products")
         return collectionData(queryRef, { idField: 'id' }).pipe(
           map(productos => productos.map((producto: any) => ({ id: producto.id, ...producto })))
-        );
+        ); 
       })
     );
   }
@@ -129,9 +156,9 @@ export class FirebaseService {
     }
   }
 
-  setProducto(id: string, data: any) {
+  async setProducto(id: string, data: any) {
     const productoRef = doc(this.firestore, "productos", id);
-    return setDoc(productoRef, data);
+    await setDoc(productoRef, data);
   }
 
   //empresas
@@ -153,10 +180,10 @@ export class FirebaseService {
     const empresaRef = doc(this.firestore, "empresas", id);
     const empresaSnapshot = await getDoc(empresaRef);
     if (empresaSnapshot.exists()) {
-      const productoData = empresaSnapshot.data();
-      return productoData;
+      const empresaData:Empresa = (empresaSnapshot.data() as Empresa);
+      return empresaData;
     } else {
-      return null;
+      return {};
     }
   }
   async getCurrentEmpresa() {
@@ -260,6 +287,22 @@ export class FirebaseService {
         );
       })
     );
+  }
+  setVenta(venta:any){
+    const addVenta = collection(this.firestore, "ventas");
+    return addDoc(addVenta, venta);
+  }
+  async setCliente(id: string, data: any) {
+    const clienteRef = doc(this.firestore, "clientes", id);
+    await setDoc(clienteRef, data);
+  }
+  setReserva(id: string, data: any) {
+    const ReservaRef = doc(this.firestore, "Reservas", id);
+    return setDoc(ReservaRef, data);
+  }
+  updateVenta(id:string,data:any){
+    const ventaRef = doc(this.firestore, "ventas", id);
+    return setDoc(ventaRef, data);
   }
 
 }

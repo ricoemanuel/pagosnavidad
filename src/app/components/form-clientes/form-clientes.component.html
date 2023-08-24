@@ -9,20 +9,26 @@
       <form [formGroup]="createClientePersonal" class="form">
         <div class="row">
           <mat-form-field appearance="fill">
-            <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombre" placeholder="Ingresa el nombre" required>
+            <mat-label>Nombre Tercero</mat-label>
+            <input matInput formControlName="nombreTercero" placeholder="Ingresa el nombre del tercero" required>
           </mat-form-field>
         </div>
         <div class="row">
           <mat-form-field appearance="fill">
-            <mat-label>Apellido</mat-label>
-            <input matInput formControlName="apellido" placeholder="Ingresa el apellido" required>
+            <mat-label>Tipo identificación</mat-label>
+            <input matInput formControlName="tipoId" placeholder="Ingresa el tipo de id" required>
           </mat-form-field>
         </div>
         <div class="row">
           <mat-form-field appearance="fill">
             <mat-label>Id</mat-label>
-            <input matInput formControlName="nit" placeholder="Ingresa el id" required>
+            <input matInput formControlName="Id" placeholder="Ingresa el id" required>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>Dígito de Verificación</mat-label>
+            <input matInput formControlName="digitoVerificacion" placeholder="Ingresa el dígito de verificación" required>
           </mat-form-field>
         </div>
       </form>
@@ -41,8 +47,8 @@
       <form [formGroup]="createClienteContacto">
         <div class="row">
           <mat-form-field appearance="fill">
-            <mat-label>Correo electrónico</mat-label>
-            <input matInput formControlName="email" placeholder="Ingresa el correo electrónico" required>
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="direccion" placeholder="Ingresa la dirección" required>
           </mat-form-field>
         </div>
         <div class="row">
@@ -59,8 +65,8 @@
         </div>
         <div class="row">
           <mat-form-field appearance="fill">
-            <mat-label>Dirección</mat-label>
-            <input matInput formControlName="direccion" placeholder="Ingresa la dirección" required>
+            <mat-label>Nombre del Contacto</mat-label>
+            <input matInput formControlName="nombreContacto" placeholder="Ingresa el nombre de contacto" required>
           </mat-form-field>
         </div>
       </form>
@@ -71,43 +77,14 @@
           </button>
         </div>
         <div class="footer__right">
-          <button mat-button matStepperNext [disabled]="createClienteContacto.invalid">
-            <mat-icon>arrow_forward</mat-icon>
+          <button mat-button (click)="addEditarCliente()" [disabled]="createClienteContacto.invalid">
+            <mat-icon>check_circle</mat-icon>
           </button>
         </div>
       </div>
     </mat-step>
 
-<!-- Segundo paso - Cartera -->
-<mat-step [stepControl]="createClienteCartera">
-  <ng-template matStepLabel>Cartera</ng-template>
-  <form [formGroup]="createClienteCartera">
-    <div class="row">
-      <mat-form-field appearance="fill">
-        <mat-label>Cupo</mat-label>
-        <input matInput formControlName="cupo" placeholder="Ingresa el cupo" required>
-      </mat-form-field>
-    </div>
-    <div class="row">
-      <mat-form-field appearance="fill">
-        <mat-label>Deuda</mat-label>
-        <input matInput formControlName="deuda" placeholder="Ingresa la deuda" required>
-      </mat-form-field>
-    </div>
-  </form>
-  <div class="footer">
-    <div class="footer__left">
-      <button mat-button matStepperPrevious>
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-    </div>
-    <div class="footer__right">
-      <button mat-button (click)="addEditarCliente()" [disabled]="createClienteCartera.invalid">
-        <mat-icon>check_circle</mat-icon>
-      </button>
-    </div>
-  </div>
-</mat-step>
+
 </mat-horizontal-stepper>
 </div>
 

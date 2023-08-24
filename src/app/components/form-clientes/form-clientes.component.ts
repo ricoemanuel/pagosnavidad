@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Cliente } from 'src/app/entities/cliente';
 import { FirebaseService } from 'src/app/services/firebase.service';
+
 
 @Component({
   selector: 'app-form-clientes',
@@ -11,7 +13,6 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class FormClientesComponent {
   createClientePersonal: FormGroup;
   createClienteContacto: FormGroup;
-  createClienteCartera: FormGroup;
   submitted = false;
   id: string | null;
   titulo = "Registrar cliente";
@@ -23,30 +24,28 @@ export class FormClientesComponent {
     private aRoute: ActivatedRoute
   ) {
     this.createClientePersonal = this.fb.group({
-      nombre: ["", Validators.required],
-      apellido: ["", Validators.required],
-      nit: ["", Validators.required]
+      nombreTercero: ["", Validators.required],
+      tipoId: ["", Validators.required],
+      Id: ["", Validators.required],
+      digitoVerificacion: ["", Validators.required],
     });
 
     this.createClienteContacto = this.fb.group({
-      email: ["", Validators.required],
+      direccion: ["", Validators.required],
       telefono: ["", Validators.required],
       ciudad: ["", Validators.required],
-      direccion: ["", Validators.required]
+      nombreContacto: ["", Validators.required]
     });
 
-    this.createClienteCartera = this.fb.group({
-      cupo: ["", Validators.required],
-      deuda: ["", Validators.required]
-    });
+
 
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
 
   async ngOnInit(): Promise<void> {
-    this.esAdmin=await this._clienteService.esAdmin()
+    this.esAdmin = await this._clienteService.esAdmin()
     if (this.esAdmin) {
-      
+
       this.router.navigate(["/admin"])
     }
     this.esCliente();
@@ -55,7 +54,7 @@ export class FormClientesComponent {
   addEditarCliente() {
     this.submitted = true;
 
-    if (this.createClientePersonal.invalid || this.createClienteContacto.invalid || this.createClienteCartera.invalid) {
+    if (this.createClientePersonal.invalid || this.createClienteContacto.invalid) {
       return;
     }
 
@@ -66,19 +65,18 @@ export class FormClientesComponent {
     }
   }
 
-  addCliente() {
-    const cliente: any = {
-      nombre: this.createClientePersonal.value.nombre,
-      apellido: this.createClientePersonal.value.apellido,
-      email: this.createClienteContacto.value.email,
-      nit: this.createClientePersonal.value.nit,
-      telefono: this.createClienteContacto.value.telefono,
-      cupo: this.createClienteCartera.value.cupo,
-      deuda: this.createClienteCartera.value.deuda,
-      direccion: this.createClienteContacto.value.direccion,
+  async addCliente() {
+    let cliente: Cliente = {
+      nombreTercero: this.createClientePersonal.value.nombreTercero,
+      tipoId: this.createClientePersonal.value.tipoId,
+      Id: this.createClientePersonal.value.Id,
+      digitoVerificacion: this.createClientePersonal.value.digitoVerificacion,
       ciudad: this.createClienteContacto.value.ciudad,
-      fechaCreacion: new Date(),
-      fechaActualizacion: new Date()
+      direccion: this.createClienteContacto.value.direccion,
+      nombreContacto: this.createClienteContacto.value.nombreContacto,
+      telefono: this.createClienteContacto.value.telefono,
+      estado: "Activo",
+      empresa: await this._clienteService.getCurrentEmpresa()
     };
 
     this._clienteService.addCliente(cliente)
@@ -99,22 +97,20 @@ export class FormClientesComponent {
         .then(data => {
           if (data) {
             this.createClientePersonal.patchValue({
-              nombre: data['nombre'],
-              apellido: data['apellido'],
-              nit: data['nit']
+              nombreTercero: data['nombreTercero'],
+              tipoId: data['tipoId'],
+              Id: data['Id'],
+              digitoVerificacion: data['digitoVerificacion'],
             });
 
             this.createClienteContacto.patchValue({
-              email: data['email'],
+              direccion: data['nombreTercero'],
               telefono: data['telefono'],
               ciudad: data['ciudad'],
-              direccion: data['direccion']
+              nombreContacto: data['nombreContacto']
             });
 
-            this.createClienteCartera.patchValue({
-              cupo: data['cupo'],
-              deuda: data['deuda']
-            });
+
           }
         })
         .catch(error => {
@@ -123,18 +119,18 @@ export class FormClientesComponent {
     }
   }
 
-  editarCliente(id: string) {
-    const cliente: any = {
-      nombre: this.createClientePersonal.value.nombre,
-      apellido: this.createClientePersonal.value.apellido,
-      email: this.createClienteContacto.value.email,
-      nit: this.createClientePersonal.value.nit,
-      telefono: this.createClienteContacto.value.telefono,
-      cupo: this.createClienteCartera.value.cupo,
-      deuda: this.createClienteCartera.value.deuda,
-      direccion: this.createClienteContacto.value.direccion,
+  async editarCliente(id: string) {
+    const cliente: Cliente = {
+      nombreTercero: this.createClientePersonal.value.nombreTercero,
+      tipoId: this.createClientePersonal.value.tipoId,
+      Id: this.createClientePersonal.value.Id,
+      digitoVerificacion: this.createClientePersonal.value.digitoVerificacion,
       ciudad: this.createClienteContacto.value.ciudad,
-      fechaActualizacion: new Date()
+      direccion: this.createClienteContacto.value.direccion,
+      nombreContacto: this.createClienteContacto.value.nombreContacto,
+      telefono: this.createClienteContacto.value.telefono,
+      estado: "Activo",
+      empresa: await this._clienteService.getCurrentEmpresa()
     };
 
     this._clienteService.actualizarEmpleado(id, cliente)

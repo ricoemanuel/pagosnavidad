@@ -2,6 +2,8 @@ import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FirebaseService } from './services/firebase.service';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { ProductosService } from './services/observers/productos.service';
+import { ClientesService } from './services/observers/clientes.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,13 +17,16 @@ export class AppComponent implements OnInit {
   developingMode: boolean = true
   constructor(
     private firebase: FirebaseService,
-    private route: Router,
     private elementRef: ElementRef,
-    private titleService: Title) {
+    private titleService: Title,
+    private ProductoOBS:ProductosService,
+    private ClienteOBS:ClientesService) {
     localStorage.setItem("registrando", "false")
   }
   async ngOnInit(): Promise<void> {
     await this.getUser()
+    // this.ProductoOBS.updateObs()
+    // this.ClienteOBS.updateObs()
     this.setTitle()
     setTimeout(() => {
       this.load = true; // Ocultar el indicador de carga
