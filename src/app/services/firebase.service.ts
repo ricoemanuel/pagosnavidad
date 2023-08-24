@@ -67,6 +67,7 @@ export class FirebaseService {
     console.log("clientes observados")
     return from(this.getCurrentEmpresa()).pipe(
       switchMap(empresa => {
+        console.log(empresa)
         const clientesRef = collection(this.firestore, 'clientes');
         const queryRef = query(clientesRef, where('empresa', '==', empresa));
 

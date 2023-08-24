@@ -29,6 +29,7 @@ export class ClientesService {
   }
   async updateObs(){
     this.Firebase.getClientesByempresa().subscribe((Clientes:Cliente[])=>{
+      console.log(Clientes)
       this.getCliente$(Clientes)
     }) 
   }

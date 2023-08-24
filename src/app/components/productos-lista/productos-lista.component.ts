@@ -116,7 +116,7 @@ export class ProductosListaComponent implements OnInit, AfterViewInit, OnDestroy
      let precio=this.precio.value[codigo]
      if (cantidad !== "" ) {
        if (producto.precioVenta1 === 0 && precio!=="") {
-         producto.precioFacturado = parseFloat(precio)
+         producto.precioVenta1 = parseFloat(precio)
        }
        this.listado.push({ producto, cantidad, descuento });
      }

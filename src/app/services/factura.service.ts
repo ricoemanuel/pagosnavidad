@@ -12,11 +12,17 @@ export class FacturaService {
   constructor(private firebase: FirebaseService) { }
   formattedCurrency = (value: any) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   formattedNumberWithCommas = (value: any) => value.toLocaleString('en-US');
-  async exportPDF(dataSource: any[], cliente: any, tipoAccion?:string, id?:string) {
+  async exportPDF(dataSource: any[], cliente: any, tipoAccion?: string, id?: string) {
+    // Crear un objeto Image
+    var img = new Image();
+
+    // Especificar la URL de la imagen
+    img.src = '../../assets/images/logoS.png';
+    
     console.log(dataSource, cliente)
     let empresa = await this.firebase.getCurrentEmpresa()
     let datosEmpresa: Empresa = await this.firebase.getEmpresa(empresa)
-    
+
     const doc: any = new jsPDF();
     let tableConfig = {
       startY: 250,
@@ -28,13 +34,13 @@ export class FacturaService {
       [datosEmpresa.ciudad,],
       [datosEmpresa.telefono,],
     ];
-    cliente.ciudad==='Medell�n'?cliente.ciudad='Medellín':cliente.ciudad
+
     const customer = [
-      [cliente.Id,cliente.ciudad],
-      [cliente.nombreTercero,cliente.direccion],
-      [cliente["telefono."],cliente.telefono],
+      [cliente.Id, cliente.ciudad],
+      [cliente.nombreTercero, cliente.direccion],
+      [cliente.telefono,],
     ];
-   
+
     const tableData = dataSource.map(product => {
       const descuentoDecimal = product.descuento / 100;
       const precioTotalConDescuento = (product.producto.precioVenta1 * (1 - descuentoDecimal)) * product.cantidad;
@@ -108,9 +114,21 @@ export class FacturaService {
         });
       }
     }
+   
+      var width = doc.internal.pageSize.getWidth(); 
+      var height = img.height * (width / img.width); 
+
+      
+      doc.addImage(img, 'PNG', (width/2)-2, 3, width - 200, height - 203);
+
     
-    if(tipoAccion!=='ventasLista'){let id: string = await this.guardarVenta(dataSource, cliente, totalFactura)}
-    doc.save(`venta-${id}.pdf`);
+    if (tipoAccion !== 'ventasLista') {
+      let idVenta: string = await this.guardarVenta(dataSource, cliente, totalFactura)
+      doc.save(`venta-${idVenta}.pdf`);
+    } else {
+      doc.save(`venta-${id}.pdf`);
+    }
+
 
   }
   async guardarVenta(data: any[], cliente: Cliente, totalFactura: number): Promise<string> {

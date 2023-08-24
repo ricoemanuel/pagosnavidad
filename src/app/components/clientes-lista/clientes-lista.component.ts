@@ -40,6 +40,7 @@ export class ClientesListaComponent implements OnInit, AfterViewInit {
   getClientes() {
     this.Clientes.provideCliente().subscribe((clientes:any) => {
       this.dataSource.data = clientes;
+      console.log(clientes)
     });
   }
 

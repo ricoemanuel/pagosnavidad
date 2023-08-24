@@ -50,6 +50,7 @@ export class FormProductosComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    //this.JsonFormatter.obtenerProductos()
     this.esAdmin = await this._productoService.esAdmin()
     if (this.esAdmin) {
       this.router.navigate(["/admin"])
