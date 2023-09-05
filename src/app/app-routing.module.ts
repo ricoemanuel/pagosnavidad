@@ -31,6 +31,7 @@ const routes: Routes = [
   { path: "", redirectTo: "clientes", pathMatch: "full" },
   { path: "nuevaventa", component: RegistrarVentaComponent },
   { path: "ventas", component: VentasListaComponent },
+  { path: "cartera/:id", component: VentasListaComponent },
 ];
 
 

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FacturaService } from 'src/app/services/factura.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { VentasService } from 'src/app/services/observers/ventas.service';
@@ -17,13 +17,16 @@ export class VentasListaComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   esAdmin: any
   exportData!:any[]
+  id: any;
   
   constructor(private firebaseService: FirebaseService, 
     private router: Router, 
     private Ventas:VentasService,
-    public facturaS:FacturaService) {
+    public facturaS:FacturaService,
+    private aRoute: ActivatedRoute) {
     this.dataSource = new MatTableDataSource<any>();
     this.dataSource.paginator = this.paginator;
+    this.id = this.aRoute.snapshot.paramMap.get('id');
   }
 
   ngAfterViewInit() {
@@ -35,7 +38,12 @@ export class VentasListaComponent {
     if (this.esAdmin) {
       this.router.navigate(["/admin"])
     }
-    this.getVentas();
+    if(!this.id){
+      this.getVentas();
+    }else{
+this.getVentasCartera();
+    }
+    
   }
 
   getVentas() {
@@ -43,6 +51,12 @@ export class VentasListaComponent {
       this.dataSource.data = Ventas;
       
     });
+  }
+  getVentasCartera() {
+    this.firebaseService.getVentasByCartera(this.id).subscribe((Ventas:any)=>{
+      console.log(Ventas)
+      this.dataSource.data=Ventas
+    })
   }
 
   editarVenta(Venta: any) {
@@ -67,6 +81,6 @@ export class VentasListaComponent {
      delete producto.precio
      delete producto.codigo
     })
-    this.facturaS.exportPDF(element.productos,element.cliente,'ventasLista',element.id)
+    this.facturaS.exportPDF(element.productos,element.cliente,element.observaciones,element.vendedor,'ventasLista',element.numeroFactura, element.fechaCreacion,element.fechaVencimiento)
   }
 }

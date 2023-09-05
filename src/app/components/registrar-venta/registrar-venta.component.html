@@ -16,7 +16,13 @@
     <div class="cliente-nombre">
         <p>Cliente:<span *ngIf="cliente"> {{ cliente.nombreTercero }}</span></p>
     </div>
-    
+    <div class="cliente-nombre">
+        <mat-form-field>
+            <mat-label>Observaciones</mat-label>
+            <textarea [(ngModel)]="observaciones" matInput></textarea>
+        </mat-form-field>
+    </div>
+
 
     <div class="mat-elevation-z8 overflow-auto col-md-11 datatable" #factura>
         <div class="buscador">
@@ -91,7 +97,7 @@
 
         <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator>
         <div class="button-container">
-            <button mat-button class="center-button" (click)="facturaS.exportPDF(dataSource.data,cliente!)">
+            <button mat-button class="center-button" (click)="guardarVenta()">
                 <mat-icon>receipt</mat-icon>
             </button>
         </div>

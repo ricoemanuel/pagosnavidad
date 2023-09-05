@@ -37,10 +37,13 @@ export class AppComponent implements OnInit {
       if (res) {
         this.user = res.uid
         let currentUser = localStorage.getItem("currentUser")
+        localStorage.setItem("currentUID",this.user)
         if (currentUser === null) {
           this.firebase.cerrarSesion()
           this.user = null
         }
+      }else{
+        
       }
     })
   }

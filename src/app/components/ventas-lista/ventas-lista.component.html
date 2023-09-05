@@ -8,8 +8,8 @@
 <div class="mat-elevation-z8 overflow-auto col-md-11 datatable">
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> ID </th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      <th mat-header-cell *matHeaderCellDef> Número de factura </th>
+      <td mat-cell *matCellDef="let element"> {{element.numeroFactura}} </td>
     </ng-container>
 
     <ng-container matColumnDef="nombre">

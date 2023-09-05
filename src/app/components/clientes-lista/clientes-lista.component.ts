@@ -65,4 +65,7 @@ export class ClientesListaComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  cartera(cliente:any){
+    this.router.navigate(['/cartera', cliente.Id]);
+  }
 }

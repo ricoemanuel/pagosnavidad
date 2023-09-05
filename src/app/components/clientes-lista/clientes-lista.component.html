@@ -31,6 +31,9 @@
         <button *ngIf="showconfig!=='venta'" mat-button (click)="editarCliente(element)">
           <mat-icon>edit</mat-icon>
         </button>
+        <button *ngIf="showconfig!=='venta'" mat-button (click)="cartera(element)">
+          <mat-icon>history</mat-icon>
+        </button>
         <button *ngIf="showconfig==='venta'" mat-button (click)="myEvent.emit(element)">
           <mat-icon>check_circle</mat-icon>
         </button>

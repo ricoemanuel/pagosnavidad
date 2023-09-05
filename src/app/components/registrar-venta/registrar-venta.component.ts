@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -8,8 +8,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FacturaService } from 'src/app/services/factura.service';
 import { Cliente } from 'src/app/entities/cliente';
 import { Producto } from 'src/app/entities/producto';
-
-
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registrar-venta',
@@ -26,11 +26,14 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   displayedColumns: string[] = ['codigo', 'descripcion', 'precioVenta', 'cantidad', 'descuento', 'total'];
   cliente!:Cliente;
+  observaciones=''
+  currentUser:string=localStorage.getItem('currentUID')!
   constructor(
     private fb: FormBuilder,
     private firebase: FirebaseService,
     private modalService: BsModalService,
-    public facturaS:FacturaService) {
+    public facturaS:FacturaService,
+    private Router: Router) {
     this.dataSource = new MatTableDataSource<any>();
   }
   ngAfterViewInit(): void {
@@ -79,6 +82,24 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  async guardarVenta(){
+    Swal.fire({
+      position: 'top-end',
+      icon: 'info',
+      title: 'Guardando venta...',
+      showConfirmButton: false,
+    })
+    await this.facturaS.exportPDF(this.dataSource.data,this.cliente!, this.observaciones, this.currentUser)
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Venta guardada',
+      showConfirmButton: false,
+      timer: 1500
+    }).then(()=>{
+      this.Router.navigate(['/ventas'])
+    })
   }
   
     

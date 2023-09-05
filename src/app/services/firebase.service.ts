@@ -77,6 +77,19 @@ export class FirebaseService {
       })
     );
   }
+  getVentasByCartera(clienteId: string): Observable<any[]> {
+    console.log(typeof clienteId)
+    const clientesRef = collection(this.firestore, 'ventas');
+    const queryRef = query(
+      clientesRef,
+      where('idCliente', '==', clienteId),
+      where('debe', '>', 0)
+    );
+    return collectionData(queryRef, { idField: 'id' }).pipe(
+      map(ventas => ventas.map((venta: any) => ({ id: venta.id, ...venta })))
+    );
+  }
+  
   getVentasByempresa(): Observable<any[]> {
     console.log("ventas observadas")
     return from(this.getCurrentEmpresa()).pipe(
@@ -305,5 +318,14 @@ export class FirebaseService {
     const ventaRef = doc(this.firestore, "ventas", id);
     return setDoc(ventaRef, data);
   }
-
+  async getConsecutivo(){
+    let empresa:any=await this.getCurrentEmpresa()
+    let consecutivo = doc(this.firestore, `consecutivo/${empresa}/consecutivo/numero`)
+    return getDoc(consecutivo);
+  }
+  async setConsecutivo(data: any) {
+    let empresa:any=await this.getCurrentEmpresa()
+    let consecutivo = doc(this.firestore, `consecutivo/${empresa}/consecutivo/numero`)
+    return setDoc(consecutivo, data);
+  }
 }
