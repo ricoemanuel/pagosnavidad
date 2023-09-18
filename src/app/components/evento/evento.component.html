@@ -1,0 +1,26 @@
+<div *ngIf="id && evento" class="row">
+    <div class="col">
+        <div class="img"></div>
+    </div>
+    <div class="col pt-3">
+        <div class="card mx-auto">
+            <div class="card-body">
+                <h5 class="card-title">{{evento.nombre}}</h5>
+                <p class="card-text">{{evento.descripcion}}</p>
+                <h6 class="card-subtitle mb-2 text-muted">Compra tu entrada:</h6>
+                <div class="row mx-auto">
+                    <div class="col line" *ngFor="let zona of evento.zonas" style="width: 18rem;">
+                        <h6 class="card-title">{{zona.nombreZona}}</h6>
+                        <p class="card-text"><strong>Precio: </strong>{{(zona.precioZona).toLocaleString('en-US',
+                            {style:'currency', currency: 'USD' })}}</p>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary mx-auto" (click)="openModal(template)">Comprar</button>
+        </div>
+        
+    </div>
+</div>
+<ng-template #template>
+    <app-grid-asientos></app-grid-asientos>
+</ng-template>
