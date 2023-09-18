@@ -1,11 +1,11 @@
 export const environment = {
   firebase: {
-    projectId: 'innovationhubes',
-    appId: '1:516056036769:web:75ef7c6b14947d5f9307e0',
-    storageBucket: 'innovationhubes.appspot.com',
-    apiKey: 'AIzaSyCEAuwGVK6oNRJxmBI4LXJbU98a7fKAACg',
-    authDomain: 'innovationhubes.firebaseapp.com',
-    messagingSenderId: '516056036769',
-    measurementId: 'G-CYGDC6QGV1',
+      projectId: 'myticketeventos',
+      appId: '1:290015062564:web:d1770a05acca36952cc6b1',
+      storageBucket: 'myticketeventos.appspot.com',
+      apiKey: 'AIzaSyDrmlLtmYc-pDGovvGvlJABEv4aDWgK_x8',
+      authDomain: 'myticketeventos.firebaseapp.com',
+      messagingSenderId: '290015062564',
+      measurementId: 'G-932QCRPQWS',
   },
 };

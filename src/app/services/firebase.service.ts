@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, signOut, authState, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from '@angular/fire/firestore';
 import { Observable, from, map, switchMap } from 'rxjs';
-import { Empresa } from '../entities/empresa';
 
 @Injectable({
   providedIn: 'root'
@@ -190,16 +189,7 @@ export class FirebaseService {
     return deleteDoc(empresaRef);
   }
 
-  async getEmpresa(id: string) {
-    const empresaRef = doc(this.firestore, "empresas", id);
-    const empresaSnapshot = await getDoc(empresaRef);
-    if (empresaSnapshot.exists()) {
-      const empresaData:Empresa = (empresaSnapshot.data() as Empresa);
-      return empresaData;
-    } else {
-      return {};
-    }
-  }
+ 
   async getCurrentEmpresa() {
     return new Promise<any>((resolve, reject) => {
       this.getAuthState().subscribe(async res => {

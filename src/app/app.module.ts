@@ -9,10 +9,7 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { provideFunctions,getFunctions } from '@angular/fire/functions';
-import { LoginComponent } from './components/login/login.component';
-import { FormClientesComponent } from './components/form-clientes/form-clientes.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { ClientesListaComponent } from './components/clientes-lista/clientes-lista.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatTableModule } from '@angular/material/table';
@@ -26,37 +23,20 @@ import {MatSelectModule} from '@angular/material/select';
 
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
-import { FormProductosComponent } from './components/form-productos/form-productos.component';
-import { ProductosListaComponent } from './components/productos-lista/productos-lista.component';
 
 import { MatExpansionModule } from '@angular/material/expansion';
 
 
 import {MatMenuModule} from '@angular/material/menu';
-import { RegistrarVentaComponent } from './components/registrar-venta/registrar-venta.component';
 
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { RendererFactory2 } from '@angular/core';
-import { FormProveedoresComponent } from './components/form-proveedores/form-proveedores.component';
-import { ProveedoresListaComponent } from './components/proveedores-lista/proveedores-lista.component';
-import { VentasListaComponent } from './components/ventas-lista/ventas-lista.component';
-
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    FormClientesComponent,
-    NavbarComponent,
-    ClientesListaComponent,
-    FormProductosComponent,
-    ProductosListaComponent,
-    RegistrarVentaComponent,
-    FormProveedoresComponent,
-    ProveedoresListaComponent,
-    VentasListaComponent
   ],
   imports: [
     BrowserModule,

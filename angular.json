@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "innovationhubes": {
+    "pagosenlinea": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/innovationhubes",
+            "outputPath": "dist/pagosenlinea",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "innovationhubes:build:production"
+              "browserTarget": "pagosenlinea:build:production"
             },
             "development": {
-              "browserTarget": "innovationhubes:build:development"
+              "browserTarget": "pagosenlinea:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "innovationhubes:build"
+            "browserTarget": "pagosenlinea:build"
           }
         },
         "test": {
@@ -106,7 +106,7 @@
           "builder": "@angular/fire:deploy",
           "options": {
             "version": 2,
-            "browserTarget": "innovationhubes:build:production"
+            "browserTarget": "pagosenlinea:build:production"
           }
         }
       }

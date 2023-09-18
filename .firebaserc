@@ -1,14 +1,14 @@
 {
   "targets": {
-    "innovationhubes": {
+    "myticketeventos": {
       "hosting": {
-        "innovationhubes": [
-          "innovationhubes"
+        "myticketeventos": [
+          "myticketeventos"
         ]
       }
     }
   },
   "projects": {
-    "default": "innovationhubes"
+    "default": "myticketeventos"
   }
 }

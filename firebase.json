@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "target": "innovationhubes",
+      "target": "myticketeventos",
       "source": ".",
       "frameworksBackend": {}
     }
