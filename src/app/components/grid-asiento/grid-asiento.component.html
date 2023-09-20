@@ -1,16 +1,15 @@
-<div>
+<div class="asientos">
     <table>
-        <ng-container *ngFor="let i of Array(is); let fila = index">
+        <ng-container *ngFor="let i of is; let fila = index">
             <tr>
-                <ng-container *ngFor="let j of Array(js); let columna = index">
+                <ng-container *ngFor="let j of js; let columna = index">
                     <td>
-                        <div>
-                            <app-asiento-palco [information]="{fila,columna,estado,evento}"></app-asiento-palco>
+                        <div *ngIf="matriz[fila][columna]">
+                            <app-asiento-palco [zonaSeleccionada]="zonaSeleccionada" (seleccionarAsiento)="agregarLista($event)" [information]="matriz[fila][columna]"></app-asiento-palco>
                         </div>
                     </td>
                 </ng-container>
             </tr>
         </ng-container>
     </table>
-
 </div>

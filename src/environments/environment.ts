@@ -7,5 +7,10 @@ export const environment = {
       authDomain: 'myticketeventos.firebaseapp.com',
       messagingSenderId: '290015062564',
       measurementId: 'G-932QCRPQWS',
+      databaseURL: 'https://myticketeventos-default-rtdb.firebaseio.com',
   },
+  wompi:{
+    head:'prv_prod_hYyfJ56bMTY3p34c5tTf4s7UPQTWXMfZ',
+    link:"https://production.wompi.co/v1/"
+  }
 };

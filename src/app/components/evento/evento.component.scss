@@ -1,35 +1,102 @@
 /* Estilos generales para la clase .img */
-.row{
-    width: 100%
+.row {
+    width: 100%;
+
 }
+
+.margin {
+    margin-top: -34px;
+}
+
 .img {
     background-image: url('../../../assets/rigo.jpg');
     background-size: cover;
     background-position: center;
     width: 100%;
-    height: 563px;
+    height: 400px;
+    margin: 20px;
 }
 
 
 @media (max-width: 768px) {
     .img {
-        width: 100vw; 
+        width: 90vw;
         height: 500px;
     }
 }
 
 
-.card{
+.card {
     padding: 12px;
-    & .card-title{
+
+    & .card-title {
         text-align: center;
     }
-    & .btn{
+
+    & .btn {
         width: 100px;
     }
 }
-.line{
+
+.line {
     border: 1px rgb(220, 220, 220) solid;
     margin: 2px;
     border-radius: 20px;
+    width: 100px !important;
+    height: 200px !important;
+}
+
+
+
+.centrar {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.title {
+    text-align: center;
+}
+
+.card-c {
+    height: 100px;
+    padding: 5px;
+    width: 180px;
+    margin: 20px;
+    cursor: pointer;
+
+    & .card-footer {
+        position: absolute;
+        bottom: 0;
+        width: 172px;
+    }
+}
+
+.margin-c {
+    margin-bottom: 20px;
+}
+
+::ng-deep .modal-dialog {
+    max-width: fit-content !important;
+}
+
+app-grid-asientos {
+        overflow: scroll;
+        margin-bottom: 10px;
+        &::-webkit-scrollbar {
+            height: 5px;
+            background-color: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgb(191, 191, 191);
+            border-radius: 20px;
+        }
+    }
+
+
+.wompi {
+    width: 90vw !important;
+    height: 90vh;
 }

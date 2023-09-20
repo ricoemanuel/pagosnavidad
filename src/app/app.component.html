@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<p *ngIf="!iniciarSesion" class="navbar">
+    <mat-toolbar color="primary">
+        <span>Eventos MyTicket</span>
+        <span class="example-spacer"></span>
+      </mat-toolbar>
+</p>
+<router-outlet *ngIf="!iniciarSesion"></router-outlet>
+
+
+<app-login *ngIf="iniciarSesion"></app-login>

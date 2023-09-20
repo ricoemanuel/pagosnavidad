@@ -1,22 +1,30 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, signOut, authState, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { DocumentData, Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, where } from '@angular/fire/firestore';
-import { Observable, from, map, switchMap } from 'rxjs';
-
+import { EMPTY, Observable, catchError, distinctUntilChanged, from, interval, map, switchMap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import {Database,Query, object, objectVal, ref} from '@angular/fire/database'
+import { traceUntilFirst } from '@angular/fire/performance';
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
-
-  //Login
+  private apiUrl = 'https://myticketeventos-default-rtdb.firebaseio.com/transacciones.json';
+  
   esAdminS!: boolean
-  constructor(private auth: Auth, private firestore: Firestore) { }
+  constructor(private database: Database,private auth: Auth, private firestore: Firestore,private http: HttpClient,private db: Database) { }
   login(objeto: any) {
     let email = objeto.email
     let password = objeto.password
     return signInWithEmailAndPassword(this.auth, email, password)
   }
-
+  getDatosWompi(): Observable<any> {
+    return interval(100).pipe(
+      switchMap(() => this.http.get<any>(this.apiUrl)),
+      distinctUntilChanged() // Emite solo si los datos son diferentes a los previos
+    );
+  }
+  
   singup(objeto: any) {
     let email = objeto.email
     let password = objeto.password
@@ -44,9 +52,9 @@ export class FirebaseService {
       return null;
     }
   }
-  getAsientoRealtime(fila: number, columna: number, evento: string): Observable<DocumentData[]> {
+  getAsientoRealtime(fila: number, columna: number, evento: string,zona:string): Observable<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
-    const q = query(entradaRef, where('fila', '==', fila), where('columna', '==', columna), where('evento', '==', evento));
+    const q = query(entradaRef, where('nombreZona', '==', zona),where('fila', '==', fila), where('columna', '==', columna), where('evento', '==', evento));
 
     return new Observable<DocumentData[]>(observer => {
       const unsubscribe = onSnapshot(q, snapshot => {
@@ -63,9 +71,119 @@ export class FirebaseService {
       };
     });
   }
+  getAsientoRealtimeByEvento(evento: string): Observable<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('evento', '==', evento));
+    return new Observable<DocumentData[]>(observer => {
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const asientos: DocumentData[] = [];
+        snapshot.forEach(doc => {
+          asientos.push(doc.data());
+        });
+        observer.next(asientos);
+      });
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
+  getAsientoRealtimeByUsuarioEstado(user: string, evento:string): Observable<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('clienteUser', '==', user),where('clienteEstado', '==', 'sin pagar'),where('evento', '==', evento));
+    return new Observable<DocumentData[]>(observer => {
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const asientos: DocumentData[] = [];
+        snapshot.forEach(doc => {
+          asientos.push(doc.data());
+        });
+        observer.next(asientos);
+      });
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
+  async getAsientoByUsuarioEstado(user: string, evento:string): Promise<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('clienteUser', '==', user),where('clienteEstado', '==', 'sin pagar'),where('evento', '==', evento));
+
+    try {
+        const snapshot = await getDocs(q);
+        const asientos: DocumentData[] = [];
+        snapshot.forEach(doc => {
+            asientos.push(doc.data());
+        });
+        return asientos;
+    } catch (error) {
+        console.error("Error al obtener los asientos:", error);
+        throw error; // Puedes manejar el error según tus necesidades
+    }
+}
+  async getAsientoByEvento(evento: string): Promise<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('evento', '==', evento));
+
+    try {
+        const snapshot = await getDocs(q);
+        const asientos: DocumentData[] = [];
+        snapshot.forEach(doc => {
+            asientos.push(doc.data());
+        });
+        return asientos;
+    } catch (error) {
+        console.error("Error al obtener los asientos:", error);
+        throw error; // Puedes manejar el error según tus necesidades
+    }
+}
+
+
   actualizarAsiento(asiento: any) {
     const entradaRef = doc(this.firestore, "asientos", `f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
-    setDoc(entradaRef, asiento)
+    return setDoc(entradaRef, asiento)
+  }
+  getAsiento(asiento: any) {
+    const entradaRef = doc(this.firestore, "asientos", `f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
+    return getDoc(entradaRef)
+  }
+  async getUser(uid:string){
+    const usuarioRef = doc(this.firestore, "usuarios", uid);
+    const usuarioSnapshot = await getDoc(usuarioRef);
+
+    if (usuarioSnapshot.exists()) {
+      const usuarioData = usuarioSnapshot.data();
+      return usuarioData;
+    } else {
+      return null;
+    }
+  }
+  async setUser(obj:any, uid:string){
+    const usuarioRef = doc(this.firestore, "usuarios", uid)
+    return setDoc(usuarioRef, obj)
+  }
+  getAsientosByEventoAndZona(eventoId:string,zona:string){
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('nombreZona', '==', zona),where('evento', '==', eventoId));
+    return new Observable<DocumentData[]>(observer => {
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const asientos: DocumentData[] = [];
+        snapshot.forEach(doc => {
+          asientos.push(doc.data());
+        });
+        observer.next(asientos);
+      });
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
+  transactions():Observable<any>{
+    const doc = ref(this.database, 'transacciones');
+    let transactions$: Observable<any>=objectVal(doc).pipe(
+      traceUntilFirst('database')
+    );
+    return transactions$
   }
 
 }
+
+

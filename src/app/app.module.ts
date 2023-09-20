@@ -8,6 +8,7 @@ import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { provideFunctions,getFunctions } from '@angular/fire/functions';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -35,14 +36,16 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { EventoComponent } from './components/evento/evento.component';
 import { GridAsientoComponent } from './components/grid-asiento/grid-asiento.component';
 import { AsientoPalcoComponent } from './components/asiento-palco/asiento-palco.component';
+import { LoginComponent } from './components/login/login.component';
 
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
     EventoComponent,
     GridAsientoComponent,
     AsientoPalcoComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,9 +65,11 @@ import { AsientoPalcoComponent } from './components/asiento-palco/asiento-palco.
     MatExpansionModule,
     MatMenuModule,
     MatAutocompleteModule,
+    HttpClientModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
+    provideDatabase(() => getDatabase()),
     provideFunctions(() => getFunctions()),
     BrowserAnimationsModule,
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
 @Component({
@@ -7,12 +7,14 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./grid-asiento.component.scss']
 })
 export class GridAsientoComponent implements OnInit{
-  
-  is:number=0
-  js:number=0
+  @Input() zonaSeleccionada!:string
+  is:any[]=[]
+  js:any[]=[]
   estado:string="inexistente"
   evento:string=""
   zona={'hexaColor':'white','nombreZona':'libre'}
+  matriz:any[]=[]
+  @Output() enviarAsientos = new EventEmitter<any>();
   constructor(private asientoService: FirebaseService,private route: ActivatedRoute,private router: Router){}
   async ngOnInit(): Promise<void> {
     this.route.params.subscribe(params => {
@@ -24,9 +26,22 @@ export class GridAsientoComponent implements OnInit{
         localStorage.setItem(element['nombreZona'],'0')
         
       });
-      this.is=evento["filas"]
-      this.js=evento["columnas"]
+      this.is=this.Array(evento["filas"])
+      this.js=this.Array(evento["columnas"])
+      for(let i=0;i<evento["filas"];i++){
+        let array:any[]=[]
+        for(let j=0;j<evento["columnas"];j++){
+          array.push(false)
+        }
+        this.matriz.push(array)
+      }
+      this.asientoService.getAsientosByEventoAndZona(this.evento,this.zonaSeleccionada).subscribe(res=>{
+        res.forEach((asiento:any)=>{
+          this.matriz[asiento.fila][asiento.columna]=asiento
+        })
+      })
     }
+    
     
   }
 
@@ -40,4 +55,9 @@ export class GridAsientoComponent implements OnInit{
   back(){
     this.router.navigate(['eventos'])
   }
+  
+  agregarLista(information:any){
+    this.enviarAsientos.emit(information)
+  }
+  
 }
