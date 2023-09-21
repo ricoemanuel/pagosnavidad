@@ -8,27 +8,18 @@
     margin-top: -34px;
 }
 
-.img {
-    background-image: url('../../../assets/rigo.jpg');
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    height: 400px;
-    margin: 20px;
+
+.img{
+    margin: 25px auto;
+    width: fit-content;
 }
 
-
 @media (max-width: 768px) {
-    .img {
-        width: 90vw;
-        height: 500px;
-    }
+    
 }
 
 
 .card {
-    padding: 12px;
-
     & .card-title {
         text-align: center;
     }
@@ -116,7 +107,7 @@ td.caja label.nombre {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 10px;
-    background-color: rgb(139 134 134);
+    background-color: rgb(73 71 71);
     color: white;
     border-radius: 5px;
   }
@@ -144,4 +135,10 @@ table {
     }
 }
 
-
+.spinner{
+    width: fit-content;
+    margin: 0 auto;
+    & img{
+        width: 50vw;
+    }
+  }

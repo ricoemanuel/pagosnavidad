@@ -1,10 +1,11 @@
-<p *ngIf="!iniciarSesion" class="navbar">
+<p *ngIf="!iniciarSesion && !cargando" class="navbar">
     <mat-toolbar color="primary">
         <span>Eventos MyTicket</span>
         <span class="example-spacer"></span>
+        <mat-icon style="cursor: pointer;" (click)="logout()" class="logout">logout</mat-icon>
       </mat-toolbar>
 </p>
-<router-outlet *ngIf="!iniciarSesion"></router-outlet>
+<router-outlet *ngIf="!iniciarSesion && !cargando"></router-outlet>
 
-
-<app-login *ngIf="iniciarSesion"></app-login>
+<div *ngIf="cargando" class="spinner"><img src="../assets/spinner.gif" alt=""></div>
+<app-login *ngIf="iniciarSesion && !cargando"></app-login>

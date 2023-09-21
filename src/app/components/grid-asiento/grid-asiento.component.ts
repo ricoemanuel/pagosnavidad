@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
 @Component({
@@ -6,7 +6,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   templateUrl: './grid-asiento.component.html',
   styleUrls: ['./grid-asiento.component.scss']
 })
-export class GridAsientoComponent implements OnInit{
+export class GridAsientoComponent implements OnInit,AfterViewInit{
+  spinner: boolean = true
   @Input() zonaSeleccionada!:string
   is:any[]=[]
   js:any[]=[]
@@ -16,6 +17,9 @@ export class GridAsientoComponent implements OnInit{
   matriz:any[]=[]
   @Output() enviarAsientos = new EventEmitter<any>();
   constructor(private asientoService: FirebaseService,private route: ActivatedRoute,private router: Router){}
+  ngAfterViewInit(): void {
+    this.spinner=false
+  }
   async ngOnInit(): Promise<void> {
     this.route.params.subscribe(params => {
       this.evento = params['id'];

@@ -12,3 +12,10 @@ table {
     text-align: center;
 
 }
+.spinner{
+    width: fit-content;
+    margin: 0 auto;
+    & img{
+        width: 50vw;
+    }
+  }

@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./evento.component.scss']
 })
 export class EventoComponent implements OnInit, OnDestroy,AfterViewInit {
+  spinner:boolean=true
   id: string | null;
   evento: any
   modalRef?: BsModalRef;
@@ -36,7 +37,7 @@ export class EventoComponent implements OnInit, OnDestroy,AfterViewInit {
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
   ngAfterViewInit(): void {
-    this.nombreLocalidadMostrado = true;
+    this.spinner=false
   }
   ngOnDestroy(): void {
     this.valirdarAsientos()

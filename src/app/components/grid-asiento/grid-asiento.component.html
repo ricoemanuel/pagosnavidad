@@ -1,4 +1,5 @@
-<div class="asientos">
+<div class="spinner" *ngIf="spinner"><img src="../assets/spinner.gif" alt=""></div>
+<div class="asientos" *ngIf="!spinner">
     <table>
         <ng-container *ngFor="let i of is; let fila = index">
             <tr>

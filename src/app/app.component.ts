@@ -10,20 +10,26 @@ import { WompiService } from './services/wompi.service';
 })
 export class AppComponent implements OnInit {
   iniciarSesion: boolean = true;
-  constructor(private firebase: FirebaseService, private wompi: WompiService) { }
+  cargando:boolean=true
+  constructor(private router: Router,private firebase: FirebaseService, private wompi: WompiService) { }
   ngOnInit(): void {
- 
+    this.router.navigate(['evento', '0pRlSIWu9Cxyv7X8s8TQ'])
     this.firebase.getAuthState().subscribe(async res => {
       if (res) {
         let user = await this.firebase.getUser(res.uid)
         if (user) {
           this.iniciarSesion = false
+          this.cargando=false
         }
       } else {
         this.iniciarSesion = true
+        this.cargando=false
       }
     })
     
+  }
+  logout(){
+    this.firebase.cerrarSesion()
   }
  
 

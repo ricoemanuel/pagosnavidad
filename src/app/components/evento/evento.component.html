@@ -1,68 +1,61 @@
-<div *ngIf="id && evento" class="row margin">
-    <div class="col-md-4">
-        <div class="img"></div>
-    </div>
-    <div class="col-md-8 pt-3 margin-c">
-        <div class="card mx-auto">
-            <div class="card-body">
-                <h5 class="card-title">{{evento.nombre}}</h5>
-                <p class="card-text">{{evento.descripcion}}</p>
-                <h6 class="card-subtitle mb-2 text-muted">Compra tu entrada:</h6>
-                <div class="row tabla">
-                    <table>
-                        <ng-container *ngFor="let fila of matriz; let i = index">
-                          <tr>
-                            <ng-container *ngFor="let elemento of fila; let j = index">
-                                
-                              <td class="caja"
-                                  (click)="mostrarZona(elemento.nombreZona, template)"
-                                  [style.backgroundColor]="elemento ? '#3f51b5' : 'transparent'"
-                                  [style.cursor]="elemento?'pointer':''">
-                                <div class="llenado" >
-                                    <label [style.cursor]="elemento?'pointer':''" [id]="string(i,j)" class="nombre"></label>
-                                    <ng-container >
-                                        {{mostrarNombre(elemento.nombreZona,string(i,j),elemento.precioZona)}}
-                                      </ng-container>
-                                    
-                                  
-                                </div>
-                              </td>
+<div class="spinner" *ngIf="spinner"><img src="../assets/spinner.gif" alt=""></div>
+<div *ngIf="!spinner">
+    <div *ngIf="id && evento" class="row margin">
+        <div class="col-md-3">
+            <div class="img"><img width="250" src="../../../assets/rigo.jpg" alt=""></div>
+
+        </div>
+        <div class="col-md-9 pt-3 margin-c">
+            <div class="card mx-auto">
+                <div class="card-body">
+                    <h5 class="card-title">{{evento.nombre}}</h5>
+                    <p class="card-text">{{evento.descripcion}}</p>
+                    <h6 class="card-subtitle mb-2 text-muted">Compra tu entrada:</h6>
+                    <div class="row tabla">
+                        <table>
+                            <ng-container *ngFor="let fila of matriz; let i = index">
+                                <tr>
+                                    <ng-container *ngFor="let elemento of fila; let j = index">
+
+                                        <td class="caja" (click)="mostrarZona(elemento.nombreZona, template)"
+                                            [style.backgroundColor]="elemento ? '#3f51b5' : 'transparent'"
+                                            [style.cursor]="elemento?'pointer':''">
+                                            <div class="llenado">
+                                                <label [style.cursor]="elemento?'pointer':''" [id]="string(i,j)"
+                                                    class="nombre"></label>
+                                                <ng-container>
+                                                    {{mostrarNombre(elemento.nombreZona,string(i,j),elemento.precioZona)}}
+                                                </ng-container>
+
+
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                </tr>
                             </ng-container>
-                          </tr>
-                        </ng-container>
-                      </table>
-                      
-
-
-                    <!-- <div class="col" *ngFor="let zona of evento.zonas">
-                        <div class="card card-c" (click)="mostrarZona(zona.nombreZona,template)">
-                            <h6 class="card-title">{{zona.nombreZona}}</h6>
-                            <div class="card-content">
-                                <div class="card-footer text-body-secondary"><strong>Precio:
-                                    </strong>{{(zona.precioZona).toLocaleString('en-US',
-                                    {style:'currency', currency: 'USD' })}}</div>
-                            </div>
-                        </div>
-                    </div> -->
+                        </table>
+                    </div>
+                    <br>
+                    <h6 class="card-subtitle mb-2 text-muted">Por favor selecciona alguna de las localidades para
+                        seleccionar su asiento.</h6>
                 </div>
 
             </div>
 
         </div>
-
     </div>
+
+    <ng-template #template>
+
+        <h3 class="title">{{selectedZone}}</h3>
+        <app-grid-asientos [zonaSeleccionada]="selectedZone"></app-grid-asientos>
+        <div class="centrar" *ngIf="listaAsientos.length>0">
+            <button class="btn btn-success" (click)="pagar(wompi)">Pagar</button>
+        </div>
+
+    </ng-template>
+
+    <ng-template #wompi>
+        <iframe class="wompi" [src]="link"></iframe>
+    </ng-template>
 </div>
-
-<ng-template #template>
-
-    <h3 class="title">{{selectedZone}}</h3>
-    <app-grid-asientos [zonaSeleccionada]="selectedZone"></app-grid-asientos>
-    <div class="centrar" *ngIf="listaAsientos.length>0">
-        <button class="btn btn-success" (click)="pagar(wompi)">Pagar</button>
-    </div>
-
-</ng-template>
-
-<ng-template #wompi>
-    <iframe class="wompi" [src]="link"></iframe>
-</ng-template>
