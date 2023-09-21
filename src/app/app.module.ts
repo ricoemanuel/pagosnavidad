@@ -26,7 +26,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {MatMenuModule} from '@angular/material/menu';
 
@@ -66,6 +66,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatMenuModule,
     MatAutocompleteModule,
     HttpClientModule,
+    MatTooltipModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

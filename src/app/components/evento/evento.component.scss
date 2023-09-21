@@ -82,21 +82,66 @@
 }
 
 app-grid-asientos {
-        overflow: scroll;
-        margin-bottom: 10px;
-        &::-webkit-scrollbar {
-            height: 5px;
-            background-color: transparent;
-        }
+    overflow: scroll;
+    margin-bottom: 10px;
 
-        &::-webkit-scrollbar-thumb {
-            background-color: rgb(191, 191, 191);
-            border-radius: 20px;
-        }
+    &::-webkit-scrollbar {
+        height: 5px;
+        background-color: transparent;
     }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgb(191, 191, 191);
+        border-radius: 20px;
+    }
+}
 
 
 .wompi {
     width: 90vw !important;
     height: 90vh;
 }
+
+.caja {
+    border-radius: 2px;
+    height: 10px;
+    position: relative;
+}
+td.caja label.nombre {
+    position: absolute;
+    top: 9px;
+    left: 5px;
+    z-index: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    background-color: #8b8686b5;
+    color: white;
+    border-radius: 5px;
+  }
+
+.llenado {
+    width: 10px;
+    
+}
+
+
+table {
+    width: fit-content;
+    
+}
+.tabla{
+    margin: 0 auto;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        height: 5px;
+        background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgb(191, 191, 191);
+        border-radius: 20px;
+    }
+}
+
+

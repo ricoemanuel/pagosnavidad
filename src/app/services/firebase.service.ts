@@ -176,6 +176,22 @@ export class FirebaseService {
       };
     });
   }
+  getAsientosByEvento(eventoId:string){
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('evento', '==', eventoId));
+    return new Observable<DocumentData[]>(observer => {
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const asientos: DocumentData[] = [];
+        snapshot.forEach(doc => {
+          asientos.push(doc.data());
+        });
+        observer.next(asientos);
+      });
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
   transactions():Observable<any>{
     const doc = ref(this.database, 'transacciones');
     let transactions$: Observable<any>=objectVal(doc).pipe(
