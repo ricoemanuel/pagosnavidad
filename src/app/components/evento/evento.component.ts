@@ -78,17 +78,13 @@ export class EventoComponent implements OnInit, OnDestroy,AfterViewInit {
     })
   }
   getAsientos() {
-    if(this.id){
-      this.firebase.getAsientosByEvento(this.id).subscribe((res:any)=>{
-        res.forEach((element:any) => {
-          this.matriz[element.fila][element.columna]=element
-        })
-        console.log(this.matriz)
+    this.evento.zonas.forEach((zona:any)=>{
+      zona.arrayZonas.forEach((asiento:any)=>{
+        this.matriz[asiento.fila][asiento.columna]=zona
       })
-    }
-    
-    
+    })
   }
+  
   openModal(template: TemplateRef<any>, backdrop:boolean) {
     if(backdrop){
       this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -188,12 +184,12 @@ export class EventoComponent implements OnInit, OnDestroy,AfterViewInit {
   }
   nombresMostrados: string[] = [];
   ids:string[]=[]
-  mostrarNombre(nombre: string, id: string) {
+  mostrarNombre(nombre: string, id: string,precio:number) {
     if (!this.nombresMostrados.includes(nombre)) {
       this.nombresMostrados.push(nombre);
       const elemento = document.getElementById(id);
       if (elemento) {
-        elemento.textContent = nombre;
+        elemento.innerHTML = `${nombre?nombre:""}${nombre?':':""} ${precio?precio.toLocaleString('es-ES'):""}`;
       }
     }
   }
