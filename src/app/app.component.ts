@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   iniciarSesion: boolean = true;
   constructor(private firebase: FirebaseService, private wompi: WompiService) { }
   ngOnInit(): void {
-
+ 
     this.firebase.getAuthState().subscribe(async res => {
       if (res) {
         let user = await this.firebase.getUser(res.uid)
@@ -25,6 +25,6 @@ export class AppComponent implements OnInit {
     })
     
   }
-  
+ 
 
 }

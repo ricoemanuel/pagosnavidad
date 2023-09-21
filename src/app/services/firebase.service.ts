@@ -3,16 +3,16 @@ import { Auth, signInWithEmailAndPassword, signOut, authState, createUserWithEma
 import { DocumentData, Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, where } from '@angular/fire/firestore';
 import { EMPTY, Observable, catchError, distinctUntilChanged, from, interval, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {Database,Query, object, objectVal, ref} from '@angular/fire/database'
+import { Database, Query, object, objectVal, ref } from '@angular/fire/database'
 import { traceUntilFirst } from '@angular/fire/performance';
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
   private apiUrl = 'https://myticketeventos-default-rtdb.firebaseio.com/transacciones.json';
-  
+
   esAdminS!: boolean
-  constructor(private database: Database,private auth: Auth, private firestore: Firestore,private http: HttpClient,private db: Database) { }
+  constructor(private database: Database, private auth: Auth, private firestore: Firestore, private http: HttpClient, private db: Database) { }
   login(objeto: any) {
     let email = objeto.email
     let password = objeto.password
@@ -24,7 +24,7 @@ export class FirebaseService {
       distinctUntilChanged() // Emite solo si los datos son diferentes a los previos
     );
   }
-  
+
   singup(objeto: any) {
     let email = objeto.email
     let password = objeto.password
@@ -40,7 +40,7 @@ export class FirebaseService {
   getAuthState() {
     return authState(this.auth)
   }
- 
+
   async getevento(id: string) {
     const eventoRef = doc(this.firestore, "eventos", id);
     const eventoSnapshot = await getDoc(eventoRef);
@@ -52,9 +52,9 @@ export class FirebaseService {
       return null;
     }
   }
-  getAsientoRealtime(fila: number, columna: number, evento: string,zona:string): Observable<DocumentData[]> {
+  getAsientoRealtime(fila: number, columna: number, evento: string, zona: string): Observable<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
-    const q = query(entradaRef, where('nombreZona', '==', zona),where('fila', '==', fila), where('columna', '==', columna), where('evento', '==', evento));
+    const q = query(entradaRef, where('nombreZona', '==', zona), where('fila', '==', fila), where('columna', '==', columna), where('evento', '==', evento));
 
     return new Observable<DocumentData[]>(observer => {
       const unsubscribe = onSnapshot(q, snapshot => {
@@ -87,9 +87,9 @@ export class FirebaseService {
       };
     });
   }
-  getAsientoRealtimeByUsuarioEstado(user: string, evento:string): Observable<DocumentData[]> {
+  getAsientoRealtimeByUsuarioEstado(user: string, evento: string): Observable<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
-    const q = query(entradaRef, where('clienteUser', '==', user),where('clienteEstado', '==', 'sin pagar'),where('evento', '==', evento));
+    const q = query(entradaRef, where('clienteUser', '==', user), where('clienteEstado', '==', 'sin pagar'), where('evento', '==', evento));
     return new Observable<DocumentData[]>(observer => {
       const unsubscribe = onSnapshot(q, snapshot => {
         const asientos: DocumentData[] = [];
@@ -103,38 +103,38 @@ export class FirebaseService {
       };
     });
   }
-  async getAsientoByUsuarioEstado(user: string, evento:string): Promise<DocumentData[]> {
+  async getAsientoByUsuarioEstado(user: string, evento: string): Promise<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
-    const q = query(entradaRef, where('clienteUser', '==', user),where('clienteEstado', '==', 'sin pagar'),where('evento', '==', evento));
+    const q = query(entradaRef, where('clienteUser', '==', user), where('clienteEstado', '==', 'sin pagar'), where('evento', '==', evento));
 
     try {
-        const snapshot = await getDocs(q);
-        const asientos: DocumentData[] = [];
-        snapshot.forEach(doc => {
-            asientos.push(doc.data());
-        });
-        return asientos;
+      const snapshot = await getDocs(q);
+      const asientos: DocumentData[] = [];
+      snapshot.forEach(doc => {
+        asientos.push(doc.data());
+      });
+      return asientos;
     } catch (error) {
-        console.error("Error al obtener los asientos:", error);
-        throw error; // Puedes manejar el error según tus necesidades
+      console.error("Error al obtener los asientos:", error);
+      throw error; // Puedes manejar el error según tus necesidades
     }
-}
+  }
   async getAsientoByEvento(evento: string): Promise<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
     const q = query(entradaRef, where('evento', '==', evento));
 
     try {
-        const snapshot = await getDocs(q);
-        const asientos: DocumentData[] = [];
-        snapshot.forEach(doc => {
-            asientos.push(doc.data());
-        });
-        return asientos;
+      const snapshot = await getDocs(q);
+      const asientos: DocumentData[] = [];
+      snapshot.forEach(doc => {
+        asientos.push(doc.data());
+      });
+      return asientos;
     } catch (error) {
-        console.error("Error al obtener los asientos:", error);
-        throw error; // Puedes manejar el error según tus necesidades
+      console.error("Error al obtener los asientos:", error);
+      throw error; // Puedes manejar el error según tus necesidades
     }
-}
+  }
 
 
   actualizarAsiento(asiento: any) {
@@ -145,7 +145,7 @@ export class FirebaseService {
     const entradaRef = doc(this.firestore, "asientos", `f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
     return getDoc(entradaRef)
   }
-  async getUser(uid:string){
+  async getUser(uid: string) {
     const usuarioRef = doc(this.firestore, "usuarios", uid);
     const usuarioSnapshot = await getDoc(usuarioRef);
 
@@ -156,13 +156,13 @@ export class FirebaseService {
       return null;
     }
   }
-  async setUser(obj:any, uid:string){
+  async setUser(obj: any, uid: string) {
     const usuarioRef = doc(this.firestore, "usuarios", uid)
     return setDoc(usuarioRef, obj)
   }
-  getAsientosByEventoAndZona(eventoId:string,zona:string){
+  getAsientosByEventoAndZona(eventoId: string, zona: string) {
     const entradaRef = collection(this.firestore, 'asientos');
-    const q = query(entradaRef, where('nombreZona', '==', zona),where('evento', '==', eventoId));
+    const q = query(entradaRef, where('nombreZona', '==', zona), where('evento', '==', eventoId));
     return new Observable<DocumentData[]>(observer => {
       const unsubscribe = onSnapshot(q, snapshot => {
         const asientos: DocumentData[] = [];
@@ -176,7 +176,7 @@ export class FirebaseService {
       };
     });
   }
-  getAsientosByEvento(eventoId:string){
+  getAsientosByEvento(eventoId: string) {
     const entradaRef = collection(this.firestore, 'asientos');
     const q = query(entradaRef, where('evento', '==', eventoId));
     return new Observable<DocumentData[]>(observer => {
@@ -192,12 +192,24 @@ export class FirebaseService {
       };
     });
   }
-  transactions():Observable<any>{
+  transactions(): Observable<any> {
     const doc = ref(this.database, 'transacciones');
-    let transactions$: Observable<any>=objectVal(doc).pipe(
+    let transactions$: Observable<any> = objectVal(doc).pipe(
       traceUntilFirst('database')
     );
     return transactions$
+  }
+
+  async valirdarAsientos(id: string, user: string) {
+    this.getAsientoByUsuarioEstado(user, id).then(res => {
+      res.forEach(async (asiento: any) => {
+        asiento.clienteEstado = "null"
+        asiento.clienteUser = "null"
+        asiento.estado = "libre"
+        await this.actualizarAsiento(asiento)
+      })
+    })
+
   }
 
 }

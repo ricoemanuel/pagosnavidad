@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeScript, SafeStyle, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -64,16 +64,8 @@ export class EventoComponent implements OnInit, OnDestroy,AfterViewInit {
         this.user = res.uid
         this.asientosReservadosSus=this.firebase.getAsientoRealtimeByUsuarioEstado(res.uid, this.id).subscribe(res => {
           this.listaAsientos = res
-
         })
-        this.firebase.getAsientoByUsuarioEstado(res.uid, this.id).then(res => {
-          res.forEach(async (asiento: any) => {
-            asiento.clienteEstado = "null"
-            asiento.clienteUser = "null"
-            asiento.estado = "libre"
-            await this.firebase.actualizarAsiento(asiento)
-          })
-        })
+        await this.firebase.valirdarAsientos(this.id,this.user)
       }
     })
   }
@@ -193,6 +185,9 @@ export class EventoComponent implements OnInit, OnDestroy,AfterViewInit {
       }
     }
   }
-  
+  @HostListener('window:beforeunload', ['$event'])
+  doSomething($event:Event) {
+    if(this.id)this.firebase.valirdarAsientos(this.id,this.user)
+  }
 
 }
