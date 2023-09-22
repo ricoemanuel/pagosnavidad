@@ -10,23 +10,15 @@ export class WompiService {
     'authorization': `Bearer ${environment.wompi.head}`
   });
   constructor(private http: HttpClient) { }
-  async generarLink(valor:number, asientos:string, usuario:string) {
+  async generarLink(valor:number, asientos:string, usuario:string, title: string) {
     const data = {
-      "name": "Pago de Conferencia de Rigoberto Urán",
-      "description": `Conferencia de Rigoberto Urán en los asientos: ${asientos} para el usuario ${usuario}` ,
+      "name": `Pago de ${title}`,
+      "description": `Asientos del evento: ${asientos}. Código de ${usuario}` ,
       "single_use": true,
       "currency": "COP",
-      "amount_in_cents": valor*100,
+      "amount_in_cents": 1500*100,
       "collect_shipping": false,
       "collect_customer_legal_id": true,
-      "customer_data": {
-        "customer_references": [
-          {
-            "label": "Documento de identidad",
-            "is_required": true
-          }
-        ]
-      }
     };
     return this.http.post(`${environment.wompi.link}payment_links`, data, { headers: this.headers })
     

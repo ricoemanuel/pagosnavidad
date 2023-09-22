@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, signOut, authState, createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { DocumentData, Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, where } from '@angular/fire/firestore';
+import { DocumentData, DocumentReference, Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, where } from '@angular/fire/firestore';
 import { EMPTY, Observable, catchError, distinctUntilChanged, from, interval, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Database, Query, object, objectVal, ref } from '@angular/fire/database'
+import { Database, Query, object, objectVal, ref, remove } from '@angular/fire/database'
 import { traceUntilFirst } from '@angular/fire/performance';
 @Injectable({
   providedIn: 'root'
@@ -200,6 +200,31 @@ export class FirebaseService {
     return transactions$
   }
 
+  async registrarFactura(transaccion: any, uid: string, evento: string, asientos: string[]) {
+    let obj: any = {
+      transaccion,
+      uid,
+      evento,
+      asientos
+    }
+    const facturaRef = collection(this.firestore, "facturas")
+    let doc: DocumentReference = await addDoc(facturaRef, obj)
+    let user: any = await this.getUser(uid)
+    // fetch('http://localhost:3000/enviar-correo', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     correo: user.correo,
+    //     nombre: user.nombre,
+    //     factura: doc.id,
+    //   }),
+    // }).catch(error=>{
+    //   console.log(error)
+    // })
+  }
+
   async valirdarAsientos(id: string, user: string) {
     this.getAsientoByUsuarioEstado(user, id).then(res => {
       res.forEach(async (asiento: any) => {
@@ -211,7 +236,7 @@ export class FirebaseService {
     })
 
   }
-  
+
 
 }
 
