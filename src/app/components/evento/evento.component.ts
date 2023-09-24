@@ -27,7 +27,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   matriz: any[] = []
   localidadesMostradas: Set<string> = new Set<string>();
   nombreLocalidadMostrado: boolean = false;
-  numbers:any[]=[]
+  numbers: any[] = []
   constructor(private aRoute: ActivatedRoute,
     private firebase: FirebaseService,
     private modalService: BsModalService,
@@ -52,9 +52,9 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
           array.push(false)
         }
         this.matriz.push(array)
-      } 
-      
-     
+      }
+
+
       this.evento.zonas.forEach((zona: any) => {
         zona.precioZona = parseInt(zona.precioZona)
       });
@@ -82,7 +82,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.matriz.forEach((fila) => {
       let cont = 0;
       let array: any[] = [];
-    
+
       // Recorremos las columnas de atrás hacia adelante
       for (let i = fila.length - 1; i >= 0; i--) {
         const columna = fila[i];
@@ -91,18 +91,18 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         array.unshift(cont);
       }
-    
+
       this.numbers.push(array);
     });
-    
-    
-    
+
+
+
   }
 
   openModal(template: TemplateRef<any>) {
-    
-      this.modalRef = this.modalService.show(template);
-    
+
+    this.modalRef = this.modalService.show(template);
+
 
   }
   selectedZone = ""
@@ -113,49 +113,43 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
-  cerrarPopup(event:any){
+  cerrarPopup(event: any) {
     this.modalService.hide()
   }
   async pagar(template: TemplateRef<any>) {
-    Swal.fire({
-      title: 'Antes de continuar por favor no actualice el sitio web antes de realizar el pago...',
-      showDenyButton: true,
-      confirmButtonText: 'Aceptar',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        this.modalService.hide()
-        let asientos: string = '';
-        let suma = 0
-        this.listaAsientos.forEach((asiento: any) => {
-          let zona = this.evento.zonas.filter((zona: any) => {
-            return zona.nombreZona === asiento.nombreZona
-          })
-          zona = zona[0]
-          suma += zona.precioZona
-          asientos += `${asiento.fila}-${asiento.columna}, `
-        })
-        asientos = asientos.slice(0, -2)
-        let response = await this.wompi.generarLink(suma, asientos, this.user, this.evento.nombre);
-        response.subscribe(async (res: any) => {
-          let link: string = `https://checkout.wompi.co/l/${res.data.id}`
-          this.link = await this._sanitizer.bypassSecurityTrustResourceUrl(link)
-          this.openModal(template)
-          this.vigilarPago(res.data.id)
-        })
-      }
+
+    this.modalService.hide()
+    let asientos: string = '';
+    let suma = 0
+    this.listaAsientos.forEach((asiento: any) => {
+      let zona = this.evento.zonas.filter((zona: any) => {
+        return zona.nombreZona === asiento.nombreZona
+      })
+      zona = zona[0]
+      suma += zona.precioZona
+      asientos += `${asiento.fila}-${asiento.columna}, `
     })
+    asientos = asientos.slice(0, -2)
+    let response = await this.wompi.generarLink(suma, asientos, this.user, this.evento.nombre);
+    response.subscribe(async (res: any) => {
+      let link: string = `https://checkout.wompi.co/l/${res.data.id}`
+      this.link = this._sanitizer.bypassSecurityTrustResourceUrl(link)
+      this.openModal(template)
+      this.vigilarPago(res.data.id)
+    })
+
   }
   vigilarPago(ref: string) {
     this.suscriptionTransaccion = this.firebase.transactions().subscribe(async res => {
       let iterable = Object.entries(res);
       let array: any[] = [];
 
-      iterable.forEach(([key, transaccion]:any) => {
+      iterable.forEach(([key, transaccion]: any) => {
         transaccion.key = key;
         array.push(transaccion);
       });
 
-      
+
 
       let respuesta = array.filter(pago => {
         return pago.data.transaction.payment_link_id === ref
@@ -172,14 +166,14 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   async aprobarSillas(transaccion: any) {
     this.suscriptionTransaccion.unsubscribe()
     if (transaccion.data.transaction.status === 'APPROVED') {
-      let asientosIds:string[]=[]
+      let asientosIds: string[] = []
       await this.listaAsientos.forEach(async asiento => {
         asientosIds.push(`f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
         asiento.clienteEstado = "pago"
         asiento.estado = "ocupado"
         await this.firebase.actualizarAsiento(asiento)
       })
-      await this.firebase.registrarFactura(transaccion,this.user,this.id!,asientosIds)
+      await this.firebase.registrarFactura(transaccion, this.user, this.id!, asientosIds)
       Swal.fire({
         position: 'top-end',
         icon: 'success',

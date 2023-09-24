@@ -10,6 +10,17 @@
                 <div class="card-body">
                     <h5 class="card-title">{{evento.nombre}}</h5>
                     <p class="card-text">{{evento.descripcion}}</p>
+                    <div class="row">
+                        <div class="col">
+                            <p><strong>Ubicacion: </strong>Teatro universidad de Cafam, Bogotá</p>
+                        </div>
+                        <div class="col">
+                            <p><strong>Fecha: </strong>Noviembre 7 de 2023</p>
+                        </div>
+                        <div class="col">
+                            <p><strong>Hora: </strong>10:00 a.m. a 11:10 a.m.</p>
+                        </div>
+                    </div>
                     <h6 class="card-subtitle mb-2 text-muted">Compra tu entrada:</h6>
                     <div class="row tabla">
                         <table>
@@ -23,7 +34,7 @@
                                             <div class="llenado">
                                                 <label [style.cursor]="elemento?'pointer':''" [id]="string(i,j)"
                                                     class="nombre"></label>
-                                                    
+
                                                 <ng-container>
                                                     {{mostrarNombre(elemento.nombreZona,string(i,j),elemento.precioZona)}}
                                                 </ng-container>
@@ -44,13 +55,15 @@
             </div>
 
         </div>
+        <footer>myticket</footer>
     </div>
 
     <ng-template #template>
         <div (click)="cerrarPopup({})" class="close"><mat-icon>close</mat-icon></div>
         <h3 class="title">{{selectedZone}}</h3>
-        <app-grid-asientos (cerrarPopUpA)="cerrarPopup($event)" [numbers]="numbers" [labels]="evento.labels" [zonaSeleccionada]="selectedZone"></app-grid-asientos>
-        <div class="centrar" >
+        <app-grid-asientos (cerrarPopUpA)="cerrarPopup($event)" [numbers]="numbers" [labels]="evento.labels"
+            [zonaSeleccionada]="selectedZone"></app-grid-asientos>
+        <div class="centrar">
             <button [disabled]="!(listaAsientos.length>0)" class="btn btn-success" (click)="pagar(wompi)">Pagar</button>
         </div>
 

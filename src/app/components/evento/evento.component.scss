@@ -9,14 +9,12 @@
 }
 
 
-.img{
+.img {
     margin: 25px auto;
     width: fit-content;
 }
 
-@media (max-width: 768px) {
-    
-}
+@media (max-width: 768px) {}
 
 
 .card {
@@ -98,6 +96,7 @@ app-grid-asientos {
     height: 10px;
     position: relative;
 }
+
 td.caja label.nombre {
     position: absolute;
     top: 9px;
@@ -110,41 +109,57 @@ td.caja label.nombre {
     background-color: rgb(73 71 71);
     color: white;
     border-radius: 5px;
-  }
+}
 
 .llenado {
     width: 10px;
-    
+
 }
 
 
 table {
     width: fit-content;
-    
+
 }
-.tabla{
+
+.tabla {
     margin: 0 auto;
     overflow: scroll;
+
     &::-webkit-scrollbar {
         height: 5px;
         background-color: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
         background-color: rgb(191, 191, 191);
         border-radius: 20px;
     }
 }
 
-.spinner{
+.spinner {
     width: fit-content;
     margin: 0 auto;
-    & img{
+
+    & img {
         width: 50vw;
     }
-  }
-  .close{
+}
+
+.close {
     position: absolute;
     right: 20px;
     top: 4px;
     cursor: pointer;
-  }
+}
+
+footer {
+    width: 100vw;
+    background-color: rgb(154 154 154 / 51%);
+    position: relative;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15vh;
+}
