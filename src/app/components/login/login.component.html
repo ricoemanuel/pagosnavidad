@@ -1,5 +1,6 @@
 <div class="spinner" *ngIf="spinner"><img src="../assets/spinner.gif" alt=""></div>
 <div class="main" *ngIf="!spinner">
+  <div class="close" (click)="redirect()"><mat-icon>close</mat-icon></div>
   <div class="container">
     <div class="form">
       <div class="thumbnail">

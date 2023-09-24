@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FirebaseService } from './services/firebase.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { WompiService } from './services/wompi.service';
 @Component({
@@ -9,29 +9,36 @@ import { WompiService } from './services/wompi.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  iniciarSesion: boolean = true;
-  cargando:boolean=true
-  constructor(private router: Router,private firebase: FirebaseService, private wompi: WompiService) { }
+  cargando: boolean = true
+  login:boolean=false
+  logged:boolean=false
+  constructor(private router: Router, private firebase: FirebaseService, private wompi: WompiService, private route: ActivatedRoute) { }
   ngOnInit(): void {
-    this.router.navigate(['evento', '0pRlSIWu9Cxyv7X8s8TQ'])
     this.firebase.getAuthState().subscribe(async res => {
       if (res) {
-        let user = await this.firebase.getUser(res.uid)
-        if (user) {
-          this.iniciarSesion = false
-          this.cargando=false
-        }
-      } else {
-        this.iniciarSesion = true
-        this.cargando=false
+        this.logged=true
       }
+      this.cargando = false
     })
-    
+    this.router.events.subscribe((event: any) => {
+      if(event.url){
+        if(event.url==='/login'){
+          this.login=true
+        }
+        else{
+          this.login=false
+        }
+      }
+
+
+  });
+
   }
-  logout(){
+  logout() {
     this.firebase.cerrarSesion()
+    this.logged=false
   }
-  
- 
+
+
 
 }

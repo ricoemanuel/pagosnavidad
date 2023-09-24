@@ -35,13 +35,16 @@ export class LoginComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.spinner = false
   }
-
+  redirect(){
+    this.router.navigate(['evento','0pRlSIWu9Cxyv7X8s8TQ'])
+  }
   async iniciar() {
     this.spinner = true
     let email = this.formularioLogin.value.correo
     let password = this.formularioLogin.value.contrasena
     this.loginservice.login({ email, password }).then(() => {
       this.spinner = false
+      this.redirect()
     }).catch(e => {
       this.spinner = false
       if (e.code == "auth/invalid-email") {

@@ -3,10 +3,12 @@
     <table>
         <ng-container *ngFor="let i of is; let fila = index">
             <tr>
+                <td>{{labelsA[fila]}}</td>
                 <ng-container *ngFor="let j of js; let columna = index">
                     <td>
                         <div *ngIf="matriz[fila][columna]">
-                            <app-asiento-palco [zonaSeleccionada]="zonaSeleccionada" (seleccionarAsiento)="agregarLista($event)" [information]="matriz[fila][columna]"></app-asiento-palco>
+                            <app-asiento-palco [number]="numbers[fila][columna]" [zonaSeleccionada]="zonaSeleccionada" (seleccionarAsiento)="agregarLista($event)
+                            " (cerrarPopUp)="cerrarPopUp($event)" [information]="matriz[fila][columna]"></app-asiento-palco>
                         </div>
                     </td>
                 </ng-container>

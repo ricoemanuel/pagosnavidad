@@ -23,6 +23,7 @@
                                             <div class="llenado">
                                                 <label [style.cursor]="elemento?'pointer':''" [id]="string(i,j)"
                                                     class="nombre"></label>
+                                                    
                                                 <ng-container>
                                                     {{mostrarNombre(elemento.nombreZona,string(i,j),elemento.precioZona)}}
                                                 </ng-container>
@@ -46,16 +47,17 @@
     </div>
 
     <ng-template #template>
-
+        <div (click)="cerrarPopup({})" class="close"><mat-icon>close</mat-icon></div>
         <h3 class="title">{{selectedZone}}</h3>
-        <app-grid-asientos [zonaSeleccionada]="selectedZone"></app-grid-asientos>
-        <div class="centrar" *ngIf="listaAsientos.length>0">
-            <button class="btn btn-success" (click)="pagar(wompi)">Pagar</button>
+        <app-grid-asientos (cerrarPopUpA)="cerrarPopup($event)" [numbers]="numbers" [labels]="evento.labels" [zonaSeleccionada]="selectedZone"></app-grid-asientos>
+        <div class="centrar" >
+            <button [disabled]="!(listaAsientos.length>0)" class="btn btn-success" (click)="pagar(wompi)">Pagar</button>
         </div>
 
     </ng-template>
 
     <ng-template #wompi>
+        <div (click)="cerrarPopup({})" class="close"><mat-icon>close</mat-icon></div>
         <iframe class="wompi" [src]="link"></iframe>
     </ng-template>
 </div>

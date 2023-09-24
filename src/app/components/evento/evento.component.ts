@@ -27,6 +27,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   matriz: any[] = []
   localidadesMostradas: Set<string> = new Set<string>();
   nombreLocalidadMostrado: boolean = false;
+  numbers:any[]=[]
   constructor(private aRoute: ActivatedRoute,
     private firebase: FirebaseService,
     private modalService: BsModalService,
@@ -52,6 +53,8 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.matriz.push(array)
       }
+      
+     
       this.evento.zonas.forEach((zona: any) => {
         zona.precioZona = parseInt(zona.precioZona)
       });
@@ -76,23 +79,42 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         this.matriz[asiento.fila][asiento.columna] = zona
       })
     })
+    this.matriz.forEach((fila) => {
+      let cont = 0;
+      let array: any[] = [];
+    
+      // Recorremos las columnas de atrás hacia adelante
+      for (let i = fila.length - 1; i >= 0; i--) {
+        const columna = fila[i];
+        if (columna) {
+          cont += 1;
+        }
+        array.unshift(cont);
+      }
+    
+      this.numbers.push(array);
+    });
+    
+    
+    
   }
 
-  openModal(template: TemplateRef<any>, backdrop: boolean) {
-    if (backdrop) {
-      this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
-    } else {
+  openModal(template: TemplateRef<any>) {
+    
       this.modalRef = this.modalService.show(template);
-    }
+    
 
   }
   selectedZone = ""
   mostrarZona(zona: any, template: TemplateRef<any>) {
     if (zona) {
       this.selectedZone = zona
-      this.openModal(template, false)
+      this.openModal(template)
     }
 
+  }
+  cerrarPopup(event:any){
+    this.modalService.hide()
   }
   async pagar(template: TemplateRef<any>) {
     Swal.fire({
@@ -117,7 +139,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         response.subscribe(async (res: any) => {
           let link: string = `https://checkout.wompi.co/l/${res.data.id}`
           this.link = await this._sanitizer.bypassSecurityTrustResourceUrl(link)
-          this.openModal(template, true)
+          this.openModal(template)
           this.vigilarPago(res.data.id)
         })
       }
@@ -133,7 +155,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         array.push(transaccion);
       });
 
-      console.log(array);
+      
 
       let respuesta = array.filter(pago => {
         return pago.data.transaction.payment_link_id === ref

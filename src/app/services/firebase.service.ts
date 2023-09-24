@@ -5,6 +5,7 @@ import { EMPTY, Observable, catchError, distinctUntilChanged, from, interval, ma
 import { HttpClient } from '@angular/common/http';
 import { Database, Query, object, objectVal, ref, remove } from '@angular/fire/database'
 import { traceUntilFirst } from '@angular/fire/performance';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -210,19 +211,20 @@ export class FirebaseService {
     const facturaRef = collection(this.firestore, "facturas")
     let doc: DocumentReference = await addDoc(facturaRef, obj)
     let user: any = await this.getUser(uid)
-    // fetch('http://localhost:3000/enviar-correo', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     correo: user.correo,
-    //     nombre: user.nombre,
-    //     factura: doc.id,
-    //   }),
-    // }).catch(error=>{
-    //   console.log(error)
-    // })
+     fetch(environment.EmailSender.link, {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+         'x-api-key':environment.EmailSender.head
+       },
+       body: JSON.stringify({
+         correo: user.correo,
+         nombre: user.nombre,
+         factura: doc.id,
+       }),
+     }).catch(error=>{
+       console.log(error)
+     })
   }
 
   async valirdarAsientos(id: string, user: string) {

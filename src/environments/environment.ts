@@ -12,5 +12,9 @@ export const environment = {
   wompi:{
     head:'prv_prod_hYyfJ56bMTY3p34c5tTf4s7UPQTWXMfZ',
     link:"https://production.wompi.co/v1/"
+  },
+  EmailSender:{
+    head:'e100eef502254844bf570a004f9da5dd',
+    link:'https://email-sender-one-alpha.vercel.app/enviar-correo'
   }
 };

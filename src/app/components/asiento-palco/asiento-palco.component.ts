@@ -15,7 +15,9 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
   information$: Observable<any> | undefined;
   modalRef?: BsModalRef;
   @Output() seleccionarAsiento = new EventEmitter<any>();
+  @Output() cerrarPopUp = new EventEmitter<any>();
   @Input() zonaSeleccionada!: string
+  @Input() number!: any[]
   formulario = this.formBuilder.group({
     nombre: ['', Validators.required],
     apellido: ['', Validators.required],
@@ -88,13 +90,27 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
   }
 
   seleccionar() {
-    if (this.information.estado !== 'reservando' && this.information.estado !== 'ocupado') {
-      this.information.estado = 'reservando'
-      this.information.clienteUser = this.user
-      this.information.clienteEstado='sin pagar'
-      this.asientoService.actualizarAsiento(this.information);
-      this.seleccionarAsiento.emit(this.information)
+    if(this.user){
+      if (this.information.estado !== 'reservando' && this.information.estado !== 'ocupado') {
+        this.information.estado = 'reservando'
+        this.information.clienteUser = this.user
+        this.information.clienteEstado='sin pagar'
+        this.asientoService.actualizarAsiento(this.information);
+        this.seleccionarAsiento.emit(this.information)
+      }
+    }else{
+      Swal.fire({
+        title: 'Antes de continuar por favor Inicie Sesión',
+        showDenyButton: true,
+        confirmButtonText: 'Aceptar',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.cerrarPopUp.emit()
+          this.router.navigate(['login'])
+        }
+      })
     }
+    
 
   }
 }
