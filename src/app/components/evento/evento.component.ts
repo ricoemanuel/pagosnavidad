@@ -52,7 +52,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
           array.push(false)
         }
         this.matriz.push(array)
-      }
+      } 
       
      
       this.evento.zonas.forEach((zona: any) => {

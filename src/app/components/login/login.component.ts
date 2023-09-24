@@ -31,12 +31,13 @@ export class LoginComponent implements AfterViewInit {
     correo: ['', Validators.required],
     contrasena: ['', Validators.required],
   });
+  disabled!: boolean;
   constructor(private formBuilder: FormBuilder, private router: Router, private loginservice: FirebaseService) { }
   ngAfterViewInit(): void {
     this.spinner = false
   }
-  redirect(){
-    this.router.navigate(['evento','0pRlSIWu9Cxyv7X8s8TQ'])
+  redirect() {
+    this.router.navigate(['evento', '0pRlSIWu9Cxyv7X8s8TQ'])
   }
   async iniciar() {
     this.spinner = true
@@ -92,55 +93,74 @@ export class LoginComponent implements AfterViewInit {
     }
   }
   registro() {
-    if (this.formularioSignUp.valid) {
-      if (this.formularioSignUp.value.contrasena === this.formularioSignUp.value.confirmar) {
-        this.loginservice.singup({ email: this.formularioSignUp.value.correo, password: this.formularioSignUp.value.contrasena }).then(async res => {
-          await this.loginservice.setUser(
-            {
-              email: this.formularioSignUp.value.correo,
-              nombre: this.formularioSignUp.value.nombre,
-              cedula: this.formularioSignUp.value.cedula,
-              tipoRegistro: this.formularioSignUp.value.tipoRegistro,
-              tipoCedula:this.formularioSignUp.value.tipoCedula
-              
-            }, res.user.uid)
-        }).catch((error) => {
-          console.log(error.code)
-          if (error.code === 'auth/email-already-in-use') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Correo en uso.',
-            })
-          } else if (error.code === 'auth/invalid-email') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Correo inválido.',
-            })
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Ha sucedido un error desconocido, por favor comuníquese con nosotros.',
-            })
-          }
-        })
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Debe confirmar las contraseñas.',
-        })
-      }
-
-    } else {
+    this.disabled=true
+    let pass=true
+    if (!this.formularioSignUp.valid) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Debe llenar todos los campos',
       })
+      this.disabled=false
+      pass=false
     }
+    if (this.formularioSignUp.value.contrasena !== this.formularioSignUp.value.confirmar) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debe confirmar las contraseñas.',
+      })
+      this.disabled=false
+      pass=false
+    }
+    if(pass===true){
+      this.loginservice.singup({ email: this.formularioSignUp.value.correo, password: this.formularioSignUp.value.contrasena }).then(async res => {
+        await this.loginservice.setUser(
+          {
+            email: this.formularioSignUp.value.correo,
+            nombre: this.formularioSignUp.value.nombre,
+            cedula: this.formularioSignUp.value.cedula,
+            tipoRegistro: this.formularioSignUp.value.tipoRegistro,
+            tipoCedula: this.formularioSignUp.value.tipoCedula
+  
+          }, res.user.uid)
+        this.redirect()
+      }).catch((error) => {
+        this.disabled = false
+        console.log(error.code)
+        if (error.code === 'auth/email-already-in-use') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Correo en uso.',
+          })
+        } else if (error.code === 'auth/weak-password') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'La contraseña debe tener 6 caráteres o más.',
+          })
+        }else if (error.code === 'auth/invalid-email') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Correo inválido.',
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha sucedido un error desconocido, por favor comuníquese con nosotros.',
+          })
+        }
+      })
+    }
+    
+
 
   }
+
+
+
+
 }

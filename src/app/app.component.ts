@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   logged:boolean=false
   constructor(private router: Router, private firebase: FirebaseService, private wompi: WompiService, private route: ActivatedRoute) { }
   ngOnInit(): void {
+    
     this.firebase.getAuthState().subscribe(async res => {
       if (res) {
         this.logged=true
@@ -38,7 +39,9 @@ export class AppComponent implements OnInit {
     this.firebase.cerrarSesion()
     this.logged=false
   }
-
+  redirect(){
+    this.router.navigate(['login'])
+  }
 
 
 }
