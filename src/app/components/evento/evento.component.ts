@@ -209,5 +209,6 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   doSomething($event: Event) {
     if (this.id) this.firebase.valirdarAsientos(this.id, this.user)
   }
+ 
 
 }

@@ -15,6 +15,7 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
   information$: Observable<any> | undefined;
   modalRef?: BsModalRef;
   @Output() seleccionarAsiento = new EventEmitter<any>();
+  @Output() borrarAsiento = new EventEmitter<any>();
   @Output() cerrarPopUp = new EventEmitter<any>();
   @Input() zonaSeleccionada!: string
   formulario = this.formBuilder.group({
@@ -36,7 +37,6 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
     if (localStorage.getItem("mapa") == "true") {
       this.map = true;
     }
-    console.log(this.information)
     if (this.information) {
       if (this.information['nombreZona'] === this.zonaSeleccionada) {
         let cont2 = parseInt(localStorage.getItem(this.information['nombreZona']) ?? '0');
@@ -88,15 +88,25 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
     this.modalRef?.hide();
   }
 
-  seleccionar() {
+  async seleccionar() {
+    console.log(this.information)
+    let edit=true
     if(this.user){
       if (this.information.estado !== 'reservando' && this.information.estado !== 'ocupado') {
         this.information.estado = 'reservando'
         this.information.clienteUser = this.user
         this.information.clienteEstado='sin pagar'
-        this.asientoService.actualizarAsiento(this.information);
-        this.seleccionarAsiento.emit(this.information)
+        await this.asientoService.actualizarAsiento(this.information);
+        edit=false
       }
+      if(this.user===this.information.clienteUser && this.information.estado==='reservando' && edit){
+        console.log("true")
+        this.information.estado = 'libre'
+        this.information.clienteUser = 'null'
+        this.information.clienteEstado='null'
+        this.asientoService.actualizarAsiento(this.information);
+      }
+      
     }else{
       Swal.fire({
         title: 'Antes de continuar por favor Inicie Sesión',

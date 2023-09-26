@@ -18,6 +18,7 @@ export class GridAsientoComponent implements OnInit {
   zona = { 'hexaColor': 'white', 'nombreZona': 'libre' }
   matriz: any[] = []
   @Output() enviarAsientos = new EventEmitter<any>();
+  @Output() borrarAsiento = new EventEmitter<any>();
   @Output() cerrarPopUpA = new EventEmitter<any>();
   constructor(private asientoService: FirebaseService, private route: ActivatedRoute, private router: Router) { }
 
@@ -83,6 +84,9 @@ export class GridAsientoComponent implements OnInit {
 
   agregarLista(information: any) {
     this.enviarAsientos.emit(information)
+  }
+  borrarLista(information: any) {
+    this.borrarAsiento.emit(information)
   }
   cerrarPopUp(event:any){
     this.cerrarPopUpA.emit()
