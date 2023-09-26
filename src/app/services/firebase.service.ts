@@ -226,20 +226,20 @@ export class FirebaseService {
     const facturaRef = collection(this.firestore, "facturas")
     let doc: DocumentReference = await addDoc(facturaRef, obj)
     let user: any = await this.getUser(uid)
-     fetch(environment.EmailSender.link, {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-         'x-api-key':environment.EmailSender.head
-       },
-       body: JSON.stringify({
-         correo: user.correo,
-         nombre: user.nombre,
-         factura: doc.id,
-       }),
-     }).catch(error=>{
-       console.log(error)
-     })
+    //  fetch(environment.EmailSender.link, {
+    //    method: 'POST',
+    //    headers: {
+    //      'Content-Type': 'application/json',
+    //      'x-api-key':environment.EmailSender.head
+    //    },
+    //    body: JSON.stringify({
+    //      correo: user.correo,
+    //      nombre: user.nombre,
+    //      factura: doc.id,
+    //    }),
+    //  }).catch(error=>{
+    //    console.log(error)
+    //  })
   }
 
   async valirdarAsientos(id: string, user: string) {
