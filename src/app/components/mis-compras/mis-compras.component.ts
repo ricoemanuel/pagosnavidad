@@ -19,6 +19,9 @@ export class MisComprasComponent implements OnInit{
     this.firebase.getAuthState().subscribe(user=>{
       this.firebase.getCurrentFacturas(user!.uid).subscribe(res=>{
         console.log(res)
+        res=res.filter((factura:any)=>{
+          return factura.transaccion.data.transaction.status!=='ERROR' && factura.asientos.length>0
+        })
         this.dataSource=new MatTableDataSource(res)
     this.dataSource.paginator = this.paginator;
       })

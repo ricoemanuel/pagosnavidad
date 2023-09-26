@@ -107,6 +107,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
+  permitirCerrar:boolean=true
   cerrarPopup(event: any) {
     this.modalService.hide()
   }
@@ -158,8 +159,15 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
   async aprobarSillas(transaccion: any) {
+    this.permitirCerrar=false
     this.suscriptionTransaccion.unsubscribe()
-    if (transaccion.data.transaction.status !== 'APPROVED') {
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Validando compra, por favor espere.',
+      showConfirmButton: false,
+    })
+    if (transaccion.data.transaction.status === 'APPROVED') {
       let asientosIds: string[] = []
       await this.listaAsientos.forEach(async asiento => {
         asientosIds.push(`f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)

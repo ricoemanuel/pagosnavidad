@@ -13,7 +13,7 @@ mat-table{
     margin: 20px 20px;
     cursor: pointer;
     & .texto{
-        color: transparent;
+        color: black;
     }
 }
 ::ng-deep .modal-dialog {
@@ -21,4 +21,8 @@ mat-table{
 }
 .codigo{
     margin: 35px;
+}
+.mensaje{
+    text-align: center;
+    
 }

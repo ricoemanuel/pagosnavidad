@@ -73,7 +73,7 @@
     </ng-template>
 
     <ng-template #wompi>
-        <div (click)="cerrarPopup({})" class="close"><mat-icon>close</mat-icon></div>
+        <div *ngIf="permitirCerrar" (click)="cerrarPopup({})" class="close"><mat-icon>close</mat-icon></div>
         <iframe class="wompi" [src]="link"></iframe>
     </ng-template>
 </div>
