@@ -14,7 +14,7 @@ export const environment = {
     link:"https://production.wompi.co/v1/"
   },
   EmailSender:{
-    head:'e100eef502254844bf570a004f9da5dd',
-    link:'https://email-sender-one-alpha.vercel.app/enviar-correo'
+    head:'Bearer re_TVEGrqzN_NL7aWPA8NrZi452sQgsVQi8T',
+    link:'https://api.resend.com/emails'
   }
 };

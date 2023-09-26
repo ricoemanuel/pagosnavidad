@@ -1,13 +1,12 @@
 import { Component, OnInit, TemplateRef, Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeScript, SafeStyle, SafeUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { WompiService } from 'src/app/services/wompi.service';
 import Swal from 'sweetalert2';
-
 @Component({
   selector: 'app-evento',
   templateUrl: './evento.component.html',
@@ -27,14 +26,13 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   matriz: any[] = []
   localidadesMostradas: Set<string> = new Set<string>();
   nombreLocalidadMostrado: boolean = false;
-  numbers: any[] = []
   constructor(private aRoute: ActivatedRoute,
     private firebase: FirebaseService,
     private modalService: BsModalService,
     private wompi: WompiService,
     protected _sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
-    private el: ElementRef) {
+    private el: ElementRef,private router: Router) {
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
   ngAfterViewInit(): void {
@@ -44,14 +42,16 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.valirdarAsientos()
   }
   async ngOnInit(): Promise<void> {
-    // this.firebase.getAsientoByLibre().then(res=>{
-    //   res.forEach(async (asiento:any)=>{
-    //     asiento.estado='libre'
-    //     asiento.clienteEstado='null'
-    //     asiento.clienteUser='null'
-    //     await this.firebase.actualizarAsiento(asiento)
-    //   })
-    // })
+    //  this.firebase.getAsientoByLibre().then(res=>{
+    //    res.forEach(async (asiento:any)=>{
+    //      asiento.estado='libre'
+    //      asiento.clienteEstado='null'
+    //      asiento.clienteUser='null'
+    //      delete asiento.cliente
+    //      delete asiento.vendedor
+    //      await this.firebase.actualizarAsiento(asiento)
+    //    })
+    //  })
     if (this.id) {
       this.evento = await this.firebase.getevento(this.id)
       for (let i = 0; i < this.evento.filas; i++) {
@@ -87,21 +87,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         this.matriz[asiento.fila][asiento.columna] = zona
       })
     })
-    this.matriz.forEach((fila) => {
-      let cont = 0;
-      let array: any[] = [];
-
-      // Recorremos las columnas de atrás hacia adelante
-      for (let i = fila.length - 1; i >= 0; i--) {
-        const columna = fila[i];
-        if (columna) {
-          cont += 1;
-        }
-        array.unshift(cont);
-      }
-
-      this.numbers.push(array);
-    });
+    
 
 
 
@@ -135,7 +121,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       })
       zona = zona[0]
       suma += zona.precioZona
-      asientos += `${asiento.fila}-${asiento.columna}, `
+      asientos += `${this.evento.labels[asiento.fila]}-${asiento.label}, `
     })
     asientos = asientos.slice(0, -2)
     let response = await this.wompi.generarLink(suma, asientos, this.user, this.evento.nombre);
@@ -173,10 +159,10 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   async aprobarSillas(transaccion: any) {
     this.suscriptionTransaccion.unsubscribe()
-    if (transaccion.data.transaction.status === 'APPROVED') {
+    if (transaccion.data.transaction.status !== 'APPROVED') {
       let asientosIds: string[] = []
       await this.listaAsientos.forEach(async asiento => {
-        asientosIds.push(`f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
+        asientosIds.push(`f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
         asiento.clienteEstado = "pago"
         asiento.estado = "ocupado"
         await this.firebase.actualizarAsiento(asiento)
@@ -189,6 +175,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         showConfirmButton: false,
         timer: 3000
       })
+      this.router.navigate(['mis-compras'])
     } else {
       Swal.fire({
         position: 'top-end',

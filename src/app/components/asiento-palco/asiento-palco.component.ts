@@ -17,7 +17,6 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
   @Output() seleccionarAsiento = new EventEmitter<any>();
   @Output() cerrarPopUp = new EventEmitter<any>();
   @Input() zonaSeleccionada!: string
-  @Input() number!: any[]
   formulario = this.formBuilder.group({
     nombre: ['', Validators.required],
     apellido: ['', Validators.required],
@@ -37,7 +36,7 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
     if (localStorage.getItem("mapa") == "true") {
       this.map = true;
     }
-
+    console.log(this.information)
     if (this.information) {
       if (this.information['nombreZona'] === this.zonaSeleccionada) {
         let cont2 = parseInt(localStorage.getItem(this.information['nombreZona']) ?? '0');

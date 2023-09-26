@@ -138,7 +138,7 @@ export class FirebaseService {
   }
   async getAsientoByLibre(): Promise<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
-    const q = query(entradaRef, where('estado', '!=', 'libre'));
+    const q = query(entradaRef, where('evento', '==', '0pRlSIWu9Cxyv7X8s8TQ'));
     try {
       const snapshot = await getDocs(q);
       const asientos: DocumentData[] = [];
@@ -226,20 +226,20 @@ export class FirebaseService {
     const facturaRef = collection(this.firestore, "facturas")
     let doc: DocumentReference = await addDoc(facturaRef, obj)
     let user: any = await this.getUser(uid)
-    //  fetch(environment.EmailSender.link, {
-    //    method: 'POST',
-    //    headers: {
-    //      'Content-Type': 'application/json',
-    //      'x-api-key':environment.EmailSender.head
-    //    },
-    //    body: JSON.stringify({
-    //      correo: user.correo,
-    //      nombre: user.nombre,
-    //      factura: doc.id,
-    //    }),
-    //  }).catch(error=>{
-    //    console.log(error)
-    //  })
+      // fetch(environment.EmailSender.link, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'x-api-key':environment.EmailSender.head
+      //   },
+      //   body: JSON.stringify({
+      //     correo: user.correo,
+      //     nombre: user.nombre,
+      //     factura: doc.id,
+      //   }),
+      // }).catch(error=>{
+      //   console.log(error)
+      // })
   }
 
   async valirdarAsientos(id: string, user: string) {
@@ -253,6 +253,28 @@ export class FirebaseService {
     })
 
   }
+  getCurrentFacturas(uid: string): Observable<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'facturas');
+    const q = query(entradaRef, where('uid', '==', uid));
+  
+    return new Observable<DocumentData[]>(observer => {
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const asientos: DocumentData[] = [];
+  
+        snapshot.forEach(doc => {
+          const dataWithId = { ...doc.data(), id: doc.id };
+          asientos.push(dataWithId);
+        });
+  
+        observer.next(asientos);
+      });
+  
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
+  
 
 
 }

@@ -64,7 +64,7 @@
     <ng-template #template>
         <div (click)="cerrarPopup({})" class="close"><mat-icon>close</mat-icon></div>
         <h3 class="title">{{selectedZone}}</h3>
-        <app-grid-asientos (cerrarPopUpA)="cerrarPopup($event)" [numbers]="numbers" [labels]="evento.labels"
+        <app-grid-asientos (cerrarPopUpA)="cerrarPopup($event)" [labels]="evento.labels"
             [zonaSeleccionada]="selectedZone"></app-grid-asientos>
         <div class="centrar">
             <button [disabled]="!(listaAsientos.length>0)" class="btn btn-success" (click)="pagar(wompi)">Pagar</button>

@@ -7,7 +7,7 @@
                 <ng-container *ngFor="let j of js; let columna = index">
                     <td>
                         <div *ngIf="matriz[fila][columna]">
-                            <app-asiento-palco [number]="numbers[fila][columna]" [zonaSeleccionada]="zonaSeleccionada" (seleccionarAsiento)="agregarLista($event)
+                            <app-asiento-palco  [zonaSeleccionada]="zonaSeleccionada" (seleccionarAsiento)="agregarLista($event)
                             " (cerrarPopUp)="cerrarPopUp($event)" [information]="matriz[fila][columna]"></app-asiento-palco>
                         </div>
                     </td>

@@ -17,7 +17,6 @@ export class GridAsientoComponent implements OnInit {
   evento: string = ""
   zona = { 'hexaColor': 'white', 'nombreZona': 'libre' }
   matriz: any[] = []
-  @Input() numbers!: any[]
   @Output() enviarAsientos = new EventEmitter<any>();
   @Output() cerrarPopUpA = new EventEmitter<any>();
   constructor(private asientoService: FirebaseService, private route: ActivatedRoute, private router: Router) { }

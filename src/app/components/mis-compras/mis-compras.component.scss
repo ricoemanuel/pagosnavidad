@@ -1,0 +1,24 @@
+.margin-c{
+    
+    margin: 0 35px 35px;
+    min-height: 70vh;
+    & mat-form-field{
+        width: 100%;
+    }
+}
+mat-table{
+    background-color: transparent;
+}
+.qr{
+    margin: 20px 20px;
+    cursor: pointer;
+    & .texto{
+        color: transparent;
+    }
+}
+::ng-deep .modal-dialog {
+    max-width: fit-content !important;
+}
+.codigo{
+    margin: 35px;
+}

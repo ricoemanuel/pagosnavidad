@@ -13,7 +13,7 @@ export class WompiService {
   async generarLink(valor:number, asientos:string, usuario:string, title: string) {
     const data = {
       "name": `Pago de ${title}`,
-      "description": `Asientos del evento: ${asientos}. Código de ${usuario}` ,
+      "description": `Asientos del evento: ${asientos}. Código de usuario ${usuario}` ,
       "single_use": true,
       "currency": "COP",
       "amount_in_cents": 1500*100,
