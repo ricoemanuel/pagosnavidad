@@ -21,11 +21,14 @@ export class LoginComponent implements AfterViewInit {
   formularioSignUp = this.formBuilder.group({
     nombre: ['', Validators.required],
     tipoCedula: ['', Validators.required],
-    cedula: ['', Validators.required],
+    numero: ['', Validators.required],
     correo: ['', Validators.required],
     tipoRegistro: ['', Validators.required],
     contrasena: ['', Validators.required],
     confirmar: ['', Validators.required],
+    telefono: ['', Validators.required],
+    entidad: [''],
+    nit: [''],
   });
   formularioLogin = this.formBuilder.group({
     correo: ['', Validators.required],
@@ -119,10 +122,12 @@ export class LoginComponent implements AfterViewInit {
           {
             email: this.formularioSignUp.value.correo,
             nombre: this.formularioSignUp.value.nombre,
-            cedula: this.formularioSignUp.value.cedula,
+            numero: this.formularioSignUp.value.numero,
             tipoRegistro: this.formularioSignUp.value.tipoRegistro,
-            tipoCedula: this.formularioSignUp.value.tipoCedula
-  
+            tipoCedula: this.formularioSignUp.value.tipoCedula,
+            nit:this.formularioSignUp.value.nit,
+            entidad:this.formularioSignUp.value.entidad,
+            telefono:this.formularioSignUp.value.telefono
           }, res.user.uid)
         this.redirect()
       }).catch((error) => {

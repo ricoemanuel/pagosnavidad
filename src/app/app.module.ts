@@ -39,6 +39,7 @@ import { AsientoPalcoComponent } from './components/asiento-palco/asiento-palco.
 import { LoginComponent } from './components/login/login.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { MisComprasComponent } from './components/mis-compras/mis-compras.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +47,7 @@ import { HttpClientModule } from '@angular/common/http';
     GridAsientoComponent,
     AsientoPalcoComponent,
     LoginComponent,
+    MisComprasComponent,
   ],
   imports: [
     BrowserModule,

@@ -101,7 +101,7 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
     }else{
       Swal.fire({
         title: 'Antes de continuar por favor Inicie Sesión',
-        showDenyButton: true,
+        showDenyButton: false,
         confirmButtonText: 'Aceptar',
       }).then(async (result) => {
         if (result.isConfirmed) {

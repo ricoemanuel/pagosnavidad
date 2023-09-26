@@ -30,7 +30,15 @@
           <div class="col">
             <mat-form-field>
               <mat-label>Número</mat-label>
-              <input matInput formControlName="cedula">
+              <input type="number" matInput formControlName="numero">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Número de teléfono/celular</mat-label>
+              <input type="number" matInput formControlName="telefono">
             </mat-form-field>
           </div>
         </div>
@@ -41,37 +49,56 @@
               <mat-select formControlName="tipoRegistro">
                 <mat-option value="estudiante">Estudiante</mat-option>
                 <mat-option value="docente">Docente</mat-option>
-                <mat-option value="espectador">Espectador</mat-option>
+                <mat-option value="asistente">asistente</mat-option>
+                <mat-option value="empresario">Empresario</mat-option>
+                <mat-option value="egresado">Egresado</mat-option>
+                <mat-option value="comunidadunicafam">Comunidad unicafam</mat-option>
               </mat-select>
             </mat-form-field>
+          </div>
         </div>
+        <div class="row" *ngIf="formularioSignUp.value.tipoRegistro==='empresario'">
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Nombre de la institución o entidad</mat-label>
+              <input type="text" matInput formControlName="entidad">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row" *ngIf="formularioSignUp.value.tipoRegistro==='empresario'">
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Nit</mat-label>
+              <input type="text" matInput formControlName="nit">
+            </mat-form-field>
+          </div>
         </div>
         <div class="row">
           <div class="col">
-          <mat-form-field>
-            <mat-label>Correo</mat-label>
-            <input type="email" matInput formControlName="correo">
-          </mat-form-field>
-        </div>
-        </div>
-        <div class="row">
-          <div class="col">
-          <mat-form-field>
-            <mat-label>Contraseña</mat-label>
-            <input type="password" matInput formControlName="contrasena">
-          </mat-form-field>
-        </div>
+            <mat-form-field>
+              <mat-label>Correo</mat-label>
+              <input type="email" matInput formControlName="correo">
+            </mat-form-field>
+          </div>
         </div>
         <div class="row">
           <div class="col">
-          <mat-form-field>
-            <mat-label>Confirmar contraseña</mat-label>
-            <input type="password" matInput formControlName="confirmar">
-          </mat-form-field>
+            <mat-form-field>
+              <mat-label>Contraseña</mat-label>
+              <input type="password" matInput formControlName="contrasena">
+            </mat-form-field>
+          </div>
         </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Confirmar contraseña</mat-label>
+              <input type="password" matInput formControlName="confirmar">
+            </mat-form-field>
+          </div>
         </div>
         <button *ngIf="!disabled" class="submit" type="submit" (click)="registro()">Registrarse</button>
-        <button *ngIf="disabled" class="disabled" type="submit" >Registrarse</button>
+        <button *ngIf="disabled" class="disabled" type="submit">Registrarse</button>
         <p class="message">¿Ya tienes cuenta? <a (click)="switch('registrarse')" style="cursor: pointer;">Inicia
             sesión</a></p>
       </form>

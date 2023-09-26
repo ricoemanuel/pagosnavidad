@@ -136,6 +136,21 @@ export class FirebaseService {
       throw error; // Puedes manejar el error según tus necesidades
     }
   }
+  async getAsientoByLibre(): Promise<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('estado', '!=', 'libre'));
+    try {
+      const snapshot = await getDocs(q);
+      const asientos: DocumentData[] = [];
+      snapshot.forEach(doc => {
+        asientos.push(doc.data());
+      });
+      return asientos;
+    } catch (error) {
+      console.error("Error al obtener los asientos:", error);
+      throw error; // Puedes manejar el error según tus necesidades
+    }
+  }
 
 
   actualizarAsiento(asiento: any) {

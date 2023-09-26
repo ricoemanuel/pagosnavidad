@@ -12,7 +12,7 @@
                     <p class="card-text">{{evento.descripcion}}</p>
                     <div class="row">
                         <div class="col">
-                            <p><strong>Ubicacion: </strong>Teatro universidad de Cafam, Bogotá</p>
+                            <p><strong>Ubicacion: </strong>Teatro Cafam, Bogotá</p>
                         </div>
                         <div class="col">
                             <p><strong>Fecha: </strong>Noviembre 7 de 2023</p>
@@ -22,6 +22,8 @@
                         </div>
                     </div>
                     <h6 class="card-subtitle mb-2 text-muted">Compra tu entrada:</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Por favor selecciona alguna de las localidades para
+                        seleccionar su asiento.</h6>
                     <div class="row tabla">
                         <table>
                             <ng-container *ngFor="let fila of matriz; let i = index">
@@ -45,17 +47,18 @@
                                     </ng-container>
                                 </tr>
                             </ng-container>
+                            
                         </table>
+                        <div class="tarima">Tarima</div>
                     </div>
                     <br>
-                    <h6 class="card-subtitle mb-2 text-muted">Por favor selecciona alguna de las localidades para
-                        seleccionar su asiento.</h6>
+                    
                 </div>
 
             </div>
 
         </div>
-        <footer>myticket</footer>
+        
     </div>
 
     <ng-template #template>

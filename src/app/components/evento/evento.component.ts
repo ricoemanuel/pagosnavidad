@@ -44,6 +44,14 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.valirdarAsientos()
   }
   async ngOnInit(): Promise<void> {
+    // this.firebase.getAsientoByLibre().then(res=>{
+    //   res.forEach(async (asiento:any)=>{
+    //     asiento.estado='libre'
+    //     asiento.clienteEstado='null'
+    //     asiento.clienteUser='null'
+    //     await this.firebase.actualizarAsiento(asiento)
+    //   })
+    // })
     if (this.id) {
       this.evento = await this.firebase.getevento(this.id)
       for (let i = 0; i < this.evento.filas; i++) {
@@ -177,17 +185,17 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       Swal.fire({
         position: 'top-end',
         icon: 'success',
-        title: 'Has comprado los asientos!!',
+        title: 'Has comprado los asientos!! Muy pronto podrás visualizar el QR para ingresar al evento',
         showConfirmButton: false,
-        timer: 1500
+        timer: 3000
       })
     } else {
       Swal.fire({
         position: 'top-end',
         icon: 'error',
-        title: 'La transacción no ha sido confirmada.',
+        title: 'La transacción no ha sido confirmada, comunícate con tu banco.',
         showConfirmButton: false,
-        timer: 1500
+        timer: 2000
       }).then(() => {
         window.location.reload()
       })
