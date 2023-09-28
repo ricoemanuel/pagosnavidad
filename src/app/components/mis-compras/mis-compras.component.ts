@@ -12,7 +12,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class MisComprasComponent implements OnInit{
   dataSource!:MatTableDataSource<any>
   baseSeleccionada=""
-  displayedColumns: string[] = ['QR', 'Evento', 'Valor','asientos'];
+  displayedColumns: string[] = ['QR', 'Evento', 'Valor','asientos', 'zonas'];
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   constructor(private firebase: FirebaseService,private modalService: BsModalService,){}
   async ngOnInit(): Promise<void> {
@@ -54,5 +54,15 @@ export class MisComprasComponent implements OnInit{
       asientosString+=(asiento.split("/")[1]+', ')
     })
     return asientosString.slice(0,-2)
+  }
+  formatZonas(asientos:any[]){
+    let asientosString:string[]=[]
+    asientos.forEach(asiento=>{
+      asientosString.push(asiento.split(",")[0])
+    })
+    asientosString = asientosString.filter((item,index)=>{
+      return asientosString.indexOf(item) === index;
+    })
+    return asientosString
   }
 }

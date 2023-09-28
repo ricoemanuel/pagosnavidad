@@ -10,10 +10,14 @@ mat-table{
     background-color: transparent;
 }
 .qr{
-    margin: 20px 20px;
+    
     cursor: pointer;
     & .texto{
         color: black;
+    }
+    & img{
+        padding: 5px;
+        width: 10vw;
     }
 }
 ::ng-deep .modal-dialog {

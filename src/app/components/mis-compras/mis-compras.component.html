@@ -1,7 +1,7 @@
 <div class="margin-c">
     <div *ngIf="dataSource.data.length>0">
         <mat-form-field>
-            <mat-label>Búsque su factura</mat-label>
+            <mat-label>Búsque su boleta</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
         </mat-form-field>
 
@@ -11,9 +11,8 @@
                 <mat-header-cell *matHeaderCellDef> Código qr </mat-header-cell>
                 <mat-cell *matCellDef="let elemento">
                     <div class="qr">
-                        <img (click)="openQR(elemento.id,template)" [src]="generateQRCodeBase64(elemento.id)"
-                            width="100">
-                        <div class="texto">{{elemento.id}}</div>
+                        <img (click)="openQR(elemento.id,template)" [src]="generateQRCodeBase64(elemento.id)">
+                         <div class="texto">{{elemento.id}}</div> 
 
                     </div>
                 </mat-cell>
@@ -21,11 +20,10 @@
 
             <ng-container matColumnDef="Evento">
                 <mat-header-cell *matHeaderCellDef> Evento </mat-header-cell>
-                <mat-cell *matCellDef="let elemento"> {{
-                    elemento.transaccion.data.transaction.payment_method.payment_description
-                    ?elemento.transaccion.data.transaction.payment_method.payment_description.replace("Pago de ", "")
-                    :''
-                    }}
+                <mat-cell *matCellDef="let elemento" >
+                    <p style="cursor: pointer;" [routerLink]="'/evento/'+elemento.evento"> {{
+                   elemento.eventoData?elemento.eventoData.nombre:'Ir al evento'
+                    }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -35,10 +33,13 @@
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="asientos">
-                <mat-header-cell *matHeaderCellDef>Número de asientos</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Asientos</mat-header-cell>
                 <mat-cell *matCellDef="let elemento"> {{formatAsientos(elemento.asientos)}}</mat-cell>
             </ng-container>
-
+            <ng-container matColumnDef="zonas">
+                <mat-header-cell *matHeaderCellDef>Zonas respectivas</mat-header-cell>
+                <mat-cell *matCellDef="let elemento"> {{formatZonas(elemento.asientos)}}</mat-cell>
+            </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

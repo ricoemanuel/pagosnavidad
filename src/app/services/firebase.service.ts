@@ -216,12 +216,13 @@ export class FirebaseService {
     return transactions$
   }
 
-  async registrarFactura(transaccion: any, uid: string, evento: string, asientos: string[]) {
+  async registrarFactura(transaccion: any, uid: string, evento: string, asientos: string[], eventoData:any) {
     let obj: any = {
       transaccion,
       uid,
       evento,
-      asientos
+      asientos,
+      eventoData
     }
     const facturaRef = collection(this.firestore, "facturas")
     let doc: DocumentReference = await addDoc(facturaRef, obj)

@@ -122,7 +122,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       })
       zona = zona[0]
       suma += zona.precioZona
-      asientos += `${this.evento.labels[asiento.fila]}-${asiento.label}, `
+      asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
     })
     asientos = asientos.slice(0, -2)
     let response = await this.wompi.generarLink(suma, asientos, this.user, this.evento.nombre);
@@ -170,12 +170,12 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     if (transaccion.data.transaction.status === 'APPROVED') {
       let asientosIds: string[] = []
       await this.listaAsientos.forEach(async asiento => {
-        asientosIds.push(`f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
+        asientosIds.push(`${asiento.nombreZona},f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
         asiento.clienteEstado = "pago"
         asiento.estado = "ocupado"
         await this.firebase.actualizarAsiento(asiento)
       })
-      await this.firebase.registrarFactura(transaccion, this.user, this.id!, asientosIds)
+      await this.firebase.registrarFactura(transaccion, this.user, this.id!, asientosIds, this.evento)
       Swal.fire({
         position: 'top-end',
         icon: 'success',
