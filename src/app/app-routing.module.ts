@@ -12,7 +12,7 @@ const routes: Routes = [
   {path:'mis-compras',component:MisComprasComponent},
   {
     path: '**', // El wildcard '**' atrapa cualquier ruta que no coincida con las rutas anteriores
-    redirectTo: '/evento/0pRlSIWu9Cxyv7X8s8TQ', // Redirige a la ruta deseada
+    redirectTo: '/evento/Mu5vLrRQqVJ8Su9wjpHW', // Redirige a la ruta deseada
   },
 ];
 

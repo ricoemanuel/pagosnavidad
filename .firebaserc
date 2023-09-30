@@ -1,14 +1,14 @@
 {
   "targets": {
-    "myticketeventos": {
+    "halloweenpagos": {
       "hosting": {
-        "myticketeventos": [
-          "myticketeventos"
+        "halloweenpagos": [
+          "halloweenpagos"
         ]
       }
     }
   },
   "projects": {
-    "default": "myticketeventos"
+    "default": "halloweenpagos"
   }
 }

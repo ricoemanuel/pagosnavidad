@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pagosenlinea": {
+    "pagosenlineahalloween": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/pagosenlinea",
+            "outputPath": "dist/pagosenlineahalloween",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "pagosenlinea:build:production"
+              "browserTarget": "pagosenlineahalloween:build:production"
             },
             "development": {
-              "browserTarget": "pagosenlinea:build:development"
+              "browserTarget": "pagosenlineahalloween:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pagosenlinea:build"
+            "browserTarget": "pagosenlineahalloween:build"
           }
         },
         "test": {
@@ -106,7 +106,7 @@
           "builder": "@angular/fire:deploy",
           "options": {
             "version": 2,
-            "browserTarget": "pagosenlinea:build:production"
+            "browserTarget": "pagosenlineahalloween:build:production"
           }
         }
       }

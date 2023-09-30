@@ -1,5 +1,4 @@
-<div class="spinner" *ngIf="spinner"><img src="../assets/spinner.gif" alt=""></div>
-<div class="asientos" *ngIf="!spinner">
+<div class="asientos">
     <table>
         <ng-container *ngFor="let i of is; let fila = index">
             <tr>
@@ -7,12 +6,8 @@
                 <ng-container *ngFor="let j of js; let columna = index">
                     <td>
                         <div *ngIf="matriz[fila][columna]">
-                            <app-asiento-palco 
-                             [zonaSeleccionada]="zonaSeleccionada" 
-                             (seleccionarAsiento)="agregarLista($event)" 
-                             (borrarAsiento)="borrarLista($event)"
-                             (cerrarPopUp)="cerrarPopUp($event)" 
-                             [information]="matriz[fila][columna]"></app-asiento-palco>
+                            <app-asiento-palco [information]="matriz[fila][columna]" [fila]="fila"
+                                [columna]="columna"></app-asiento-palco>
                         </div>
                     </td>
                 </ng-container>

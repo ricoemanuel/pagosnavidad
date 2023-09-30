@@ -40,6 +40,12 @@
                 <mat-header-cell *matHeaderCellDef>Zonas respectivas</mat-header-cell>
                 <mat-cell *matCellDef="let elemento"> {{formatZonas(elemento.asientos)}}</mat-cell>
             </ng-container>
+            <ng-container matColumnDef="personas">
+                <mat-header-cell *matHeaderCellDef>Asistentes</mat-header-cell>
+                <mat-cell *matCellDef="let elemento">
+                     <p [innerHTML]="iterObject(elemento.detalle)"></p>
+                    </mat-cell>
+            </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

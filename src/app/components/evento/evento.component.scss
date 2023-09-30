@@ -14,6 +14,7 @@
     width: fit-content;
 }
 
+
 @media (max-width: 768px) {}
 
 
@@ -135,6 +136,11 @@ table {
         background-color: rgb(191, 191, 191);
         border-radius: 20px;
     }
+    & .button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 .spinner {
@@ -161,4 +167,20 @@ table {
     height: 50px;
     text-align: center;
     color: white;
+}
+.palco{
+    width: 500px;
+    padding: 10px;
+    & mat-form-field{
+        width: 100%;
+    }
+    & .title{
+        width: fit-content;
+        margin: 0 auto;
+    }
+}
+.centrar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -4,7 +4,7 @@
   <div class="container">
     <div class="form">
       <div class="thumbnail">
-        <img src="../../../assets/logo.png" alt="Thumbnail">
+        <img src="../../../assets/favicon.png" alt="Thumbnail">
       </div>
       <form [formGroup]="formularioSignUp" class="register-form" *ngIf="iniciarSesion">
         <div class="row">
@@ -39,37 +39,6 @@
             <mat-form-field>
               <mat-label>Número de teléfono/celular</mat-label>
               <input type="number" matInput formControlName="telefono">
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field>
-              <mat-label>Tipo de registro</mat-label>
-              <mat-select formControlName="tipoRegistro">
-                <mat-option value="estudiante">Estudiante</mat-option>
-                <mat-option value="docente">Docente</mat-option>
-                <mat-option value="asistente">asistente</mat-option>
-                <mat-option value="empresario">Empresario</mat-option>
-                <mat-option value="egresado">Egresado</mat-option>
-                <mat-option value="comunidadunicafam">Comunidad unicafam</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row" *ngIf="formularioSignUp.value.tipoRegistro==='empresario'">
-          <div class="col">
-            <mat-form-field>
-              <mat-label>Nombre de la institución o entidad</mat-label>
-              <input type="text" matInput formControlName="entidad">
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row" *ngIf="formularioSignUp.value.tipoRegistro==='empresario'">
-          <div class="col">
-            <mat-form-field>
-              <mat-label>Nit</mat-label>
-              <input type="text" matInput formControlName="nit">
             </mat-form-field>
           </div>
         </div>

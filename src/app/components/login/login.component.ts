@@ -23,12 +23,10 @@ export class LoginComponent implements AfterViewInit {
     tipoCedula: ['', Validators.required],
     numero: ['', Validators.required],
     correo: ['', Validators.required],
-    tipoRegistro: ['', Validators.required],
+    
     contrasena: ['', Validators.required],
     confirmar: ['', Validators.required],
     telefono: ['', Validators.required],
-    entidad: [''],
-    nit: [''],
   });
   formularioLogin = this.formBuilder.group({
     correo: ['', Validators.required],
@@ -40,7 +38,7 @@ export class LoginComponent implements AfterViewInit {
     this.spinner = false
   }
   redirect() {
-    this.router.navigate(['evento', '0pRlSIWu9Cxyv7X8s8TQ'])
+    this.router.navigate(['evento', 'Mu5vLrRQqVJ8Su9wjpHW'])
   }
   async iniciar() {
     this.spinner = true
@@ -123,10 +121,7 @@ export class LoginComponent implements AfterViewInit {
             email: this.formularioSignUp.value.correo,
             nombre: this.formularioSignUp.value.nombre,
             numero: this.formularioSignUp.value.numero,
-            tipoRegistro: this.formularioSignUp.value.tipoRegistro,
             tipoCedula: this.formularioSignUp.value.tipoCedula,
-            nit:this.formularioSignUp.value.nit,
-            entidad:this.formularioSignUp.value.entidad,
             telefono:this.formularioSignUp.value.telefono
           }, res.user.uid)
         this.redirect()

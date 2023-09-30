@@ -1,5 +1,5 @@
-import { Component, OnInit, TemplateRef, Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, AfterViewInit, ElementRef, HostListener } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, TemplateRef, Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, AfterViewInit, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeScript, SafeStyle, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -26,13 +26,21 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   matriz: any[] = []
   localidadesMostradas: Set<string> = new Set<string>();
   nombreLocalidadMostrado: boolean = false;
+  @ViewChild('template') template!: TemplateRef<any>;
+  secondFormGroup = this._formBuilder.group({
+    ninos: '',
+    adultos: '',
+    persona: ''
+  });
   constructor(private aRoute: ActivatedRoute,
     private firebase: FirebaseService,
     private modalService: BsModalService,
     private wompi: WompiService,
     protected _sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
-    private el: ElementRef,private router: Router) {
+    private el: ElementRef,
+    private router: Router,
+    private _formBuilder: FormBuilder,) {
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
   ngAfterViewInit(): void {
@@ -42,16 +50,6 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.valirdarAsientos()
   }
   async ngOnInit(): Promise<void> {
-    //  this.firebase.getAsientoByLibre().then(res=>{
-    //    res.forEach(async (asiento:any)=>{
-    //      asiento.estado='libre'
-    //      asiento.clienteEstado='null'
-    //      asiento.clienteUser='null'
-    //      delete asiento.cliente
-    //      delete asiento.vendedor
-    //      await this.firebase.actualizarAsiento(asiento)
-    //    })
-    //  })
     if (this.id) {
       this.evento = await this.firebase.getevento(this.id)
       for (let i = 0; i < this.evento.filas; i++) {
@@ -68,7 +66,12 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       });
       this.valirdarAsientos()
       this.getAsientos()
+
     }
+  }
+  detalle: any = {}
+  pagarT() {
+    console.log(this.detalle)
   }
   valirdarAsientos() {
     this.firebase.getAuthState().subscribe(async res => {
@@ -76,6 +79,17 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         this.user = res.uid
         this.asientosReservadosSus = this.firebase.getAsientoRealtimeByUsuarioEstado(res.uid, this.id).subscribe(res => {
           this.listaAsientos = res
+          this.detalle = {}
+          this.listaAsientos.forEach(asiento => {
+            this.detalle[asiento.label] = {
+              ninos: 0,
+              adultos: 0,
+              personas: 0
+            }
+          })
+          if (this.listaAsientos.length > 0) {
+            this.continuar(this.template)
+          }
         })
         await this.firebase.valirdarAsientos(this.id, this.user)
       }
@@ -87,15 +101,18 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         this.matriz[asiento.fila][asiento.columna] = zona
       })
     })
-    
 
 
 
   }
 
-  openModal(template: TemplateRef<any>) {
+  openModal(template: TemplateRef<any>, back: boolean) {
+    if (!back) {
+      this.modalRef = this.modalService.show(template);
+    } else {
+      this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+    }
 
-    this.modalRef = this.modalService.show(template);
 
 
   }
@@ -103,35 +120,65 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   mostrarZona(zona: any, template: TemplateRef<any>) {
     if (zona) {
       this.selectedZone = zona
-      this.openModal(template)
+      this.openModal(template, false)
     }
 
   }
-  permitirCerrar:boolean=true
-  cerrarPopup(event: any) {
-    this.modalService.hide()
+  permitirCerrar: boolean = true
+  async cerrarPopup(event: any) {
+    if (this.id) {
+      await this.firebase.valirdarAsientos(this.id, this.user)
+      this.modalService.hide()
+    }
+    
   }
   async pagar(template: TemplateRef<any>) {
+    let pass = true
+    let claves = Object.keys(this.detalle)
 
-    this.modalService.hide()
-    let asientos: string = '';
-    let suma = 0
-    this.listaAsientos.forEach((asiento: any) => {
-      let zona = this.evento.zonas.filter((zona: any) => {
-        return zona.nombreZona === asiento.nombreZona
+    claves.forEach(clave => {
+      let totalPersonas = 8 + this.detalle[clave].personas
+      if (this.detalle[clave].adultos < 1) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Debe de haber al menos 1 adulto',
+        })
+        pass = false
+      }
+      if (!((this.detalle[clave].ninos + this.detalle[clave].adultos) === totalPersonas)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `El número de niños más el de adultos debe ser ${totalPersonas}`,
+        })
+        pass = false
+      }
+    })
+    if (pass) {
+      console.log(pass)
+
+      this.modalService.hide()
+      let asientos: string = '';
+      let suma = 0
+      this.listaAsientos.forEach((asiento: any) => {
+        let zona = this.evento.zonas.filter((zona: any) => {
+          return zona.nombreZona === asiento.nombreZona
+        })
+        zona = zona[0]
+        suma += zona.precioZona + (this.detalle[asiento.label].personas * zona.persona)
+        asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
       })
-      zona = zona[0]
-      suma += zona.precioZona
-      asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
-    })
-    asientos = asientos.slice(0, -2)
-    let response = await this.wompi.generarLink(suma, asientos, this.user, this.evento.nombre);
-    response.subscribe(async (res: any) => {
-      let link: string = `https://checkout.wompi.co/l/${res.data.id}`
-      this.link = this._sanitizer.bypassSecurityTrustResourceUrl(link)
-      this.openModal(template)
-      this.vigilarPago(res.data.id)
-    })
+      asientos = asientos.slice(0, -2)
+      console.log(suma)
+      let response = await this.wompi.generarLink(suma, `Palcos del evento ${asientos}`, this.evento.nombre);
+      response.subscribe(async (res: any) => {
+        let link: string = `https://checkout.wompi.co/l/${res.data.id}`
+        this.link = this._sanitizer.bypassSecurityTrustResourceUrl(link)
+        this.openModal(template, false)
+        this.vigilarPago(res.data.id)
+      })
+    }
 
   }
   vigilarPago(ref: string) {
@@ -159,7 +206,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
   async aprobarSillas(transaccion: any) {
-    this.permitirCerrar=false
+    this.permitirCerrar = false
     this.suscriptionTransaccion.unsubscribe()
     Swal.fire({
       position: 'top-end',
@@ -167,7 +214,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Validando compra, por favor espere.',
       showConfirmButton: false,
     })
-    if (transaccion.data.transaction.status === 'APPROVED') {
+    if (transaccion.data.transaction.status !== 'APPROVED') {
       let asientosIds: string[] = []
       await this.listaAsientos.forEach(async asiento => {
         asientosIds.push(`${asiento.nombreZona},f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
@@ -175,7 +222,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         asiento.estado = "ocupado"
         await this.firebase.actualizarAsiento(asiento)
       })
-      await this.firebase.registrarFactura(transaccion, this.user, this.id!, asientosIds, this.evento)
+      await this.firebase.registrarFactura(transaccion, this.user, this.id!, asientosIds, this.evento, this.detalle)
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -217,6 +264,24 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   doSomething($event: Event) {
     if (this.id) this.firebase.valirdarAsientos(this.id, this.user)
   }
- 
 
+  continuar(template: TemplateRef<any>) {
+    this.openModal(template, true)
+  }
+  async cancelar() {
+    if (this.id) {
+      // Cierra el pop-up (asegúrate de que this.modalRef.hide() sea una función asíncrona)
+      this.modalRef?.hide();
+    
+      // Espera 1.5 segundos usando setTimeout
+      await new Promise((resolve) => {
+        setTimeout(resolve, 150);
+      });
+    
+      // Luego, ejecuta la función validarAsientos
+      await this.firebase.valirdarAsientos(this.id, this.user);
+    }
+    
+
+  }
 }

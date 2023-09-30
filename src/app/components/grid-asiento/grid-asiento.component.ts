@@ -16,7 +16,7 @@ export class GridAsientoComponent implements OnInit {
   estado: string = "inexistente"
   evento: string = ""
   zona = { 'hexaColor': 'white', 'nombreZona': 'libre' }
-  matriz: any[] = []
+  @Input() matriz: any[] = []
   @Output() enviarAsientos = new EventEmitter<any>();
   @Output() borrarAsiento = new EventEmitter<any>();
   @Output() cerrarPopUpA = new EventEmitter<any>();
@@ -27,46 +27,9 @@ export class GridAsientoComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.evento = params['id'];
     });
-    let evento = await this.asientoService.getevento(this.evento)
-    if (evento != undefined) {
-      evento['zonas'].forEach((element: { [x: string]: any; }) => {
-        localStorage.setItem(element['nombreZona'], '0')
 
-      });
-      this.is = this.Array(evento["filas"])
-      this.js = this.Array(evento["columnas"])
-      for (let i = 0; i < evento["filas"]; i++) {
-        let array: any[] = []
-        for (let j = 0; j < evento["columnas"]; j++) {
-          array.push(false)
-        }
-        this.matriz.push(array)
-      }
-      this.asientoService.getAsientosByEventoAndZona(this.evento, this.zonaSeleccionada).subscribe(res => {
-        res.forEach((asiento: any) => {
-
-          this.matriz[asiento.fila][asiento.columna] = asiento
-        })
-        this.matriz.forEach((fila, filaIndex) => {
-          let status = false;
-          fila.forEach((columna: any, columnaIndex: number) => {
-            if (columna) {
-              status = true;
-            }
-          });
-
-          if (!status) {
-            this.labelsA[filaIndex] = "";
-          }
-        });
-
-        
-        this.spinner = false
-      })
-
-
-
-    }
+    this.is = this.Array(this.matriz.length)
+    this.js = this.Array(this.matriz[0].length)
 
 
   }
@@ -88,7 +51,7 @@ export class GridAsientoComponent implements OnInit {
   borrarLista(information: any) {
     this.borrarAsiento.emit(information)
   }
-  cerrarPopUp(event:any){
+  cerrarPopUp(event: any) {
     this.cerrarPopUpA.emit()
   }
 

@@ -4,20 +4,19 @@ import { Observable } from 'rxjs';
 import { DocumentData } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
 @Component({
   selector: 'app-asiento-palco',
   templateUrl: './asiento-palco.component.html',
   styleUrls: ['./asiento-palco.component.scss']
 })
-export class AsientoPalcoComponent implements AfterViewInit, OnInit {
-  information$: Observable<any> | undefined;
+export class AsientoPalcoComponent implements  OnInit {
+  @Input() information: any;
+  @Input() fila!: number;
+  @Input() columna!: number;
+  
   modalRef?: BsModalRef;
-  @Output() seleccionarAsiento = new EventEmitter<any>();
-  @Output() borrarAsiento = new EventEmitter<any>();
-  @Output() cerrarPopUp = new EventEmitter<any>();
-  @Input() zonaSeleccionada!: string
   formulario = this.formBuilder.group({
     nombre: ['', Validators.required],
     apellido: ['', Validators.required],
@@ -28,64 +27,34 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
   cont1: number = 0
   firstTime: boolean = true
   user: string | undefined;
-  constructor(private router: Router, private formBuilder: FormBuilder, private asientoService: FirebaseService, private modalService: BsModalService) { }
+  evento: any;
+  charging: boolean = true
+  constructor(private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private asientoService: FirebaseService, private modalService: BsModalService) { }
 
   async ngOnInit(): Promise<void> {
     this.asientoService.getAuthState().subscribe(res => {
       this.user = res?.uid
     })
-    if (localStorage.getItem("mapa") == "true") {
-      this.map = true;
-    }
-    if (this.information) {
-      if (this.information['nombreZona'] === this.zonaSeleccionada) {
-        let cont2 = parseInt(localStorage.getItem(this.information['nombreZona']) ?? '0');
-        cont2++
-        if (this.firstTime) {
-          this.firstTime = false
-          this.cont1 = cont2
-        }
-        localStorage.setItem(this.information['nombreZona'], cont2.toString());
+    this.route.params.subscribe(params => {
+      this.evento = params['id'];
+    });
 
-      } else {
-        this.information.estado = 'noSelected'
-      }
-    }
+    this.asientoService.getAsientoRealtime(this.fila, this.columna, this.evento).subscribe(res => {
+      this.information = res[0]
+      this.charging = false
+    })
   }
-
-  async ngAfterViewInit(): Promise<void> {
-
-  }
-
-  @Input() information: any;
-
-
   openModal(template: TemplateRef<any>) {
-
     if (this.information['estado'] != "ocupado") {
-
-
     }
     //this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
 
 
   }
   cancelar(template: TemplateRef<any>) {
-
     if (this.information['estado'] != "ocupado") {
-
-
     }
-
-
     this.modalRef?.hide()
-
-  }
-  Reservar() {
-    this.information.cliente = this.formulario.value
-    this.information.vendedor = this.vendedor.value
-    this.asientoService.actualizarAsiento(this.information);
-    this.modalRef?.hide();
   }
 
   async seleccionar() {
@@ -114,7 +83,6 @@ export class AsientoPalcoComponent implements AfterViewInit, OnInit {
         confirmButtonText: 'Aceptar',
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.cerrarPopUp.emit()
           this.router.navigate(['login'])
         }
       })

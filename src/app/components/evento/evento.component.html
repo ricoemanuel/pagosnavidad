@@ -1,10 +1,9 @@
 <div class="spinner" *ngIf="spinner"><img src="../assets/spinner.gif" alt=""></div>
 <div *ngIf="!spinner">
     <div *ngIf="id && evento" class="row margin">
-        <div class="col-md-3">
-            <div class="img"><img width="250" src="../../../assets/rigo.jpg" alt=""></div>
 
-        </div>
+        <div class="img"><img width="250" src="../../../assets/halloween.jpg" alt=""></div>
+
         <div class="col-md-9 pt-3 margin-c">
             <div class="card mx-auto">
                 <div class="card-body">
@@ -12,64 +11,70 @@
                     <p class="card-text">{{evento.descripcion}}</p>
                     <div class="row">
                         <div class="col">
-                            <p><strong>Ubicacion: </strong>Teatro Cafam, Bogotá</p>
+                            <p><strong>Ubicacion: </strong>Cielo Alto, Medellín</p>
                         </div>
                         <div class="col">
-                            <p><strong>Fecha: </strong>Noviembre 7 de 2023</p>
-                        </div>
-                        <div class="col">
-                            <p><strong>Hora: </strong>10:00 a.m. a 11:10 a.m.</p>
+                            <p><strong>Fecha: </strong>Octubre 28,29,30 y 31 de 2023</p>
                         </div>
                     </div>
-                    <h6 class="card-subtitle mb-2 text-muted">Compra tu entrada:</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Por favor selecciona alguna de las localidades para
-                        seleccionar su asiento.</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Compra tu palco:</h6>
                     <div class="row tabla">
-                        <table>
-                            <ng-container *ngFor="let fila of matriz; let i = index">
-                                <tr>
-                                    <ng-container *ngFor="let elemento of fila; let j = index">
-
-                                        <td class="caja" (click)="mostrarZona(elemento.nombreZona, template)"
-                                            [style.backgroundColor]="elemento ? '#3f51b5' : 'transparent'"
-                                            [style.cursor]="elemento?'pointer':''">
-                                            <div class="llenado">
-                                                <label [style.cursor]="elemento?'pointer':''" [id]="string(i,j)"
-                                                    class="nombre"></label>
-
-                                                <ng-container>
-                                                    {{mostrarNombre(elemento.nombreZona,string(i,j),elemento.precioZona)}}
-                                                </ng-container>
-
-
-                                            </div>
-                                        </td>
-                                    </ng-container>
-                                </tr>
-                            </ng-container>
-                            
-                        </table>
-                        <div class="tarima">Tarima</div>
+                        <div class="tarima">Escenario</div>
+                        <app-grid-asientos [matriz]="matriz" [labels]="evento.labels"></app-grid-asientos>
+                        <div class="button"><button (click)="continuar(template)"
+                                class="btn btn-success">Continuar</button></div>
                     </div>
+
                     <br>
-                    
+
                 </div>
 
             </div>
 
         </div>
-        
+
     </div>
 
     <ng-template #template>
-        <div (click)="cerrarPopup({})" class="close"><mat-icon>close</mat-icon></div>
-        <h3 class="title">{{selectedZone}}</h3>
-        <app-grid-asientos (cerrarPopUpA)="cerrarPopup($event)" [labels]="evento.labels" 
-            [zonaSeleccionada]="selectedZone"></app-grid-asientos>
-        <div class="centrar">
-            <button [disabled]="!(listaAsientos.length>0)" class="btn btn-success" (click)="pagar(wompi)">Pagar</button>
-        </div>
+        <ng-container *ngFor="let palco of listaAsientos">
+            <div class="palco">
 
+                <div class="row">
+                    <div class="col title">Palco {{palco.label}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field>
+                            <mat-label>Número de personas adicionales</mat-label>
+                            <input [(ngModel)]="detalle[palco.label]['personas']" matInput type="number" min="0"
+                                max="4">
+                        </mat-form-field>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field>
+                            <mat-label>Número de niños</mat-label>
+                            <input [(ngModel)]="detalle[palco.label]['ninos']" matInput type="number" min="0" max="11">
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col">
+                        <mat-form-field>
+                            <mat-label>Número de adultos</mat-label>
+                            <input [(ngModel)]="detalle[palco.label]['adultos']" matInput type="number" min="1"
+                                max="12">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+            </div>
+        </ng-container>
+        <div class="row">
+            <div class="col centrar"><button class="btn btn-success" (click)="pagar(wompi)">Pagar</button></div>
+            <div class="col centrar"><button class="btn btn-danger" (click)="cancelar()">Cancelar</button></div>
+        </div>
     </ng-template>
 
     <ng-template #wompi>
