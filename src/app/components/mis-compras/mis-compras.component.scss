@@ -30,3 +30,10 @@ mat-table{
     text-align: center;
     
 }
+.datatable {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    border-radius: 9px;
+  }

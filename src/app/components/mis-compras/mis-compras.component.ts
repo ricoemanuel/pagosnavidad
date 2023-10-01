@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -9,12 +9,17 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   templateUrl: './mis-compras.component.html',
   styleUrls: ['./mis-compras.component.scss']
 })
-export class MisComprasComponent implements OnInit {
+export class MisComprasComponent implements OnInit, AfterViewInit {
   dataSource!: MatTableDataSource<any>
   baseSeleccionada = ""
   displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'asientos', 'zonas', 'personas'];
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  constructor(private firebase: FirebaseService, private modalService: BsModalService,) { }
+  constructor(private firebase: FirebaseService, private modalService: BsModalService,) { 
+    
+  }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
   async ngOnInit(): Promise<void> {
     this.firebase.getAuthState().subscribe(user => {
       this.firebase.getCurrentFacturas(user!.uid).subscribe(res => {
@@ -22,7 +27,7 @@ export class MisComprasComponent implements OnInit {
           return factura.transaccion.data.transaction.status !== 'ERROR' && factura.asientos.length > 0
         })
         this.dataSource = new MatTableDataSource(res)
-        this.dataSource.paginator = this.paginator;
+        
       })
     })
   }

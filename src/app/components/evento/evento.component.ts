@@ -52,20 +52,26 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   async ngOnInit(): Promise<void> {
     if (this.id) {
       this.evento = await this.firebase.getevento(this.id)
-      for (let i = 0; i < this.evento.filas; i++) {
-        let array: any[] = []
-        for (let j = 0; j < this.evento.columnas; j++) {
-          array.push(false)
+      if (!this.evento) {
+        window.location.href = 'https://myteventos.com/halloween-encantado/';
+      } else {
+        localStorage.setItem('id', this.id)
+        for (let i = 0; i < this.evento.filas; i++) {
+          let array: any[] = []
+          for (let j = 0; j < this.evento.columnas; j++) {
+            array.push(false)
+          }
+          this.matriz.push(array)
         }
-        this.matriz.push(array)
+
+
+        this.evento.zonas.forEach((zona: any) => {
+          zona.precioZona = parseInt(zona.precioZona)
+        });
+        this.valirdarAsientos()
+        this.getAsientos()
       }
 
-
-      this.evento.zonas.forEach((zona: any) => {
-        zona.precioZona = parseInt(zona.precioZona)
-      });
-      this.valirdarAsientos()
-      this.getAsientos()
 
     }
   }
@@ -130,7 +136,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       await this.firebase.valirdarAsientos(this.id, this.user)
       this.modalService.hide()
     }
-    
+
   }
   async pagar(template: TemplateRef<any>) {
     let pass = true
@@ -272,16 +278,16 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.id) {
       // Cierra el pop-up (asegúrate de que this.modalRef.hide() sea una función asíncrona)
       this.modalRef?.hide();
-    
+
       // Espera 1.5 segundos usando setTimeout
       await new Promise((resolve) => {
         setTimeout(resolve, 150);
       });
-    
+
       // Luego, ejecuta la función validarAsientos
       await this.firebase.valirdarAsientos(this.id, this.user);
     }
-    
+
 
   }
 }

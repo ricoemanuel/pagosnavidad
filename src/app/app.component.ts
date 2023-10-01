@@ -12,9 +12,11 @@ export class AppComponent implements OnInit {
   cargando: boolean = true
   login:boolean=false
   logged:boolean=false
-  constructor(private router: Router, private firebase: FirebaseService, private wompi: WompiService, private route: ActivatedRoute) { }
+  id: string | null;
+  constructor(private router: Router, private firebase: FirebaseService, private wompi: WompiService, private route: ActivatedRoute) {
+    this.id = this.route.snapshot.paramMap.get('id');
+   }
   ngOnInit(): void {
-    
     this.firebase.getAuthState().subscribe(async res => {
       if (res) {
         this.logged=true
@@ -43,7 +45,7 @@ export class AppComponent implements OnInit {
     this.router.navigate(['login'])
   }
   redirectW(){
-    const urlWhatsApp = 'https://api.whatsapp.com/send?phone=573177159222';
+    const urlWhatsApp = 'https://api.whatsapp.com/send?phone=573054029445';
     window.open(urlWhatsApp, '_blank'); // Abre en una nueva ventana o pestaña
     // O puedes usar router.navigate para redirigir en la misma ventana
     // this.router.navigate(['/']); // Por ejemplo, redirigir a la página de inicio de tu aplicación Angular

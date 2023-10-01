@@ -38,7 +38,7 @@ export class LoginComponent implements AfterViewInit {
     this.spinner = false
   }
   redirect() {
-    this.router.navigate(['evento', 'Mu5vLrRQqVJ8Su9wjpHW'])
+    this.router.navigate(['evento', localStorage.getItem('id')])
   }
   async iniciar() {
     this.spinner = true
