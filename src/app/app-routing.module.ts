@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EventoComponent } from './components/evento/evento.component';
 import { LoginComponent } from './components/login/login.component';
 import { MisComprasComponent } from './components/mis-compras/mis-compras.component';
-import { RedirectComponent } from './component/redirect/redirect.component';
+import { MainComponent } from './components/main/main.component';
 
 
 //Components
@@ -11,10 +11,10 @@ const routes: Routes = [
   {path:'evento/:id',component:EventoComponent},
   {path:'login',component:LoginComponent},
   {path:'mis-compras',component:MisComprasComponent},
-  {path:'redirect',component:RedirectComponent},
+  {path:'main',component:MainComponent},
   {
     path: '**', // El wildcard '**' atrapa cualquier ruta que no coincida con las rutas anteriores
-    redirectTo: '/redirect', // Redirige a la ruta deseada
+    redirectTo: '/main', // Redirige a la ruta deseada
   },
 ];
 

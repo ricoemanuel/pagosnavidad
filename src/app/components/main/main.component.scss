@@ -57,6 +57,7 @@
 
 .margin-c {
     margin-bottom: 20px;
+    padding: 20px;
     & .card{
         height: 83vh;
         overflow: scroll;
@@ -183,20 +184,27 @@ table {
     text-align: center;
     color: white;
 }
-.mesa{
-    width: inherit;
-    padding: 10px;
-    & mat-form-field{
-        width: 100%;
-    }
-    & .title{
-        width: fit-content;
-    margin: 0 auto;
-    color: #3f51b5;
-    font-size: 24px;
-    margin-bottom: 24px;
-    }
+/* Estilos para los bloques de palcos */
+.palco {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
+
+/* Estilos para el precio y la información adicional */
+.price, .additional, .capacity {
+    font-weight: bold;
+}
+
+/* Línea horizontal para separar los bloques de palcos */
+hr {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 20px 0;
+}
+
 .centrar{
     display: flex;
     justify-content: center;
@@ -210,15 +218,14 @@ table {
         width: 50vw;
     }
 }
-.main{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    & mat-form-field{
-        width: 100%;
-    }
+/* Estilos para las listas de instrucciones y términos */
+.instructions-list, .terms-list {
+    list-style-type: decimal;
+    margin-left: 20px;
 }
-.detalle{
-    min-width: 370px;
-    max-width: 500px;
+
+/* Estilos para los párrafos que contienen los encabezados */
+.instructions, .terms {
+    font-weight: bold;
+    margin-top: 20px;
 }

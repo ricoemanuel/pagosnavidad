@@ -40,7 +40,8 @@ import { LoginComponent } from './components/login/login.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { MisComprasComponent } from './components/mis-compras/mis-compras.component';
-import { RedirectComponent } from './component/redirect/redirect.component';
+
+import { MainComponent } from './components/main/main.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +50,7 @@ import { RedirectComponent } from './component/redirect/redirect.component';
     AsientoPalcoComponent,
     LoginComponent,
     MisComprasComponent,
-    RedirectComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,

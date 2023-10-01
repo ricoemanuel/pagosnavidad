@@ -20,10 +20,7 @@ export class LoginComponent implements AfterViewInit {
   registrarse = true
   formularioSignUp = this.formBuilder.group({
     nombre: ['', Validators.required],
-    tipoCedula: ['', Validators.required],
-    numero: ['', Validators.required],
     correo: ['', Validators.required],
-    
     contrasena: ['', Validators.required],
     confirmar: ['', Validators.required],
     telefono: ['', Validators.required],
@@ -94,16 +91,16 @@ export class LoginComponent implements AfterViewInit {
     }
   }
   registro() {
-    this.disabled=true
-    let pass=true
+    this.disabled = true
+    let pass = true
     if (!this.formularioSignUp.valid) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Debe llenar todos los campos',
       })
-      this.disabled=false
-      pass=false
+      this.disabled = false
+      pass = false
     }
     if (this.formularioSignUp.value.contrasena !== this.formularioSignUp.value.confirmar) {
       Swal.fire({
@@ -111,18 +108,16 @@ export class LoginComponent implements AfterViewInit {
         title: 'Oops...',
         text: 'Debe confirmar las contraseñas.',
       })
-      this.disabled=false
-      pass=false
+      this.disabled = false
+      pass = false
     }
-    if(pass===true){
+    if (pass === true) {
       this.loginservice.singup({ email: this.formularioSignUp.value.correo, password: this.formularioSignUp.value.contrasena }).then(async res => {
         await this.loginservice.setUser(
           {
             email: this.formularioSignUp.value.correo,
             nombre: this.formularioSignUp.value.nombre,
-            numero: this.formularioSignUp.value.numero,
-            tipoCedula: this.formularioSignUp.value.tipoCedula,
-            telefono:this.formularioSignUp.value.telefono
+            telefono: this.formularioSignUp.value.telefono
           }, res.user.uid)
         this.redirect()
       }).catch((error) => {
@@ -140,7 +135,7 @@ export class LoginComponent implements AfterViewInit {
             title: 'Oops...',
             text: 'La contraseña debe tener 6 caráteres o más.',
           })
-        }else if (error.code === 'auth/invalid-email') {
+        } else if (error.code === 'auth/invalid-email') {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -155,7 +150,7 @@ export class LoginComponent implements AfterViewInit {
         }
       })
     }
-    
+
 
 
   }

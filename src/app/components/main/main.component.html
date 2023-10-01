@@ -1,0 +1,71 @@
+<div class="row margin">
+    <div class="img"><img width="250" src="../../../assets/halloween.jpg" alt=""></div>
+    <div class="col-md-8 pt-3 margin-c">
+        <div class="card mx-auto">
+            <p class="instructions">
+                <strong>Instrucciones de compra:</strong>
+            </p>
+            <ol class="instructions-list">
+                <li>Seleccione el día y horario de su función.</li>
+                <li>Seleccione en el mapa su palco y defina el número de adultos, niños y personas adicionales si lo
+                    desea. Recuerde que la mesa es para un máximo de 8 personas y un máximo de 12 personas.</li>
+                <li>Registre sus datos.</li>
+                <li>Realice su compra.</li>
+                <li>Si presenta algún inconveniente, por favor escriba a nuestra línea de ayuda.</li>
+            </ol>
+
+            <p class="terms">
+                <strong>Términos y condiciones:</strong>
+            </p>
+            <ol class="terms-list">
+                <li>No se realizan cambios en las funciones ni en los horarios del evento.</li>
+                <li>Solo se realizarán devoluciones de dinero si el evento no se realiza.</li>
+                <li>La no asistencia al evento no obliga al organizador a devolver dinero alguno.</li>
+                <li>Los niños menores de 1 año no pagan su ingreso al evento.</li>
+            </ol>
+
+
+            <mat-form-field>
+                <mat-label>Seleccione la función</mat-label>
+                <mat-select [(ngModel)]="select" (ngModelChange)="seleccionar()">
+                    <mat-option value="QpMYCzedq9Qc6AeoQxNE">Sábado 28 de octubre 10:00 a.m.</mat-option>
+                    <mat-option value=" ">Sábado 28 de octubre 1:00 p.m.</mat-option>
+                    <mat-option value=" ">Sábado 28 de octubre 5:00 p.m.</mat-option>
+                    <mat-option value=" ">Domingo 29 de octubre 10:00 a.m.</mat-option>
+                    <mat-option value=" ">Domingo 29 de octubre 1:00 p.m.</mat-option>
+                    <mat-option value=" ">Domingo 29 de octubre 5:00 p.m.</mat-option>
+                    <mat-option value=" ">lunes 30 de octubre 2:30 p.m.</mat-option>
+                    <mat-option value=" ">lunes 30 de octubre 5:00 p.m.</mat-option>
+                    <mat-option value=" ">Martes 31 de octubre 2:30 p.m.</mat-option>
+                    <mat-option value=" ">Martes 31 de octubre 5:00 p.m.</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="palco">
+                        <h2>Mesas A</h2>
+                        <p class="price">Valor: $720.000</p>
+                        <p class="additional">Persona adicional: $90.000</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="palco">
+                        <h2>Mesas B</h2>
+                        <p class="price">Valor: $590.000</p>
+                        <p class="additional">Persona adicional: $75.000</p>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+            <div class="mapaImg">
+                <img src="../../../assets/mapa.jpg" alt="">
+            </div>
+
+        </div>
+    </div>
+</div>

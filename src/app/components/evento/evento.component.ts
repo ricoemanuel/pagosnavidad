@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   spinner: boolean = true
   id: string | null;
+  select = ""
   evento: any
   modalRef?: BsModalRef;
   listaAsientos: any[] = []
@@ -42,6 +43,9 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private _formBuilder: FormBuilder,) {
     this.id = this.aRoute.snapshot.paramMap.get('id');
+  }
+  seleccionar() {
+    this.router.navigate(['evento', this.select])
   }
   ngAfterViewInit(): void {
     this.spinner = false
@@ -93,8 +97,12 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
               personas: 0
             }
           })
-          if (this.listaAsientos.length > 0) {
-            this.continuar(this.template)
+          if(this.listaAsientos.length>3){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Solo puedes escoger 3 mesas por transacción',
+            })
           }
         })
         await this.firebase.valirdarAsientos(this.id, this.user)
@@ -141,26 +149,43 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   async pagar(template: TemplateRef<any>) {
     let pass = true
     let claves = Object.keys(this.detalle)
-
+    let error1:string=""
+    let error2:string=""
     claves.forEach(clave => {
       let totalPersonas = 8 + this.detalle[clave].personas
       if (this.detalle[clave].adultos < 1) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Debe de haber al menos 1 adulto',
-        })
+        error1+=clave+", "
         pass = false
       }
       if (!((this.detalle[clave].ninos + this.detalle[clave].adultos) === totalPersonas)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: `El número de niños más el de adultos debe ser ${totalPersonas}`,
-        })
+        error2+=`${totalPersonas} en la mesa ${clave}, `
         pass = false
       }
     })
+    error2=error2.slice(0,-2)
+    let mensajes=true
+    if(error1!=="" && error2!==""){
+      mensajes=false
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto y el número de niños más el de adultos en cada mesa debe ser: ${error2}`,
+      })
+    }
+    if(error1!=="" && mensajes){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto`,
+      })
+    }
+    if(error2!=="" && mensajes){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `El número de niños más el de adultos en cada mesa debe ser: ${error2}`,
+      })
+    }
     if (pass) {
       console.log(pass)
 
