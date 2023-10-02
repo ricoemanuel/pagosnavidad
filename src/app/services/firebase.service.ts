@@ -116,7 +116,6 @@ export class FirebaseService {
       });
       return asientos;
     } catch (error) {
-      console.error("Error al obtener los asientos:", error);
       throw error; // Puedes manejar el error según tus necesidades
     }
   }
@@ -132,7 +131,6 @@ export class FirebaseService {
       });
       return asientos;
     } catch (error) {
-      console.error("Error al obtener los asientos:", error);
       throw error; // Puedes manejar el error según tus necesidades
     }
   }

@@ -44,8 +44,9 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     private _formBuilder: FormBuilder,) {
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
-  seleccionar() {
-    this.router.navigate(['evento', this.select])
+  async seleccionar() {
+    await this.router.navigate(['evento', this.select])
+    window.location.reload()
   }
   ngAfterViewInit(): void {
     this.spinner = false
@@ -80,9 +81,6 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   detalle: any = {}
-  pagarT() {
-    console.log(this.detalle)
-  }
   valirdarAsientos() {
     this.firebase.getAuthState().subscribe(async res => {
       if (res && this.id) {
@@ -187,7 +185,6 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       })
     }
     if (pass) {
-      console.log(pass)
 
       this.modalService.hide()
       let asientos: string = '';
@@ -201,7 +198,6 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
       })
       asientos = asientos.slice(0, -2)
-      console.log(suma)
       let response = await this.wompi.generarLink(suma, `Palcos del evento ${asientos}`, this.evento.nombre);
       response.subscribe(async (res: any) => {
         let link: string = `https://checkout.wompi.co/l/${res.data.id}`

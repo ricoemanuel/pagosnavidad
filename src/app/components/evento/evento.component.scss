@@ -202,14 +202,23 @@ table {
     justify-content: center;
     align-items: center;
 }
-.mapaImg{
+.mapaImg {
     display: flex;
     justify-content: center;
     align-items: center;
-    & img{
-        width: 50vw;
+  
+    & img {
+      width: 50vw; /* Tamaño predeterminado para otros dispositivos */
     }
-}
+  
+    @media (max-width: 768px) {
+      /* Cambiar el ancho de la imagen a 100% en dispositivos con un ancho de pantalla de 768px o menos (tabletas y dispositivos móviles) */
+      & img {
+        width: 100%;
+      }
+    }
+  }
+  
 .main{
     display: flex;
     justify-content: center;

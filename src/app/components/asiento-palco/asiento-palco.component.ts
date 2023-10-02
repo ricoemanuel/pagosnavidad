@@ -58,7 +58,6 @@ export class AsientoPalcoComponent implements  OnInit {
   }
 
   async seleccionar() {
-    console.log(this.information)
     let edit=true
     if(this.user){
       if (this.information.estado !== 'reservando' && this.information.estado !== 'ocupado') {
@@ -69,7 +68,7 @@ export class AsientoPalcoComponent implements  OnInit {
         edit=false
       }
       if(this.user===this.information.clienteUser && this.information.estado==='reservando' && edit){
-        console.log("true")
+       
         this.information.estado = 'libre'
         this.information.clienteUser = 'null'
         this.information.clienteEstado='null'

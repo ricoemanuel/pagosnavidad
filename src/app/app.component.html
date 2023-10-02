@@ -1,6 +1,6 @@
 <p *ngIf="!cargando && !login" class="navbar">
     <mat-toolbar color="primary">
-        <span>Eventos MyTicket</span>
+        <span><mat-icon style="position: absolute;left: 150px; cursor: pointer;" (click)="home()">home</mat-icon>Eventos MyTicket</span>
         <span class="example-spacer"></span>
         <mat-icon [matMenuTriggerFor]="menu" style="cursor: pointer;" class="logout">person_pin</mat-icon>
         <mat-menu #menu="matMenu">
