@@ -194,6 +194,14 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
           return zona.nombreZona === asiento.nombreZona
         })
         zona = zona[0]
+        if(!zona.persona){
+          if(zona.nombreZona==="zona B"){
+            zona.persona=75000
+          }
+          if(zona.nombreZona==="zona A"){
+            zona.persona=90000
+          }
+        }
         suma += zona.precioZona + (this.detalle[asiento.label].personas * zona.persona)
         asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
       })
