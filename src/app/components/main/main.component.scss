@@ -57,8 +57,9 @@
 
 .margin-c {
     margin-bottom: 20px;
-    padding: 20px;
+    
     & .card{
+        padding: 30px;
         height: 83vh;
         overflow: scroll;
         & .card-title {
@@ -228,4 +229,14 @@ hr {
 .instructions, .terms {
     font-weight: bold;
     margin-top: 20px;
+}
+.description{
+    & h3 {
+        
+        text-align: center;
+      }
+    & p {
+        color: #333;
+        margin-bottom: 15px;
+      }
 }
