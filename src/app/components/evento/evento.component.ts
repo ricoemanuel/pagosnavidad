@@ -241,7 +241,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Validando compra, por favor espere.',
       showConfirmButton: false,
     })
-    if (transaccion.data.transaction.status !== 'APPROVED') {
+    if (transaccion.data.transaction.status === 'APPROVED') {
       let asientosIds: string[] = []
       await this.listaAsientos.forEach(async asiento => {
         asientosIds.push(`${asiento.nombreZona},f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)

@@ -22,6 +22,7 @@ export class MisComprasComponent implements OnInit, AfterViewInit {
   }
   async ngOnInit(): Promise<void> {
     this.firebase.getAuthState().subscribe(user => {
+      console.log(user)
       this.firebase.getCurrentFacturas(user!.uid).subscribe(res => {
         res = res.filter((factura: any) => {
           return factura.transaccion.data.transaction.status !== 'ERROR' && factura.asientos.length > 0

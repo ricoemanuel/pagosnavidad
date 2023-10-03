@@ -119,6 +119,21 @@ export class FirebaseService {
       throw error; // Puedes manejar el error según tus necesidades
     }
   }
+  async getAsientoByEstado(user: string, evento: string): Promise<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('clienteEstado', '==', 'sin pagar'), where('evento', '==', evento));
+
+    try {
+      const snapshot = await getDocs(q);
+      const asientos: DocumentData[] = [];
+      snapshot.forEach(doc => {
+        asientos.push(doc.data());
+      });
+      return asientos;
+    } catch (error) {
+      throw error; // Puedes manejar el error según tus necesidades
+    }
+  }
   async getAsientoByEvento(evento: string): Promise<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
     const q = query(entradaRef, where('evento', '==', evento));
