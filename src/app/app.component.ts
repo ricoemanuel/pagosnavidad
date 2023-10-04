@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   login:boolean=false
   logged:boolean=false
   id: string | null;
+  esAdmin:boolean=false
   constructor(private router: Router, private firebase: FirebaseService, private wompi: WompiService, private route: ActivatedRoute) {
     this.id = this.route.snapshot.paramMap.get('id');
    }
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
     this.firebase.getAuthState().subscribe(async res => {
       if (res) {
         this.logged=true
+        res.uid==="NNcOSeH29sRCTw7LDqOlthXdg8E3"?this.esAdmin=true:this.esAdmin=false
       }
       this.cargando = false
     })

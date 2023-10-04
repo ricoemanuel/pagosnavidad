@@ -42,6 +42,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MisComprasComponent } from './components/mis-compras/mis-compras.component';
 
 import { MainComponent } from './components/main/main.component';
+import { AdminComponent } from './components/admin/admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +52,7 @@ import { MainComponent } from './components/main/main.component';
     LoginComponent,
     MisComprasComponent,
     MainComponent,
+    AdminComponent,
   ],
   imports: [
     BrowserModule,

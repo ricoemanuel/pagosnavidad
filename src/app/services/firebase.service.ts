@@ -288,10 +288,29 @@ export class FirebaseService {
         unsubscribe();
       };
     });
+    
   }
 
-
+  getFacturas(): Observable<DocumentData[]> {
+    const facturasRef = collection(this.firestore, 'facturas');
+  
+    return new Observable<DocumentData[]>(observer => {
+      const unsubscribe = onSnapshot(facturasRef, snapshot => {
+        const facturas: DocumentData[] = [];
+  
+        snapshot.forEach(doc => {
+          const dataWithId = { ...doc.data(), id: doc.id };
+          facturas.push(dataWithId);
+        });
+  
+        observer.next(facturas);
+      });
+  
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
+  
 
 }
-
-

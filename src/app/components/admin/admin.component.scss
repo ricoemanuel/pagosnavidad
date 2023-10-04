@@ -1,0 +1,39 @@
+.margin-c{
+    
+    margin: 0 35px 35px;
+    min-height: 70vh;
+    & mat-form-field{
+        width: 100%;
+    }
+}
+mat-table{
+    background-color: transparent;
+}
+.qr{
+    
+    cursor: pointer;
+    & .texto{
+        color: black;
+    }
+    & img{
+        padding: 5px;
+        width: 10vw;
+    }
+}
+::ng-deep .modal-dialog {
+    max-width: fit-content !important;
+}
+.codigo{
+    margin: 35px;
+}
+.mensaje{
+    text-align: center;
+    
+}
+.datatable {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    border-radius: 9px;
+  }
