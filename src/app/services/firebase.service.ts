@@ -119,6 +119,24 @@ export class FirebaseService {
       throw error; // Puedes manejar el error según tus necesidades
     }
   }
+  async getAsientoByEstadoString(estado: string): Promise<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'asientos');
+    const q = query(entradaRef, where('estado', '==', estado), where('evento', '!=', '0pRlSIWu9Cxyv7X8s8TQ'));
+
+    try {
+        const snapshot = await getDocs(q);
+        const asientos: DocumentData[] = [];
+        snapshot.forEach(doc => {
+            const asientoData = doc.data();
+            const asientoWithId = { id: doc.id, ...asientoData };
+            asientos.push(asientoWithId);
+        });
+        return asientos;
+    } catch (error) {
+        throw error; // Puedes manejar el error según tus necesidades
+    }
+}
+
   async getAsientoByEstado(user: string, evento: string): Promise<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
     const q = query(entradaRef, where('clienteEstado', '==', 'sin pagar'), where('evento', '==', evento));
@@ -169,6 +187,10 @@ export class FirebaseService {
   actualizarAsiento(asiento: any) {
     const entradaRef = doc(this.firestore, "asientos", `f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
     return setDoc(entradaRef, asiento)
+  }
+  actualizarFactura(factura: any,id:string) {
+    const entradaRef = doc(this.firestore, "facturas", id)
+    return setDoc(entradaRef, factura)
   }
   getAsiento(asiento: any) {
     const entradaRef = doc(this.firestore, "asientos", `f${asiento.fila}c${asiento.columna}-${asiento.evento}`)

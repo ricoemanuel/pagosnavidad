@@ -13,8 +13,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class AdminComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any>
   baseSeleccionada = ""
-  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'asientos', 'zonas', 'personas'];
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'asientos', 'zonas', 'personas', 'transaccion', 'fecha'];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  spinner!: boolean;
   constructor(private firebase: FirebaseService,
     private modalService: BsModalService,
   ) {
@@ -23,8 +24,44 @@ export class AdminComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.spinner=false
   }
+  formatfecha(fecha: string) {
+    
+    const fechaDate = new Date(fecha);
+    
+    // Obtener el nombre del día
+    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const nombreDia = diasSemana[fechaDate.getUTCDay()];
+    
+    // Obtener la fecha en formato dd/mm/aaaa
+    const dia = fechaDate.getUTCDate().toString().padStart(2, '0');
+    const mes = (fechaDate.getUTCMonth() + 1).toString().padStart(2, '0'); // Se suma 1 porque los meses van de 0 a 11
+    const año = fechaDate.getUTCFullYear();
+    
+    // Obtener la hora en formato hh:mm
+    const hora = fechaDate.getUTCHours().toString().padStart(2, '0');
+    const minutos = fechaDate.getUTCMinutes().toString().padStart(2, '0');
+    
+    const formatoDeseado = `${nombreDia}, ${dia}/${mes}/${año} ${hora}:${minutos}`;
+    return formatoDeseado
+    
+
+  }
+  cont: number = 0
   async ngOnInit(): Promise<void> {
+    this.spinner=true
+    //  let asientos=await this.firebase.getAsientoByEstadoString("ocupado")
+    //  console.log(asientos)
+    //  asientos.forEach(async (asiento:any)=>{
+    //    asiento.estado="libre"
+    //    asiento.clienteUser="null"
+    //    if(asiento.clienteUSer){
+    //      delete asiento.clienteUSer
+    //    }
+    //    asiento.clienteEstado="null"
+    //  })
+    let asientosFactura: string[] = []
     this.firebase.getAuthState().subscribe(user => {
       if (user!.uid === "NNcOSeH29sRCTw7LDqOlthXdg8E3") {
         this.firebase.getFacturas().subscribe(res => {
@@ -34,10 +71,28 @@ export class AdminComponent implements OnInit, AfterViewInit {
             }
             return false
           })
+          data.forEach((factura: any) => {
+            factura.asientos.forEach((asientoFact: any) => {
+              asientosFactura.push(asientoFact.split(",")[1].split("/")[0])
+            })
+
+            this.cont += factura.asientos.length
+          })
+          // let Existe:any[]=[]
+          // asientosFactura.forEach((mesa:string)=>{
+          //   let existe=asientos.filter((mesaA:any)=>{
+          //     return mesaA.id===mesa
+          //   })
+          //   Existe.push(existe[0])
+          // })
+          // let diferencia=asientos.filter(item => !Existe.includes(item));
+          // console.log(diferencia)
           this.dataSource.data = data
+          this.dataSource.paginator = this.paginator;
         })
       }
     })
+
   }
   generateQRCodeBase64(qrData: string) {
     const qr = QRCode(0, 'L');
