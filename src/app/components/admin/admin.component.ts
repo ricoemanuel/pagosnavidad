@@ -13,7 +13,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class AdminComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any>
   baseSeleccionada = ""
-  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'asientos', 'zonas', 'personas', 'transaccion', 'fecha'];
+  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre','personas', 'transaccion', 'fecha'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   spinner!: boolean;
   constructor(private firebase: FirebaseService,
@@ -22,35 +22,34 @@ export class AdminComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource<any>();
     this.dataSource.paginator = this.paginator;
   }
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.spinner=false
   }
   formatfecha(fecha: string) {
-    
+
     const fechaDate = new Date(fecha);
-    
+
     // Obtener el nombre del día
     const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const nombreDia = diasSemana[fechaDate.getUTCDay()];
-    
+
     // Obtener la fecha en formato dd/mm/aaaa
     const dia = fechaDate.getUTCDate().toString().padStart(2, '0');
     const mes = (fechaDate.getUTCMonth() + 1).toString().padStart(2, '0'); // Se suma 1 porque los meses van de 0 a 11
     const año = fechaDate.getUTCFullYear();
-    
+
     // Obtener la hora en formato hh:mm
     const hora = fechaDate.getUTCHours().toString().padStart(2, '0');
     const minutos = fechaDate.getUTCMinutes().toString().padStart(2, '0');
-    
+
     const formatoDeseado = `${nombreDia}, ${dia}/${mes}/${año} ${hora}:${minutos}`;
     return formatoDeseado
-    
+
 
   }
   cont: number = 0
   async ngOnInit(): Promise<void> {
-    this.spinner=true
+    this.spinner = true
     //  let asientos=await this.firebase.getAsientoByEstadoString("ocupado")
     //  console.log(asientos)
     //  asientos.forEach(async (asiento:any)=>{
@@ -71,11 +70,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
             }
             return false
           })
-          data.forEach((factura: any) => {
-            factura.asientos.forEach((asientoFact: any) => {
-              asientosFactura.push(asientoFact.split(",")[1].split("/")[0])
-            })
-
+          data.forEach(async (factura: any) => {
             this.cont += factura.asientos.length
           })
           // let Existe:any[]=[]
@@ -88,7 +83,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
           // let diferencia=asientos.filter(item => !Existe.includes(item));
           // console.log(diferencia)
           this.dataSource.data = data
-          this.dataSource.paginator = this.paginator;
         })
       }
     })
