@@ -14,7 +14,7 @@ export const environment = {
     link:"https://production.wompi.co/v1/"
   },
   EmailSender:{
-    head:'Bearer re_TVEGrqzN_NL7aWPA8NrZi452sQgsVQi8T',
+    head:'mlsn.64cfe73cfcd92d8a5bbeedee136256bd385d3edb978ee57aa4b29510ed34b836',
     link:'https://api.resend.com/emails'
   }
 };

@@ -83,6 +83,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
           // let diferencia=asientos.filter(item => !Existe.includes(item));
           // console.log(diferencia)
           this.dataSource.data = data
+          this.dataSource.paginator = this.paginator;
         })
       }
     })
