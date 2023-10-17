@@ -47,8 +47,8 @@
             </mat-form-field>
           </div>
         </div>
-        <button *ngIf="!disabled" class="submit" type="submit" (click)="registro()">Registrarse</button>
-        <button *ngIf="disabled" class="disabled" type="submit">Registrarse</button>
+        <button *ngIf="!disabled" class="submit"  (click)="registro()">Registrarse</button>
+        <button *ngIf="disabled" class="disabled" >Registrarse</button>
         <p class="message">¿Ya tienes cuenta? <a (click)="switch('registrarse')" style="cursor: pointer;">Inicia
             sesión</a></p>
       </form>
@@ -62,10 +62,10 @@
         <div class="row">
           <mat-form-field>
             <mat-label>Contraseña</mat-label>
-            <input type="password" matInput formControlName="contrasena">
+            <input type="password" name="password" autocomplete="off" matInput formControlName="contrasena">
           </mat-form-field>
         </div>
-        <button class="submit" type="submit" (click)="iniciar()">Iniciar Sesión</button>
+        <button class="submit" (click)="iniciar()">Iniciar Sesión</button>
         <p class="message">¿No te has registrado? <a (click)="switch('iniciarSesion')" style="cursor: pointer;">Create
             una cuenta</a></p>
       </form>

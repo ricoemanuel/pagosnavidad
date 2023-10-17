@@ -35,9 +35,15 @@ export class LoginComponent implements AfterViewInit {
     this.spinner = false
   }
   redirect() {
-    this.router.navigate(['evento', localStorage.getItem('id')])
+    if(localStorage.getItem('id')){
+      this.router.navigate(['evento', localStorage.getItem('id')])
+    }else{
+      this.router.navigate(['main'])
+    }
+    
   }
   async iniciar() {
+    console.log(this.formularioLogin)
     this.spinner = true
     let email = this.formularioLogin.value.correo
     let password = this.formularioLogin.value.contrasena
@@ -46,6 +52,7 @@ export class LoginComponent implements AfterViewInit {
       this.redirect()
     }).catch(e => {
       this.spinner = false
+      console.log(e)
       if (e.code == "auth/invalid-email") {
         Swal.fire({
           icon: 'error',
