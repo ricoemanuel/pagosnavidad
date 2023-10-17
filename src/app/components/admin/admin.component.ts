@@ -13,7 +13,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class AdminComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any>
   baseSeleccionada = ""
-  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre','personas', 'transaccion', 'fecha'];
+  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre', 'personas', 'transaccion', 'fecha'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   spinner!: boolean;
   constructor(private firebase: FirebaseService,
@@ -50,7 +50,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   cont: number = 0
   async ngOnInit(): Promise<void> {
     this.spinner = true
-    //  let asientos=await this.firebase.getAsientoByEstadoString("ocupado")
+    //let asientos=await this.firebase.getAsientoByEstadoString("ocupado")
     //  console.log(asientos)
     //  asientos.forEach(async (asiento:any)=>{
     //    asiento.estado="libre"
@@ -70,6 +70,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
             }
             return false
           })
+          this.cont=0
           data.forEach(async (factura: any) => {
             this.cont += factura.asientos.length
           })

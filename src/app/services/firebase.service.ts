@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Database, Query, object, objectVal, ref, remove } from '@angular/fire/database'
 import { traceUntilFirst } from '@angular/fire/performance';
 import { environment } from 'src/environments/environment';
+import * as QRCode from 'qrcode-generator';
 @Injectable({
   providedIn: 'root'
 })
@@ -124,18 +125,18 @@ export class FirebaseService {
     const q = query(entradaRef, where('estado', '==', estado), where('evento', '!=', '0pRlSIWu9Cxyv7X8s8TQ'));
 
     try {
-        const snapshot = await getDocs(q);
-        const asientos: DocumentData[] = [];
-        snapshot.forEach(doc => {
-            const asientoData = doc.data();
-            const asientoWithId = { id: doc.id, ...asientoData };
-            asientos.push(asientoWithId);
-        });
-        return asientos;
+      const snapshot = await getDocs(q);
+      const asientos: DocumentData[] = [];
+      snapshot.forEach(doc => {
+        const asientoData = doc.data();
+        const asientoWithId = { id: doc.id, ...asientoData };
+        asientos.push(asientoWithId);
+      });
+      return asientos;
     } catch (error) {
-        throw error; // Puedes manejar el error según tus necesidades
+      throw error; // Puedes manejar el error según tus necesidades
     }
-}
+  }
 
   async getAsientoByEstado(user: string, evento: string): Promise<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
@@ -188,7 +189,7 @@ export class FirebaseService {
     const entradaRef = doc(this.firestore, "asientos", `f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
     return setDoc(entradaRef, asiento)
   }
-  actualizarFactura(factura: any,id:string) {
+  actualizarFactura(factura: any, id: string) {
     const entradaRef = doc(this.firestore, "facturas", id)
     return setDoc(entradaRef, factura)
   }
@@ -262,21 +263,7 @@ export class FirebaseService {
     }
     const facturaRef = collection(this.firestore, "facturas")
     let doc: DocumentReference = await addDoc(facturaRef, obj)
-    let user: any = await this.getUser(uid)
-    // fetch(environment.EmailSender.link, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'x-api-key':environment.EmailSender.head
-    //   },
-    //   body: JSON.stringify({
-    //     correo: user.correo,
-    //     nombre: user.nombre,
-    //     factura: doc.id,
-    //   }),
-    // }).catch(error=>{
-    //   console.log(error)
-    // })
+    await this.setEmail(uid, doc.id)
   }
 
   async valirdarAsientos(id: string, user: string) {
@@ -310,29 +297,98 @@ export class FirebaseService {
         unsubscribe();
       };
     });
-    
+
   }
 
   getFacturas(): Observable<DocumentData[]> {
     const facturasRef = collection(this.firestore, 'facturas');
-  
+
     return new Observable<DocumentData[]>(observer => {
       const unsubscribe = onSnapshot(facturasRef, snapshot => {
         const facturas: DocumentData[] = [];
-  
+
         snapshot.forEach(doc => {
           const dataWithId = { ...doc.data(), id: doc.id };
           facturas.push(dataWithId);
         });
-  
+
         observer.next(facturas);
       });
-  
+
       return () => {
         unsubscribe();
       };
     });
   }
-  
+  async getImage() {
+    const userRef = doc(this.firestore, "imagenes", 'mLhC6d9suMmzYhJZeNBo');
+    let docImg = await getDoc(userRef);
+    return docImg.data()
+  }
+  async setEmail(user: string, codigo:string) {
+    let doc = await this.userObserver(user)
+    let imagen:any=await this.getImage()
+    let userData: any = doc.data()
+    if (userData) {
+      let data = {
+        to: [userData.email],
+        message: {
+          subject: 'Bienvenido a Halloween encantado',
+          text: 'Estamos contentos de que participes en este mágico evento.',
+          html: `<code>
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+          </head>
+          <body style="
+          text-align: center;">
+          <h1 style="color: #333;">¡Hola, ${userData.nombre}!</h1>
+          <h3 style="color: #333;">Estamos felices de que hagas parte de este mágico día.</h3>
+            <div style="{display: flex;
+            justify-content: center;
+            align-items: center;}">
+              <a><img style="{cursor:pointer}" width="800" src="cid:arte" alt="Imagen"></a>
+            </div>
+            <p>Presenta este QR en la entrada de tu evento.</p>
+            <div style="{display: flex;
+              justify-content: center;
+              align-items: center;}">
+                <a><img width="200" src="cid:qrCode" alt="Imagen"></a>
+            </div>
+            <div style="{display: flex;
+              justify-content: center;
+              align-items: center;}">
+              <button style="background-color: #381346; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;"><a href="https://halloweenpagos.web.app/mis-compras" style="text-decoration: none; color: white;">Mira tus entradas aquí</a></button>
+            </div>
+            <div style="{display: flex;
+              justify-content: center;
+              align-items: center;}">
+              © Copyright 2023  Todos los derechos reservados www.myticket.com.co
+            </div>
+          </body>
+          </html>
+          </code>`,
+          attachments: [{
+            filename: 'arte.jpg',
+            path: imagen.imagen,
+            cid: 'arte'
+        },{
+          filename: 'qrCode.png',
+          path: this.generateQRCodeBase64(codigo),
+          cid: 'qrCode'
+      }]
+        }
+      }
+      const facturaRef = collection(this.firestore, "mail")
+      await addDoc(facturaRef, data)
+    }
 
+  }
+  generateQRCodeBase64(qrData: string) {
+    const qr = QRCode(0, 'L');
+    qr.addData(qrData);
+    qr.make();
+    return qr.createDataURL(10, 0);
+  }
 }
