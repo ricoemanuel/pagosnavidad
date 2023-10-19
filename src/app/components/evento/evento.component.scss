@@ -230,6 +230,10 @@ table {
 .detalle{
     min-width: 370px;
     max-width: 500px;
+    & mat-form-field{
+        padding: 5px;
+        width: 100%;
+    }
 }
 /* Estilos para el mensaje */
 .mensaje_404 {

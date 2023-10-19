@@ -92,6 +92,12 @@
                 </div>
 
             </ng-container>
+            <label for="codigo">Sí tienes un código promocional digitalo aquí.</label>
+            <mat-form-field>
+                <mat-label>Código promocional</mat-label>
+                <input [(ngModel)]="codigo" matInput type="text" min="0"
+                    max="4" id="codigo">
+            </mat-form-field>
             <div class="row">
                 <div class="col centrar"><button class="btn btn-success" (click)="pagar(wompi)">Pagar</button></div>
                 <div class="col centrar"><button class="btn btn-danger" (click)="cancelar()">Cancelar</button></div>

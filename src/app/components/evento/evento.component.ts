@@ -27,7 +27,10 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   matriz: any[] = []
   localidadesMostradas: Set<string> = new Set<string>();
   nombreLocalidadMostrado: boolean = false;
+  codigo:string=""
   @ViewChild('template') template!: TemplateRef<any>;
+  listaCodigos:any={"HalloMañanitas":0.1}
+
   secondFormGroup = this._formBuilder.group({
     ninos: '',
     adultos: '',
@@ -206,7 +209,15 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
       })
       asientos = asientos.slice(0, -2)
-      let response = await this.wompi.generarLink(suma, `Palcos del evento ${asientos}`, this.evento.nombre);
+      let descuento=this.listaCodigos[this.codigo]
+      let mensaje=""
+      if(descuento){
+        suma=suma-(suma*descuento)
+        mensaje=`Mesas del evento ${asientos} con un descuento del ${descuento*100}% con el codigo ${this.codigo}`
+      }else{
+        mensaje=`Mesas del evento ${asientos}`
+      }
+      let response = await this.wompi.generarLink(suma, mensaje, this.evento.nombre);
       response.subscribe(async (res: any) => {
         let link: string = `https://checkout.wompi.co/l/${res.data.id}`
         this.link = this._sanitizer.bypassSecurityTrustResourceUrl(link)
@@ -257,7 +268,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
         asiento.estado = "ocupado"
         await this.firebase.actualizarAsiento(asiento)
       })
-      await this.firebase.registrarFactura(transaccion, this.user, this.id!, asientosIds, this.evento, this.detalle)
+      await this.firebase.registrarFactura(transaccion, this.user, this.id!, asientosIds, this.evento, this.detalle, this.codigo)
       Swal.fire({
         position: 'top-end',
         icon: 'success',
