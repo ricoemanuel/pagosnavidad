@@ -16,6 +16,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre', 'personas', 'transaccion', 'fecha'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   spinner!: boolean;
+  conts:any={}
+  nombres:any={}
   constructor(private firebase: FirebaseService,
     private modalService: BsModalService,
   ) {
@@ -50,8 +52,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
   cont: number = 0
   async ngOnInit(): Promise<void> {
     this.spinner = true
-    //let asientos=await this.firebase.getAsientoByEstadoString("ocupado")
-    //  console.log(asientos)
+    // let asientos = await this.firebase.getAsientoByEstadoString("ocupado")
+    //console.log(asientos)
     //  asientos.forEach(async (asiento:any)=>{
     //    asiento.estado="libre"
     //    asiento.clienteUser="null"
@@ -70,18 +72,41 @@ export class AdminComponent implements OnInit, AfterViewInit {
             }
             return false
           })
-          this.cont=0
+          this.cont = 0
           data.forEach(async (factura: any) => {
+            let llaves=Object.keys(factura.detalle)
+            let numNiños=0
+            let numAdultos=0
+            llaves.forEach((llave:string)=>{
+              numNiños+=parseInt(factura.detalle[llave].ninos)
+              numAdultos+=parseInt(factura.detalle[llave].adultos)
+            })
             this.cont += factura.asientos.length
+            if(this.conts[factura.evento]){
+              
+              this.conts[factura.evento].ninos+=numNiños
+              this.conts[factura.evento].adultos+=numAdultos
+            }else{
+              this.nombres[factura.evento]=factura.eventoData.nombre
+              this.conts[factura.evento]={
+                ninos:numNiños,
+                adultos:numAdultos
+              }
+            }
+            // factura.asientos.forEach((mesa:any)=>{
+            //   asientosFactura.push(mesa.split(",")[1].split("/")[0])
+            // })
           })
-          // let Existe:any[]=[]
-          // asientosFactura.forEach((mesa:string)=>{
-          //   let existe=asientos.filter((mesaA:any)=>{
-          //     return mesaA.id===mesa
+          // console.log(asientosFactura)
+          // let Existe: any[] = []
+          // asientosFactura.forEach((mesa: string) => {
+          //   let existe = asientos.filter((mesaA: any) => {
+          //     return mesaA.id === mesa
           //   })
           //   Existe.push(existe[0])
           // })
-          // let diferencia=asientos.filter(item => !Existe.includes(item));
+
+          // let diferencia = asientos.filter(item => !Existe.includes(item));
           // console.log(diferencia)
           this.dataSource.data = data
           this.dataSource.paginator = this.paginator;
@@ -138,5 +163,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
       asistentes += `<br>${clave}<br>Niños: ${elemento[clave].ninos}<br>Adultos: ${elemento[clave].adultos}<br>`
     })
     return asistentes
+  }
+  toArray(){
+    return Object.keys(this.nombres)
   }
 }

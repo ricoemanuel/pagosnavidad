@@ -49,3 +49,13 @@ mat-table{
     margin-bottom: 10px; /* Espaciado superior para centrar verticalmente */
     background-color: #f0f0f0; /* Color de fondo opcional */
 }
+.centrar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tabla-ventas {
+    width: 90%;
+    margin: 35px;
+}

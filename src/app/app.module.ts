@@ -40,9 +40,10 @@ import { LoginComponent } from './components/login/login.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { MisComprasComponent } from './components/mis-compras/mis-compras.component';
-
+import { MatTableExporterModule } from 'mat-table-exporter';
 import { MainComponent } from './components/main/main.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { VentaFraccionadaComponent } from './components/venta-fraccionada/venta-fraccionada.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +54,7 @@ import { AdminComponent } from './components/admin/admin.component';
     MisComprasComponent,
     MainComponent,
     AdminComponent,
+    VentaFraccionadaComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +71,7 @@ import { AdminComponent } from './components/admin/admin.component';
     MatPaginatorModule,
     MatTableModule,
     MatSelectModule,
+    MatTableExporterModule,
     MatExpansionModule,
     MatMenuModule,
     MatAutocompleteModule,

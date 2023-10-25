@@ -8,8 +8,11 @@
 <div class="mensaje_404">
     Mesas totales vendidas: {{cont}}
 </div>
+<div class="centrar">
+    <button class="btn btn-success"  (click)="exporter.exportTable('xlsx')">Exportar</button>
+</div>
 <div class="mat-elevation-z8 overflow-auto col-md-11 datatable">
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table matTableExporter #exporter="matTableExporter" mat-table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="QR">
             <mat-header-cell *matHeaderCellDef> Código qr </mat-header-cell>
@@ -68,6 +71,24 @@
     </table>
 
     <mat-paginator [pageSizeOptions]="[5,10,25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
+<div class="centrar">
+    <table class="table table-striped tabla-ventas">
+        <thead>
+            <tr>
+                <th scope="col">Función</th>
+                <th scope="col">Niños</th>
+                <th scope="col">Adultos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let id of toArray()">
+                <th scope="row">{{nombres[id]}}</th>
+                <td>{{conts[id]["ninos"]}}</td>
+                <td>{{conts[id]["adultos"]}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 <ng-template #template>
     <div class="codigo">
