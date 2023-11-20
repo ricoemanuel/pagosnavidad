@@ -59,3 +59,12 @@ mat-table{
     width: 90%;
     margin: 35px;
 }
+.detalle{
+    padding: 10px;
+    min-width: 370px;
+    max-width: 500px;
+    & mat-form-field{
+        padding: 5px;
+        width: 100%;
+    }
+}

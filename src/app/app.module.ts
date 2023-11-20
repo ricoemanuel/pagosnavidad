@@ -44,6 +44,7 @@ import { MatTableExporterModule } from 'mat-table-exporter';
 import { MainComponent } from './components/main/main.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { VentaFraccionadaComponent } from './components/venta-fraccionada/venta-fraccionada.component';
+import { EventoAdminComponent } from './components/evento-admin/evento-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,6 +56,7 @@ import { VentaFraccionadaComponent } from './components/venta-fraccionada/venta-
     MainComponent,
     AdminComponent,
     VentaFraccionadaComponent,
+    EventoAdminComponent,
   ],
   imports: [
     BrowserModule,

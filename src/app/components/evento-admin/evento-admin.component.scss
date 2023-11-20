@@ -1,0 +1,250 @@
+/* Estilos generales para la clase .img */
+.row {
+    width: 100%;
+
+}
+
+.margin {
+    margin-top: -34px;
+}
+
+
+.img {
+    margin: 25px auto;
+    width: fit-content;
+}
+
+
+
+
+
+
+
+.line {
+    border: 1px rgb(220, 220, 220) solid;
+    margin: 2px;
+    border-radius: 20px;
+    width: 100px !important;
+    height: 200px !important;
+}
+
+
+
+.centrar {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.title {
+    text-align: center;
+}
+
+.card-c {
+    height: 100px;
+    padding: 5px;
+    width: 180px;
+    margin: 20px;
+    cursor: pointer;
+
+    & .card-footer {
+        position: absolute;
+        bottom: 0;
+        width: 172px;
+    }
+}
+
+.margin-c {
+    margin-bottom: 20px;
+    & .card{
+        height: 83vh;
+        overflow: scroll;
+        & .card-title {
+            text-align: center;
+        }
+    
+        & .btn {
+            width: 100px;
+        }
+        &::-webkit-scrollbar {
+            height: 5px;
+            background-color: transparent;
+            width: 5px;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color: rgb(191, 191, 191);
+            border-radius: 20px;
+            
+        }
+    }
+    
+}
+
+::ng-deep .modal-dialog {
+    max-width: fit-content !important;
+}
+
+app-grid-asientos {
+    overflow: scroll;
+    margin-bottom: 10px;
+
+    &::-webkit-scrollbar {
+        height: 5px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgb(191, 191, 191);
+        border-radius: 20px;
+    }
+}
+
+
+.wompi {
+    width: 90vw !important;
+    height: 90vh;
+}
+
+.caja {
+    border-radius: 2px;
+    height: 10px;
+    position: relative;
+}
+
+td.caja label.nombre {
+    position: absolute;
+    top: 9px;
+    left: 5px;
+    z-index: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    background-color: rgb(73 71 71);
+    color: white;
+    border-radius: 5px;
+}
+
+.llenado {
+    width: 10px;
+
+}
+
+
+table {
+    width: fit-content;
+
+}
+
+.tabla {
+    margin: 0 auto;
+    overflow: scroll;
+
+    &::-webkit-scrollbar {
+        height: 5px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgb(191, 191, 191);
+        border-radius: 20px;
+    }
+    & .button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.spinner {
+    width: fit-content;
+    margin: 0 auto;
+
+    & img {
+        width: 50vw;
+    }
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 4px;
+    cursor: pointer;
+}
+
+
+.tarima{
+    margin: 0 auto;
+    width: 100%;
+    background-color: #3f51b5;
+    height: 30px;
+    text-align: center;
+    color: white;
+}
+.mesa{
+    width: inherit;
+    padding: 10px;
+    & mat-form-field{
+        width: 100%;
+    }
+    & .title{
+        width: fit-content;
+    margin: 0 auto;
+    color: #3f51b5;
+    font-size: 24px;
+    margin-bottom: 24px;
+    }
+}
+.centrar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mapaImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    & img {
+      width: 50vw; /* Tamaño predeterminado para otros dispositivos */
+    }
+  
+    @media (max-width: 768px) {
+      /* Cambiar el ancho de la imagen a 100% en dispositivos con un ancho de pantalla de 768px o menos (tabletas y dispositivos móviles) */
+      & img {
+        width: 100%;
+      }
+    }
+  }
+  
+.main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & mat-form-field{
+        width: 100%;
+    }
+}
+.detalle{
+    min-width: 370px;
+    max-width: 500px;
+    & mat-form-field{
+        padding: 5px;
+        width: 100%;
+    }
+}
+/* Estilos para el mensaje */
+.mensaje_404 {
+    text-align: center;
+    font-size: 24px; /* Tamaño de fuente grande */
+    padding: 20px; /* Espaciado interno */
+    border: 2px solid #ccc; /* Borde opcional */
+    border-radius: 10px; /* Borde redondeado opcional */
+    max-width: 400px; /* Ancho máximo del div */
+    margin: 0 auto; /* Centrar horizontalmente */
+    margin-top: 100px; 
+    margin-bottom: 100px; /* Espaciado superior para centrar verticalmente */
+    background-color: #f0f0f0; /* Color de fondo opcional */
+}

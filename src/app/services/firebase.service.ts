@@ -120,6 +120,25 @@ export class FirebaseService {
       throw error; // Puedes manejar el error según tus necesidades
     }
   }
+  async getUsuarioByCorreo(correo: string): Promise<DocumentData[]> {
+    const entradaRef = collection(this.firestore, 'usuarios');
+    const q = query(entradaRef, where('email', '==', correo));
+
+    try {
+      const snapshot = await getDocs(q);
+      const asientos: { id: string, data: DocumentData }[] = [];
+    
+      snapshot.forEach(doc => {
+        asientos.push({ id: doc.id, data: doc.data() });
+      });
+    
+      return asientos;
+    } catch (error) {
+      throw error; // Puedes manejar el error según tus necesidades
+    }
+    
+  }
+  
   async getAsientoByEstadoString(estado: string): Promise<DocumentData[]> {
     const entradaRef = collection(this.firestore, 'asientos');
     const q = query(entradaRef, where('estado', '==', estado), where('evento', '!=', '0pRlSIWu9Cxyv7X8s8TQ'));
@@ -190,11 +209,15 @@ export class FirebaseService {
     return setDoc(entradaRef, asiento)
   }
   actualizarFactura(factura: any, id: string) {
-    const entradaRef = doc(this.firestore, "facturas", id)
+    const entradaRef = doc(this.firestore, "facturasNavidad", id)
     return setDoc(entradaRef, factura)
   }
   getAsiento(asiento: any) {
     const entradaRef = doc(this.firestore, "asientos", `f${asiento.fila}c${asiento.columna}-${asiento.evento}`)
+    return getDoc(entradaRef)
+  }
+  getAsientoByid(id:string) {
+    const entradaRef = doc(this.firestore, "asientos", id)
     return getDoc(entradaRef)
   }
   async getUser(uid: string) {
@@ -202,7 +225,8 @@ export class FirebaseService {
     const usuarioSnapshot = await getDoc(usuarioRef);
 
     if (usuarioSnapshot.exists()) {
-      const usuarioData = usuarioSnapshot.data();
+      const usuarioData:any = usuarioSnapshot.data();
+      usuarioData.uid=uid
       return usuarioData;
     } else {
       return null;
@@ -252,19 +276,41 @@ export class FirebaseService {
     return transactions$
   }
 
-  async registrarFactura(transaccion: any, uid: string, evento: string, asientos: string[], eventoData: any, detalle: any, codigo:string) {
+  async registrarFactura(link: any, user: any,uid:string, evento: string, asientos: string[], eventoData: any, detalle: any, codigo:string, suma:number) {
     let obj: any = {
-      transaccion,
-      uid,
+      link,
+      user,
       evento,
+      uid,
       asientos,
       eventoData,
       detalle,
-      codigo
+      codigo,
+      fecha:new Date(),
+      estado:'comprando',
+      suma
     }
-    const facturaRef = collection(this.firestore, "facturas")
+    const facturaRef = collection(this.firestore, "facturasNavidad")
     let doc: DocumentReference = await addDoc(facturaRef, obj)
-    await this.setEmail(uid, doc.id)
+    //await this.setEmail(uid, doc.id)
+  }
+  async registrarFacturaAdmin(link: any, user: any,uid:string, evento: string, asientos: string[], eventoData: any, detalle: any, codigo:string, suma:number) {
+    let obj: any = {
+      link,
+      user,
+      evento,
+      uid,
+      asientos,
+      eventoData,
+      detalle,
+      codigo,
+      fecha:new Date(),
+      estado:'comprado',
+      suma
+    }
+    const facturaRef = collection(this.firestore, "facturasNavidad")
+    let doc: DocumentReference = await addDoc(facturaRef, obj)
+    //await this.setEmail(uid, doc.id)
   }
 
   async valirdarAsientos(id: string, user: string) {
@@ -279,7 +325,7 @@ export class FirebaseService {
 
   }
   getCurrentFacturas(uid: string): Observable<DocumentData[]> {
-    const entradaRef = collection(this.firestore, 'facturas');
+    const entradaRef = collection(this.firestore, 'facturasNavidad');
     const q = query(entradaRef, where('uid', '==', uid));
 
     return new Observable<DocumentData[]>(observer => {
@@ -302,7 +348,7 @@ export class FirebaseService {
   }
 
   getFacturas(): Observable<DocumentData[]> {
-    const facturasRef = collection(this.firestore, 'facturas');
+    const facturasRef = collection(this.firestore, 'facturasNavidad');
 
     return new Observable<DocumentData[]>(observer => {
       const unsubscribe = onSnapshot(facturasRef, snapshot => {

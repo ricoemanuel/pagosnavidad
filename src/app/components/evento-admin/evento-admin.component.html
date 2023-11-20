@@ -50,6 +50,16 @@
 
     <ng-template #template>
         <div class="detalle">
+            <div class="row">
+                <div class="col">
+
+                    <label for="correo">Ingresa el correo de la persona.</label>
+                    <mat-form-field>
+                        <mat-label>Correo</mat-label>
+                        <input [(ngModel)]="correo" matInput type="email" id="correo">
+                    </mat-form-field>
+                </div>
+            </div>
             <ng-container *ngFor="let mesa of listaAsientos">
                 <div class="mesa">
 

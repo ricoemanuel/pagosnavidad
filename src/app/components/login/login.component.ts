@@ -122,7 +122,7 @@ export class LoginComponent implements AfterViewInit {
       this.loginservice.singup({ email: this.formularioSignUp.value.correo, password: this.formularioSignUp.value.contrasena }).then(async res => {
         await this.loginservice.setUser(
           {
-            email: this.formularioSignUp.value.correo,
+            email: this.formularioSignUp.value.correo?.toLocaleLowerCase(),
             nombre: this.formularioSignUp.value.nombre,
             telefono: this.formularioSignUp.value.telefono
           }, res.user.uid)

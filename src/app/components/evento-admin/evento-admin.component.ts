@@ -8,11 +8,11 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { WompiService } from 'src/app/services/wompi.service';
 import Swal from 'sweetalert2';
 @Component({
-  selector: 'app-evento',
-  templateUrl: './evento.component.html',
-  styleUrls: ['./evento.component.scss']
+  selector: 'app-evento-admin',
+  templateUrl: './evento-admin.component.html',
+  styleUrls: ['./evento-admin.component.scss']
 })
-export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EventoAdminComponent implements OnInit, OnDestroy, AfterViewInit {
   spinner: boolean = true
   id: string | null;
   select = ""
@@ -27,11 +27,11 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   matriz: any[] = []
   localidadesMostradas: Set<string> = new Set<string>();
   nombreLocalidadMostrado: boolean = false;
-  codigo:string=""
+  codigo: string = ""
   @ViewChild('template') template!: TemplateRef<any>;
   tiempoInactividad = 3000;
   ultimoTiempoInteraccion: number;
-  listaCodigos:any={"HalloMañanitas":0.1,"HallowWhatsapp":0.3}
+  listaCodigos: any = { "HalloMañanitas": 0.1, "HallowWhatsapp": 0.3 }
 
   secondFormGroup = this._formBuilder.group({
     ninos: '',
@@ -47,7 +47,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     private el: ElementRef,
     private router: Router,
     private _formBuilder: FormBuilder,) {
-      this.ultimoTiempoInteraccion = Date.now();
+    this.ultimoTiempoInteraccion = Date.now();
     this.id = this.aRoute.snapshot.paramMap.get('id');
   }
   @HostListener('document:mousemove', ['$event'])
@@ -64,14 +64,14 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Comprueba si ha pasado el tiempo de inactividad
     if (tiempoInactivo > this.tiempoInactividad) {
-      if(this.id){
-        this.firebase.valirdarAsientos(this.id,this.user)
+      if (this.id) {
+        this.firebase.valirdarAsientos(this.id, this.user)
       }
-      
+
     }
   }
   async seleccionar() {
-    await this.router.navigate(['evento', this.select])
+    await this.router.navigate(['evento-admin', this.select])
     window.location.reload()
   }
   ngAfterViewInit(): void {
@@ -81,7 +81,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.valirdarAsientos()
   }
   async ngOnInit(): Promise<void> {
-    
+
     if (this.id) {
       this.evento = await this.firebase.getevento(this.id)
       if (!this.evento) {
@@ -109,13 +109,16 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.verificarInactividad()
     setInterval(() => this.verificarInactividad(), 60000);
   }
-  dataUser:any
+  dataUser: any
   detalle: any = {}
+  correo: string = ""
   valirdarAsientos() {
     this.firebase.getAuthState().subscribe(async res => {
       if (res && this.id) {
         this.user = res.uid
-        this.dataUser=await this.firebase.getUser(this.user)
+        if(this.user!=='NNcOSeH29sRCTw7LDqOlthXdg8E3'){
+          await this.router.navigate(['evento', this.id])
+        }
         this.asientosReservadosSus = this.firebase.getAsientoRealtimeByUsuarioEstado(res.uid, this.id).subscribe(res => {
           this.listaAsientos = res
           this.detalle = {}
@@ -126,7 +129,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
               personas: 0
             }
           })
-          if(this.listaAsientos.length>3){
+          if (this.listaAsientos.length > 3) {
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -175,90 +178,101 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
   async pagar(template: TemplateRef<any>) {
-    let pass = true
-    let claves = Object.keys(this.detalle)
-    let error1:string=""
-    let error2:string=""
-    let detalle=[...[this.detalle]]
-    claves.forEach(clave => {
-      let totalPersonas = 8 + this.detalle[clave].personas
-      if (this.detalle[clave].adultos < 1) {
-        error1+=clave+", "
-        pass = false
-      }
-      if (!((this.detalle[clave].ninos + this.detalle[clave].adultos) === totalPersonas)) {
-        error2+=`${totalPersonas} en la mesa ${clave}, `
-        pass = false
-      }
-    })
-    error2=error2.slice(0,-2)
-    let mensajes=true
-    if(error1!=="" && error2!==""){
-      mensajes=false
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto y el número de niños más el de adultos en cada mesa debe ser: ${error2}`,
-      })
-    }
-    if(error1!=="" && mensajes){
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto`,
-      })
-    }
-    if(error2!=="" && mensajes){
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: `El número de niños más el de adultos en cada mesa debe ser: ${error2}`,
-      })
-    }
-    if (pass) {
-
-      this.modalService.hide()
-      let asientos: string = '';
-      let suma = 0
-      this.listaAsientos.forEach((asiento: any) => {
-        let zona = this.evento.zonas.filter((zona: any) => {
-          return zona.nombreZona === asiento.nombreZona
-        })
-        zona = zona[0]
-        if(!zona.persona){
-          if(zona.nombreZona==="zona B"){
-            zona.persona=75000
-          }
-          if(zona.nombreZona==="zona A"){
-            zona.persona=90000
-          }
+    let user: any = await this.firebase.getUsuarioByCorreo(this.correo)
+    if (user.length > 0) {
+      this.user = user[0].id
+      this.dataUser = user[0].data
+      let pass = true
+      let claves = Object.keys(this.detalle)
+      let error1: string = ""
+      let error2: string = ""
+      let detalle = [...[this.detalle]]
+      claves.forEach(clave => {
+        let totalPersonas = 8 + this.detalle[clave].personas
+        if (this.detalle[clave].adultos < 1) {
+          error1 += clave + ", "
+          pass = false
         }
-        suma += zona.precioZona + (this.detalle[asiento.label].personas * zona.persona)
-        asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
+        if (!((this.detalle[clave].ninos + this.detalle[clave].adultos) === totalPersonas)) {
+          error2 += `${totalPersonas} en la mesa ${clave}, `
+          pass = false
+        }
       })
-      asientos = asientos.slice(0, -2)
-      let descuento=this.listaCodigos[this.codigo]
-      let mensaje=""
-      if(descuento){
-        suma=suma-(suma*descuento)
-        mensaje=`Mesas del evento ${asientos} con un descuento del ${descuento*100}% con el codigo ${this.codigo}`
-      }else{
-        mensaje=`Mesas del evento ${asientos}`
+      error2 = error2.slice(0, -2)
+      let mensajes = true
+      if (error1 !== "" && error2 !== "") {
+        mensajes = false
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto y el número de niños más el de adultos en cada mesa debe ser: ${error2}`,
+        })
       }
-      let response = await this.wompi.generarLink(suma, mensaje, this.evento.nombre);
-      let asientosIds: string[] = []
-      await this.listaAsientos.forEach(async asiento => {
-        asientosIds.push(`${asiento.nombreZona},f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
-        asiento.clienteEstado = "pagando"
-        asiento.estado = "ocupado"
-        await this.firebase.actualizarAsiento(asiento)
-      })
-      response.subscribe(async (res: any) => {
-        await this.firebase.registrarFactura(res.data.id, this.dataUser,this.user, this.id!, asientosIds, this.evento, detalle[0], this.codigo, suma)
-        let link: string = `https://checkout.wompi.co/l/${res.data.id}`
-        window.location.href=link
+      if (error1 !== "" && mensajes) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto`,
+        })
+      }
+      if (error2 !== "" && mensajes) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `El número de niños más el de adultos en cada mesa debe ser: ${error2}`,
+        })
+      }
+      if (pass) {
+
+        this.modalService.hide()
+        let asientos: string = '';
+        let suma = 0
+        this.listaAsientos.forEach((asiento: any) => {
+          let zona = this.evento.zonas.filter((zona: any) => {
+            return zona.nombreZona === asiento.nombreZona
+          })
+          zona = zona[0]
+          if (!zona.persona) {
+            if (zona.nombreZona === "zona B") {
+              zona.persona = 75000
+            }
+            if (zona.nombreZona === "zona A") {
+              zona.persona = 90000
+            }
+          }
+          suma += zona.precioZona + (this.detalle[asiento.label].personas * zona.persona)
+          asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
+        })
+        asientos = asientos.slice(0, -2)
+        let descuento = this.listaCodigos[this.codigo]
+        let mensaje = ""
+        if (descuento) {
+          suma = suma - (suma * descuento)
+          mensaje = `Mesas del evento ${asientos} con un descuento del ${descuento * 100}% con el codigo ${this.codigo}`
+        } else {
+          mensaje = `Mesas del evento ${asientos}`
+        }
+
+        let asientosIds: string[] = []
+        await this.listaAsientos.forEach(async asiento => {
+          asientosIds.push(`${asiento.nombreZona},f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
+          asiento.clienteEstado = "pago"
+          asiento.estado = "ocupado"
+          asiento.clienteUser = this.user
+          await this.firebase.actualizarAsiento(asiento)
+        })
+
+        await this.firebase.registrarFacturaAdmin("pago wpp", this.dataUser, this.user, this.id!, asientosIds, this.evento, detalle[0], this.codigo, suma)
+        window.location.reload()
+      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `El usuario no existe`,
       })
     }
+
 
   }
   string(i: number, j: number) {

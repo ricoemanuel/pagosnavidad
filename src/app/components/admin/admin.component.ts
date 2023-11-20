@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import * as QRCode from 'qrcode-generator';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin',
@@ -13,11 +14,13 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class AdminComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any>
   baseSeleccionada = ""
-  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre', 'personas', 'transaccion', 'fecha'];
+  listaAsientos: any[] = []
+  detalle: any = {}
+  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre', 'personas', 'transaccion', 'fecha', 'acciones'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   spinner!: boolean;
-  conts:any={}
-  nombres:any={}
+  conts: any = {}
+  nombres: any = {}
   constructor(private firebase: FirebaseService,
     private modalService: BsModalService,
   ) {
@@ -27,9 +30,9 @@ export class AdminComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  formatfecha(fecha: string) {
+  formatfecha(fecha: any) {
 
-    const fechaDate = new Date(fecha);
+    const fechaDate = new Date(fecha.seconds * 1000 + fecha.nanoseconds / 1e6);
 
     // Obtener el nombre del día
     const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -44,7 +47,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     const hora = fechaDate.getUTCHours().toString().padStart(2, '0');
     const minutos = fechaDate.getUTCMinutes().toString().padStart(2, '0');
 
-    const formatoDeseado = `${nombreDia}, ${dia}/${mes}/${año} ${hora}:${minutos}`;
+    const formatoDeseado = `${nombreDia}, ${dia}/${mes}/${año}`;
     return formatoDeseado
 
 
@@ -53,7 +56,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> {
     this.spinner = true
     // let asientos = await this.firebase.getAsientoByEstadoString("ocupado")
-    //console.log(asientos)
+    
     //  asientos.forEach(async (asiento:any)=>{
     //    asiento.estado="libre"
     //    asiento.clienteUser="null"
@@ -68,36 +71,38 @@ export class AdminComponent implements OnInit, AfterViewInit {
         this.firebase.getFacturas().subscribe(res => {
           let data = res.filter((factura: any) => {
             if (factura.eventoData) {
-              return factura.eventoData.nombre.split(" ")[0] === "Halloween" && factura.transaccion.data.transaction.status === 'APPROVED'
+              return factura.eventoData.nombre.split(" ")[0] === "Halloween" && (factura.estado === "comprado" || factura.estado === "comprando")
             }
             return false
           })
           this.cont = 0
           data.forEach(async (factura: any) => {
-            let llaves=Object.keys(factura.detalle)
-            let numNiños=0
-            let numAdultos=0
-            llaves.forEach((llave:string)=>{
-              numNiños+=parseInt(factura.detalle[llave].ninos)
-              numAdultos+=parseInt(factura.detalle[llave].adultos)
-            })
-            this.cont += factura.asientos.length
-            if(this.conts[factura.evento]){
-              
-              this.conts[factura.evento].ninos+=numNiños
-              this.conts[factura.evento].adultos+=numAdultos
-            }else{
-              this.nombres[factura.evento]=factura.eventoData.nombre
-              this.conts[factura.evento]={
-                ninos:numNiños,
-                adultos:numAdultos
+            if (factura.ingresados) {
+              let llaves = Object.keys(factura.ingresados)
+              let numNiños = 0
+              let numAdultos = 0
+              llaves.forEach((llave: string) => {
+                numNiños += parseInt(factura.ingresados[llave].ninos)
+                numAdultos += parseInt(factura.ingresados[llave].adultos)
+              })
+              this.cont += factura.asientos.length
+              if (this.conts[factura.evento]) {
+
+                this.conts[factura.evento].ninos += numNiños
+                this.conts[factura.evento].adultos += numAdultos
+              } else {
+                this.nombres[factura.evento] = factura.eventoData.nombre
+                this.conts[factura.evento] = {
+                  ninos: numNiños,
+                  adultos: numAdultos
+                }
               }
             }
+
             // factura.asientos.forEach((mesa:any)=>{
             //   asientosFactura.push(mesa.split(",")[1].split("/")[0])
             // })
           })
-          // console.log(asientosFactura)
           // let Existe: any[] = []
           // asientosFactura.forEach((mesa: string) => {
           //   let existe = asientos.filter((mesaA: any) => {
@@ -164,7 +169,49 @@ export class AdminComponent implements OnInit, AfterViewInit {
     })
     return asistentes
   }
-  toArray(){
+  toArray() {
     return Object.keys(this.nombres)
+  }
+  ventaEdit:any
+  editar(venta: any, template: TemplateRef<any>) {
+    this.ventaEdit = JSON.parse(JSON.stringify(venta));
+    this.detalle = JSON.parse(JSON.stringify(venta.detalle));
+    let claves = Object.keys(venta.detalle);
+    this.listaAsientos = claves.map((clave: string) => ({ label: clave }));
+    this.openModal(template);
+}
+eliminar(venta:any){
+  Swal.fire({
+    title: "Quieres borrar esta venta?",
+    showDenyButton: true,
+    confirmButtonText: "Borrar",
+    denyButtonText: `Cancelar`
+  }).then(async (result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      venta.asientos.forEach(async(asiento:string)=>{
+        let data:any=(await this.firebase.getAsientoByid(asiento.split(",")[1].split("/")[0])).data()
+        data.clienteEstado="null"
+        data.estado="libre"
+        data.clienteUser="null"
+        await this.firebase.actualizarAsiento(data)
+      })
+      venta.estado="borrado"
+      await this.firebase.actualizarFactura(venta,venta.id)
+    }
+  });
+}
+
+
+  async guardar() {
+    this.modalService.hide()
+    this.ventaEdit.detalle=this.detalle
+    await this.firebase.actualizarFactura(this.ventaEdit,this.ventaEdit.id)
+  }
+  cancelar() {
+    this.modalService.hide()
+    this.detalle = {}
+    this.listaAsientos = []
+
   }
 }

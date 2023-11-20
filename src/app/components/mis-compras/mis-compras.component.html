@@ -2,25 +2,27 @@
     <div class="row justify-content-center">
         <div *ngFor="let entrada of data" class="col-md-4">
             <div class="border">
-                <mat-icon style="cursor: pointer;" (click)="generarPDF(entrada.id)">print</mat-icon>
+                <mat-icon *ngIf="entrada.estado==='comprado'" style="cursor: pointer;" (click)="generarPDF(entrada.id)">print</mat-icon>
                 <div #content [id]="entrada.id" class="entrada" *ngIf="entrada.detalle">
                     <p [routerLink]="'/evento/'+entrada.evento" style="cursor: pointer; font-weight: bold;">
                         {{entrada.eventoData?entrada.eventoData.nombre:'Ir al evento'}}</p>
-                    <div class="codigo">
+                    <div class="codigo" *ngIf="entrada.estado==='comprado'">
                         <img [src]="generateQRCodeBase64(entrada.id)" alt="">
                     </div>
                     <mat-icon> monetization_on</mat-icon>
                     <br>
                     {{
-                    ((entrada.transaccion.data.transaction.amount_in_cents)/100).toLocaleString('en-US', {
+                    ((entrada.suma)).toLocaleString('en-US', {
                     style: 'currency', currency: 'USD' })}}
                     <br><br>
                     <mat-icon>person</mat-icon>
                     <br>
-                    {{entrada.transaccion.data.transaction.customer_data.full_name}}
+                    {{entrada.user.nombre}}
                     <br><br>
                     <mat-icon>people</mat-icon>
                     <div class="row justify-content-center" [innerHTML]="iterObject(entrada.detalle)"></div>
+                    <hr>
+                    {{entrada.estado}}
                 </div>
             </div>
         </div>
