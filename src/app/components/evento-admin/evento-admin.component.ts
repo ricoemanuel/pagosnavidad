@@ -29,7 +29,7 @@ export class EventoAdminComponent implements OnInit, OnDestroy, AfterViewInit {
   nombreLocalidadMostrado: boolean = false;
   codigo: string = ""
   @ViewChild('template') template!: TemplateRef<any>;
-  tiempoInactividad = 3000;
+  tiempoInactividad = 300000;
   ultimoTiempoInteraccion: number;
   listaCodigos: any = { "HalloMañanitas": 0.1, "HallowWhatsapp": 0.3 }
 
@@ -111,12 +111,13 @@ export class EventoAdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   dataUser: any
   detalle: any = {}
-  correo: string = ""
+  nombre: string = ""
+  transaccion: string = ""
   valirdarAsientos() {
     this.firebase.getAuthState().subscribe(async res => {
       if (res && this.id) {
         this.user = res.uid
-        if(this.user!=='NNcOSeH29sRCTw7LDqOlthXdg8E3'){
+        if (this.user !== 'NNcOSeH29sRCTw7LDqOlthXdg8E3') {
           await this.router.navigate(['evento', this.id])
         }
         this.asientosReservadosSus = this.firebase.getAsientoRealtimeByUsuarioEstado(res.uid, this.id).subscribe(res => {
@@ -178,101 +179,103 @@ export class EventoAdminComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
   async pagar(template: TemplateRef<any>) {
-    let user: any = await this.firebase.getUsuarioByCorreo(this.correo)
-    if (user.length > 0) {
-      this.user = user[0].id
-      this.dataUser = user[0].data
-      let pass = true
-      let claves = Object.keys(this.detalle)
-      let error1: string = ""
-      let error2: string = ""
-      let detalle = [...[this.detalle]]
-      claves.forEach(clave => {
-        let totalPersonas = 8 + this.detalle[clave].personas
-        if (this.detalle[clave].adultos < 1) {
-          error1 += clave + ", "
-          pass = false
-        }
-        if (!((this.detalle[clave].ninos + this.detalle[clave].adultos) === totalPersonas)) {
-          error2 += `${totalPersonas} en la mesa ${clave}, `
-          pass = false
-        }
-      })
-      error2 = error2.slice(0, -2)
-      let mensajes = true
-      if (error1 !== "" && error2 !== "") {
-        mensajes = false
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto y el número de niños más el de adultos en cada mesa debe ser: ${error2}`,
-        })
-      }
-      if (error1 !== "" && mensajes) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto`,
-        })
-      }
-      if (error2 !== "" && mensajes) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: `El número de niños más el de adultos en cada mesa debe ser: ${error2}`,
-        })
-      }
-      if (pass) {
-
-        this.modalService.hide()
-        let asientos: string = '';
-        let suma = 0
-        this.listaAsientos.forEach((asiento: any) => {
-          let zona = this.evento.zonas.filter((zona: any) => {
-            return zona.nombreZona === asiento.nombreZona
-          })
-          zona = zona[0]
-          if (!zona.persona) {
-            if (zona.nombreZona === "zona B") {
-              zona.persona = 75000
-            }
-            if (zona.nombreZona === "zona A") {
-              zona.persona = 90000
-            }
+    if (this.nombre !== "") {
+      let user: any = await this.firebase.getUsuarioByCorreo('admin@gmail.com')
+      if (user.length > 0) {
+        this.user = user[0].id
+        this.dataUser = user[0].data
+        this.dataUser.nombre = this.nombre
+        let pass = true
+        let claves = Object.keys(this.detalle)
+        let error1: string = ""
+        let error2: string = ""
+        let detalle = [...[this.detalle]]
+        claves.forEach(clave => {
+          let totalPersonas = 8 + this.detalle[clave].personas
+          if (this.detalle[clave].adultos < 1) {
+            error1 += clave + ", "
+            pass = false
           }
-          suma += zona.precioZona + (this.detalle[asiento.label].personas * zona.persona)
-          asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
+          if (!((this.detalle[clave].ninos + this.detalle[clave].adultos) === totalPersonas)) {
+            error2 += `${totalPersonas} en la mesa ${clave}, `
+            pass = false
+          }
         })
-        asientos = asientos.slice(0, -2)
-        let descuento = this.listaCodigos[this.codigo]
-        let mensaje = ""
-        if (descuento) {
-          suma = suma - (suma * descuento)
-          mensaje = `Mesas del evento ${asientos} con un descuento del ${descuento * 100}% con el codigo ${this.codigo}`
-        } else {
-          mensaje = `Mesas del evento ${asientos}`
+        error2 = error2.slice(0, -2)
+        let mensajes = true
+        if (error1 !== "" && error2 !== "") {
+          mensajes = false
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto y el número de niños más el de adultos en cada mesa debe ser: ${error2}`,
+          })
         }
+        if (error1 !== "" && mensajes) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `En la(s) mesa(s) ${error1}Debe de haber al menos 1 adulto`,
+          })
+        }
+        if (error2 !== "" && mensajes) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `El número de niños más el de adultos en cada mesa debe ser: ${error2}`,
+          })
+        }
+        if (pass) {
 
-        let asientosIds: string[] = []
-        await this.listaAsientos.forEach(async asiento => {
-          asientosIds.push(`${asiento.nombreZona},f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
-          asiento.clienteEstado = "pago"
-          asiento.estado = "ocupado"
-          asiento.clienteUser = this.user
-          await this.firebase.actualizarAsiento(asiento)
-        })
+          this.modalService.hide()
+          let asientos: string = '';
+          let suma = 0
+          this.listaAsientos.forEach((asiento: any) => {
+            let zona = this.evento.zonas.filter((zona: any) => {
+              return zona.nombreZona === asiento.nombreZona
+            })
+            zona = zona[0]
+            if (!zona.persona) {
+              if (zona.nombreZona === "zona B") {
+                zona.persona = 75000
+              }
+              if (zona.nombreZona === "zona A") {
+                zona.persona = 90000
+              }
+            }
+            suma += zona.precioZona + (this.detalle[asiento.label].personas * zona.persona)
+            asientos += `${asiento.nombreZona} ${this.evento.labels[asiento.fila]}-${asiento.label}, `
+          })
+          asientos = asientos.slice(0, -2)
+          let descuento = this.listaCodigos[this.codigo]
+          let mensaje = ""
+          if (descuento) {
+            suma = suma - (suma * descuento)
+            mensaje = `Mesas del evento ${asientos} con un descuento del ${descuento * 100}% con el codigo ${this.codigo}`
+          } else {
+            mensaje = `Mesas del evento ${asientos}`
+          }
 
-        let doc:any=await this.firebase.registrarFacturaAdmin("pago wpp", this.dataUser, this.user, this.id!, asientosIds, this.evento, detalle[0], this.codigo, suma)
-        await this.firebase.setEmail(this.user,doc)
+          let asientosIds: string[] = []
+          await this.listaAsientos.forEach(async asiento => {
+            asientosIds.push(`${asiento.nombreZona},f${asiento.fila}c${asiento.columna}-${asiento.evento}/${this.evento.labels[asiento.fila]}-${asiento.label}`)
+            asiento.clienteEstado = "pago"
+            asiento.estado = "ocupado"
+            asiento.clienteUser = this.user
+            await this.firebase.actualizarAsiento(asiento)
+          })
+
+          let doc: any = await this.firebase.registrarFacturaAdmin("pago wpp", this.dataUser, this.user, this.id!, asientosIds, this.evento, detalle[0], this.codigo, suma)
+          await this.firebase.setEmail(this.user, doc)
+        }
       }
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: `El usuario no existe`,
+        text: `Debes ingresar el nombre de la persona`,
       })
     }
-
 
   }
   string(i: number, j: number) {

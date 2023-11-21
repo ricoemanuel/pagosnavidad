@@ -48,10 +48,18 @@
             <div class="row">
                 <div class="col">
 
-                    <label for="correo">Ingresa el correo de la persona.</label>
+                    <label for="correo">Ingresa el nombre de la persona.</label>
                     <mat-form-field>
-                        <mat-label>Correo</mat-label>
-                        <input [(ngModel)]="correo" matInput type="email" id="correo">
+                        <mat-label>Nombre*</mat-label>
+                        <input [(ngModel)]="nombre" matInput type="text" id="correo">
+                    </mat-form-field>
+                </div>
+                <div class="col">
+
+                    <label for="transaccion">Ingresa el numero de la transacción</label>
+                    <mat-form-field>
+                        <mat-label># de transacción</mat-label>
+                        <input [(ngModel)]="transaccion" matInput type="text" id="transaccion">
                     </mat-form-field>
                 </div>
             </div>

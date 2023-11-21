@@ -94,6 +94,7 @@ export class AprobarMesasComponent implements OnInit, AfterViewInit {
          this.data=data
           this.dataSource.data = data
           this.dataSource.paginator = this.paginator;
+          this.validarEntradas()
         })
       }
     })

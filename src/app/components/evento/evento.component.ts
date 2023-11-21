@@ -29,7 +29,7 @@ export class EventoComponent implements OnInit, OnDestroy, AfterViewInit {
   nombreLocalidadMostrado: boolean = false;
   codigo:string=""
   @ViewChild('template') template!: TemplateRef<any>;
-  tiempoInactividad = 3000;
+  tiempoInactividad = 300000;
   ultimoTiempoInteraccion: number;
   listaCodigos:any={"HalloMañanitas":0.1,"HallowWhatsapp":0.3}
 

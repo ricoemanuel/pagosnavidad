@@ -28,7 +28,7 @@ export class MisComprasComponent implements OnInit {
       this.firebase.getCurrentFacturas(user!.uid).subscribe(res => {
         res = res.filter((factura: any) => {
           if (factura.eventoData) {
-            return factura.estado !== 'cancelado'
+            return factura.estado === 'comprado'
           } else {
             return false
           }
