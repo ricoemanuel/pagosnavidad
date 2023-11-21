@@ -59,7 +59,7 @@ export class MisComprasComponent implements OnInit {
             return trans.data.transaction.payment_link_id === entrada.link
           })
           if (transaccion.length > 0) {
-            if (transaccion[0].data.transaction.status !== 'APPROVED') {
+            if (transaccion[0].data.transaction.status === 'APPROVED') {
               entrada.estado = 'comprado'
               entrada.transaccion=transaccion[0].data.transaction
               await this.firebase.actualizarFactura(entrada, entrada.id)
@@ -72,18 +72,18 @@ export class MisComprasComponent implements OnInit {
 
               })
             }
-            // if (transaccion[0].data.transaction.status === 'DECLINED') {
-            //   entrada.estado = 'cancelado'
-            //   await this.firebase.actualizarFactura(entrada, entrada.id)
-            //   await entrada.asientos.forEach(async (asiento: string) => {
-            //     let id = asiento.split(",")[1].split("/")[0]
-            //     let dataAsiento: any = (await this.firebase.getAsientoByid(id)).data()
-            //     dataAsiento.clienteEstado = 'null'
-            //     dataAsiento.clienteUser = 'null'
-            //     dataAsiento.estado = 'libre'
-            //     await this.firebase.actualizarAsiento(dataAsiento)
-            //   })
-            // }
+             if (transaccion[0].data.transaction.status === 'DECLINED') {
+               entrada.estado = 'cancelado'
+               await this.firebase.actualizarFactura(entrada, entrada.id)
+               await entrada.asientos.forEach(async (asiento: string) => {
+                 let id = asiento.split(",")[1].split("/")[0]
+                 let dataAsiento: any = (await this.firebase.getAsientoByid(id)).data()
+                 dataAsiento.clienteEstado = 'null'
+                 dataAsiento.clienteUser = 'null'
+                 dataAsiento.estado = 'libre'
+                 await this.firebase.actualizarAsiento(dataAsiento)
+               })
+             }
           } else {
             let fechaInicio = new Date(entrada.fecha.seconds * 1000 + entrada.fecha.nanoseconds / 1e6);
             let fechaFin = new Date();
