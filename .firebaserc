@@ -1,14 +1,14 @@
 {
   "targets": {
-    "halloweenpagos": {
+    "pagos-navidad": {
       "hosting": {
-        "halloweenpagos": [
-          "halloweenpagos"
+        "pagos-navidad": [
+          "pagos-navidad"
         ]
       }
     }
   },
   "projects": {
-    "default": "halloweenpagos"
+    "default": "pagos-navidad"
   }
 }

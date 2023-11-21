@@ -310,7 +310,7 @@ export class FirebaseService {
     }
     const facturaRef = collection(this.firestore, "facturasNavidad")
     let doc: DocumentReference = await addDoc(facturaRef, obj)
-    //await this.setEmail(uid, doc.id)
+    return doc.id
   }
 
   async valirdarAsientos(id: string, user: string) {
@@ -380,7 +380,7 @@ export class FirebaseService {
       let data = {
         to: [userData.email],
         message: {
-          subject: 'Bienvenido a Halloween encantado',
+          subject: 'Bienvenido a Navidad Mágica.',
           text: 'Estamos contentos de que participes en este mágico evento.',
           html: `<code>
           <!DOCTYPE html>
@@ -400,13 +400,15 @@ export class FirebaseService {
             <p>Presenta este QR en la entrada de tu evento.</p>
             <div style="{display: flex;
               justify-content: center;
-              align-items: center;}">
+              align-items: center;
+            background-color:white;
+          padding:20px;}">
                 <a><img width="200" src="cid:qrCode" alt="Imagen"></a>
             </div>
             <div style="{display: flex;
               justify-content: center;
               align-items: center;}">
-              <button style="background-color: #381346; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;"><a href="https://halloweenpagos.web.app/mis-compras" style="text-decoration: none; color: white;">Mira tus entradas aquí</a></button>
+              <button style="background-color: #381346; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;"><a href="https://pagos-navidad.web.app/mis-compras" style="text-decoration: none; color: white;">Mira tus entradas aquí</a></button>
             </div>
             <div style="{display: flex;
               justify-content: center;

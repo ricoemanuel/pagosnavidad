@@ -45,6 +45,7 @@ import { MainComponent } from './components/main/main.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { VentaFraccionadaComponent } from './components/venta-fraccionada/venta-fraccionada.component';
 import { EventoAdminComponent } from './components/evento-admin/evento-admin.component';
+import { AprobarMesasComponent } from './components/aprobar-mesas/aprobar-mesas.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,6 +58,7 @@ import { EventoAdminComponent } from './components/evento-admin/evento-admin.com
     AdminComponent,
     VentaFraccionadaComponent,
     EventoAdminComponent,
+    AprobarMesasComponent,
   ],
   imports: [
     BrowserModule,

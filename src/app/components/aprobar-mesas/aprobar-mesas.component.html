@@ -1,0 +1,158 @@
+<br>
+<div class="buscador">
+    <mat-form-field appearance="outline">
+        <mat-label>Escriba su búsqueda</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+</div>
+<div class="centrar">
+    <button class="btn btn-success" (click)="exporter.exportTable('xlsx')">Exportar</button>
+</div>
+<div class="mat-elevation-z8 overflow-auto col-md-11 datatable">
+    <table matTableExporter #exporter="matTableExporter" mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="QR">
+            <mat-header-cell *matHeaderCellDef> Código qr </mat-header-cell>
+            <mat-cell *matCellDef="let elemento">
+                <div class="qr">
+                    <p (click)="openModal(template)">{{elemento.id}}</p>
+                </div>
+
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Evento">
+            <mat-header-cell *matHeaderCellDef> Evento </mat-header-cell>
+            <mat-cell *matCellDef="let elemento">
+                <p style="cursor: pointer;"> {{
+                    elemento.eventoData?elemento.eventoData.nombre:'Ir al evento'
+                    }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Valor">
+            <mat-header-cell *matHeaderCellDef> Valor </mat-header-cell>
+            <mat-cell *matCellDef="let elemento"> {{
+                ((elemento.suma)).toLocaleString('en-US', {
+                style: 'currency', currency: 'USD' })}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Nombre">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let elemento"> {{
+                elemento.user.nombre}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="personas">
+            <mat-header-cell *matHeaderCellDef>Asistentes</mat-header-cell>
+            <mat-cell *matCellDef="let elemento">
+                <p [innerHTML]="iterObject(elemento.detalle)"></p>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="transaccion">
+            <mat-header-cell *matHeaderCellDef>Número de transacción</mat-header-cell>
+            <mat-cell *matCellDef="let elemento">
+                {{elemento.transaccion?elemento.transaccion.id:''}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="fecha">
+            <mat-header-cell *matHeaderCellDef>Fecha de compra</mat-header-cell>
+            <mat-cell *matCellDef="let elemento">
+                {{formatfecha(elemento.fecha)}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let elemento">
+                <mat-icon style="cursor: pointer;" (click)="editar(elemento,template)">edit</mat-icon>
+                <mat-icon style="cursor: pointer;" (click)="eliminar(elemento)">delete</mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5,10,25, 100,250]" aria-label="Select page of users"></mat-paginator>
+</div>
+<div class="centrar">
+    <table class="table table-striped tabla-ventas">
+        <thead>
+            <tr>
+                <th scope="col">Función</th>
+                <th scope="col">Niños</th>
+                <th scope="col">Adultos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let id of toArray()">
+                <th scope="row">{{nombres[id]}}</th>
+                <td>{{conts[id]["ninos"]}}</td>
+                <td>{{conts[id]["adultos"]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ng-template #template>
+    
+    <div class="detalle">
+        <h3 style="text-align: center;">Editar Venta</h3>
+        <div class="row">
+            <div class="col">
+
+                <label for="suma">Si vas a cambiar el número de personas, asegúrate de cambiar el valor.</label>
+                <mat-form-field>
+                    <mat-label>Valor</mat-label>
+                    <input [(ngModel)]="ventaEdit.suma" matInput type="number" min="0"
+                        max="4" id="suma">
+                </mat-form-field>
+            </div>
+        </div>
+        <ng-container *ngFor="let mesa of listaAsientos">
+            <div class="mesa">
+
+                <div class="row">
+                    <div class="col title">Mesa {{mesa.label}}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+
+                        <label for="personas">Adicionales</label>
+                        <mat-form-field>
+                            <mat-label>Número de personas adicionales</mat-label>
+                            <input [(ngModel)]="detalle[mesa.label]['personas']" matInput type="number" min="0"
+                                max="4" id="personas">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="ninos">Por favor, indica cuántos niños asistirán.</label>
+                        <mat-form-field>
+                            <mat-label>Número de niños</mat-label>
+                            <input [(ngModel)]="detalle[mesa.label]['ninos']" matInput type="number" min="0"
+                                max="11" id="ninos">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="adultos">Por favor, indica cuántos adultos asistirán.</label>
+                        <mat-form-field>
+                            <mat-label>Número de adultos</mat-label>
+                            <input id="adultos" [(ngModel)]="detalle[mesa.label]['adultos']" matInput type="number"
+                                min="1" max="12">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+            </div>
+
+        </ng-container>
+        
+        <div class="row">
+            <div class="col centrar"><button class="btn btn-success" (click)="guardar()">Pagar</button></div>
+            <div class="col centrar"><button class="btn btn-danger" (click)="cancelar()">Cancelar</button></div>
+        </div> 
+    </div>
+</ng-template>

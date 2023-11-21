@@ -6,7 +6,7 @@
         <mat-menu #menu="matMenu">
           <button *ngIf="logged" style="cursor: pointer;" routerLink="/mis-compras" mat-menu-item>Mis boletas</button>
           <button *ngIf="logged && esAdmin" style="cursor: pointer;" routerLink="/ventas" mat-menu-item>Ventas</button>
-          <button *ngIf="logged && esAdmin" style="cursor: pointer;" routerLink="/evento-admin/nfJxrK37OMGO1rPK1lNZ" mat-menu-item>Venta directa</button>
+          <button *ngIf="logged && esAdmin" style="cursor: pointer;" routerLink="/evento-admin/7OwNindMfH6a0nSTSuUh" mat-menu-item>Venta directa</button>
           <button *ngIf="!logged" style="cursor: pointer;" (click)="redirect()" mat-menu-item>Iniciar sesión</button>
           <button *ngIf="logged" style="cursor: pointer;" (click)="logout()" mat-menu-item>Cerrar sesión</button>
         </mat-menu>

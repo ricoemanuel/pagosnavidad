@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
     this.router.navigate(['main'])
   }
   redirectW(){
-    const urlWhatsApp = 'https://api.whatsapp.com/send?phone=573177159222';
+    const urlWhatsApp = 'https://api.whatsapp.com/send?phone=573043822213';
     window.open(urlWhatsApp, '_blank');
   
   }

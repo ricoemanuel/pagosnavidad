@@ -6,6 +6,7 @@ import { MisComprasComponent } from './components/mis-compras/mis-compras.compon
 import { MainComponent } from './components/main/main.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { EventoAdminComponent } from './components/evento-admin/evento-admin.component';
+import { AprobarMesasComponent } from './components/aprobar-mesas/aprobar-mesas.component';
 
 
 //Components
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path:'mis-compras',component:MisComprasComponent},
   {path:'main',component:MainComponent},
   {path:'ventas',component:AdminComponent},
+  {path:'aprobador',component:AprobarMesasComponent},
   {path:'evento-admin/:id',component:EventoAdminComponent},
   {
     path: '**', // El wildcard '**' atrapa cualquier ruta que no coincida con las rutas anteriores

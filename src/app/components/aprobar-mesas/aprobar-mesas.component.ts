@@ -7,11 +7,11 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  selector: 'app-aprobar-mesas',
+  templateUrl: './aprobar-mesas.component.html',
+  styleUrls: ['./aprobar-mesas.component.scss']
 })
-export class AdminComponent implements OnInit, AfterViewInit {
+export class AprobarMesasComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any>
   baseSeleccionada = ""
   listaAsientos: any[] = []
@@ -55,23 +55,14 @@ export class AdminComponent implements OnInit, AfterViewInit {
   cont: number = 0
   async ngOnInit(): Promise<void> {
     this.spinner = true
-    // let asientos = await this.firebase.getAsientoByEstadoString("ocupado")
-    
-    //  asientos.forEach(async (asiento:any)=>{
-    //    asiento.estado="libre"
-    //    asiento.clienteUser="null"
-    //    if(asiento.clienteUSer){
-    //      delete asiento.clienteUSer
-    //    }
-    //    asiento.clienteEstado="null"
-    //  })
-    let asientosFactura: string[] = []
+   
+   
     this.firebase.getAuthState().subscribe(user => {
       if (user!.uid === "NNcOSeH29sRCTw7LDqOlthXdg8E3") {
         this.firebase.getFacturas().subscribe(res => {
           let data = res.filter((factura: any) => {
             if (factura.eventoData) {
-              return factura.eventoData.nombre.split(" ")[0] === "Navidad" && (factura.estado === "comprado")
+              return factura.eventoData.nombre.split(" ")[0] === "Navidad" && (factura.estado === "comprando")
             }
             return false
           })
@@ -99,26 +90,80 @@ export class AdminComponent implements OnInit, AfterViewInit {
               }
             }
 
-            // factura.asientos.forEach((mesa:any)=>{
-            //   asientosFactura.push(mesa.split(",")[1].split("/")[0])
-            // })
           })
-          // let Existe: any[] = []
-          // asientosFactura.forEach((mesa: string) => {
-          //   let existe = asientos.filter((mesaA: any) => {
-          //     return mesaA.id === mesa
-          //   })
-          //   Existe.push(existe[0])
-          // })
-
-          // let diferencia = asientos.filter(item => !Existe.includes(item));
-          // console.log(diferencia)
+         this.data=data
           this.dataSource.data = data
           this.dataSource.paginator = this.paginator;
         })
       }
     })
 
+  }
+  data:any
+  validarEntradas() {
+    console.log("entró")
+    this.data.forEach(async (entrada: any) => {
+      if (entrada.estado === 'comprando') {
+        this.firebase.transactions().subscribe(async res => {
+          let iterable = Object.entries(res);
+          let array: any[] = [];
+
+          iterable.forEach(([key, transaccion]: any) => {
+            transaccion.key = key;
+            array.push(transaccion);
+          });
+          let transaccion = array.filter((trans: any) => {
+            return trans.data.transaction.payment_link_id === entrada.link
+          })
+          if (transaccion.length > 0) {
+            if (transaccion[0].data.transaction.status === 'APPROVED') {
+              entrada.estado = 'comprado'
+              entrada.transaccion=transaccion[0].data.transaction
+              await this.firebase.actualizarFactura(entrada, entrada.id)
+              await entrada.asientos.forEach(async (asiento: string) => {
+                let id = asiento.split(",")[1].split("/")[0]
+                let dataAsiento: any = (await this.firebase.getAsientoByid(id)).data()
+                dataAsiento.clienteEstado = 'pago'
+                
+                await this.firebase.actualizarAsiento(dataAsiento)
+
+              })
+            }
+             if (transaccion[0].data.transaction.status === 'DECLINED') {
+               entrada.estado = 'cancelado'
+               await this.firebase.actualizarFactura(entrada, entrada.id)
+               await entrada.asientos.forEach(async (asiento: string) => {
+                 let id = asiento.split(",")[1].split("/")[0]
+                 let dataAsiento: any = (await this.firebase.getAsientoByid(id)).data()
+                 dataAsiento.clienteEstado = 'null'
+                 dataAsiento.clienteUser = 'null'
+                 dataAsiento.estado = 'libre'
+                 await this.firebase.actualizarAsiento(dataAsiento)
+               })
+             }
+          } else {
+            let fechaInicio = new Date(entrada.fecha.seconds * 1000 + entrada.fecha.nanoseconds / 1e6);
+            let fechaFin = new Date();
+            let diferencia = ((fechaFin.getTime() - fechaInicio.getTime()) / 1000) / 60;
+            if (diferencia > 30) {
+              entrada.estado = 'cancelado'
+              await this.firebase.actualizarFactura(entrada, entrada.id)
+              await entrada.asientos.forEach(async (asiento: string) => {
+                let id = asiento.split(",")[1].split("/")[0]
+                let dataAsiento: any = (await this.firebase.getAsientoByid(id)).data()
+                dataAsiento.clienteEstado = 'null'
+                dataAsiento.clienteUser = 'null'
+                dataAsiento.estado = 'libre'
+                await this.firebase.actualizarAsiento(dataAsiento)
+
+              })
+            }
+          }
+
+        });
+
+      }
+    })
   }
   generateQRCodeBase64(qrData: string) {
     const qr = QRCode(0, 'L');
