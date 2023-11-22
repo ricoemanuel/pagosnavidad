@@ -294,7 +294,7 @@ export class FirebaseService {
     let doc: DocumentReference = await addDoc(facturaRef, obj)
     //await this.setEmail(uid, doc.id)
   }
-  async registrarFacturaAdmin(link: any, user: any,uid:string, evento: string, asientos: string[], eventoData: any, detalle: any, codigo:string, suma:number) {
+  async registrarFacturaAdmin(transaccion:any,link: any, user: any,uid:string, evento: string, asientos: string[], eventoData: any, detalle: any, codigo:string, suma:number) {
     let obj: any = {
       link,
       user,
@@ -304,6 +304,7 @@ export class FirebaseService {
       eventoData,
       detalle,
       codigo,
+      transaccion,
       fecha:new Date(),
       estado:'comprado',
       suma

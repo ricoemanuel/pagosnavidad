@@ -264,8 +264,8 @@ export class EventoAdminComponent implements OnInit, OnDestroy, AfterViewInit {
             asiento.clienteUser = this.user
             await this.firebase.actualizarAsiento(asiento)
           })
-
-          let doc: any = await this.firebase.registrarFacturaAdmin("pago wpp", this.dataUser, this.user, this.id!, asientosIds, this.evento, detalle[0], this.codigo, suma)
+          let transaccion={id:this.transaccion}
+          let doc: any = await this.firebase.registrarFacturaAdmin(transaccion,"pago wpp", this.dataUser, this.user, this.id!, asientosIds, this.evento, detalle[0], this.codigo, suma)
           await this.firebase.setEmail(this.user, doc)
         }
       }
