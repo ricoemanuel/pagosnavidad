@@ -94,7 +94,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
           data=data.sort((a:any, b:any) => {
             const fechaA = new Date(a.fecha.seconds * 1000 + a.fecha.nanoseconds / 1e6);
             const fechaB = new Date(b.fecha.seconds * 1000 + b.fecha.nanoseconds / 1e6);
-            return fechaA.getTime() - fechaB.getTime();
+            return fechaB.getTime()-fechaA.getTime();
           });
           this.dataSource.data = data
           this.dataSource.paginator = this.paginator;
