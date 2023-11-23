@@ -16,7 +16,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   baseSeleccionada = ""
   listaAsientos: any[] = []
   detalle: any = {}
-  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre', 'personas', 'transaccion', 'fecha', 'acciones'];
+  displayedColumns: string[] = ['QR', 'Evento', 'Valor', 'Nombre','correo','celular', 'personas', 'transaccion', 'fecha', 'acciones'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   spinner!: boolean;
   conts: any = {}
@@ -52,20 +52,10 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
 
   }
+  transaccion:string=''
   cont: number = 0
   async ngOnInit(): Promise<void> {
     this.spinner = true
-    // let asientos = await this.firebase.getAsientoByEstadoString("ocupado")
-    
-    //  asientos.forEach(async (asiento:any)=>{
-    //    asiento.estado="libre"
-    //    asiento.clienteUser="null"
-    //    if(asiento.clienteUSer){
-    //      delete asiento.clienteUSer
-    //    }
-    //    asiento.clienteEstado="null"
-    //  })
-    let asientosFactura: string[] = []
     this.firebase.getAuthState().subscribe(user => {
       if (user!.uid === "NNcOSeH29sRCTw7LDqOlthXdg8E3") {
         this.firebase.getFacturas().subscribe(res => {
@@ -99,20 +89,13 @@ export class AdminComponent implements OnInit, AfterViewInit {
               }
             }
 
-            // factura.asientos.forEach((mesa:any)=>{
-            //   asientosFactura.push(mesa.split(",")[1].split("/")[0])
-            // })
+          
           })
-          // let Existe: any[] = []
-          // asientosFactura.forEach((mesa: string) => {
-          //   let existe = asientos.filter((mesaA: any) => {
-          //     return mesaA.id === mesa
-          //   })
-          //   Existe.push(existe[0])
-          // })
-
-          // let diferencia = asientos.filter(item => !Existe.includes(item));
-          // console.log(diferencia)
+          data=data.sort((a:any, b:any) => {
+            const fechaA = new Date(a.fecha.seconds * 1000 + a.fecha.nanoseconds / 1e6);
+            const fechaB = new Date(b.fecha.seconds * 1000 + b.fecha.nanoseconds / 1e6);
+            return fechaA.getTime() - fechaB.getTime();
+          });
           this.dataSource.data = data
           this.dataSource.paginator = this.paginator;
         })
@@ -206,10 +189,14 @@ eliminar(venta:any){
   async guardar() {
     this.modalService.hide()
     this.ventaEdit.detalle=this.detalle
+    if(!this.ventaEdit.transaccion){
+      this.ventaEdit.transaccion={id:this.transaccion}
+    }
+    this.transaccion=''
     await this.firebase.actualizarFactura(this.ventaEdit,this.ventaEdit.id)
   }
-  cancelar() {
-    this.modalService.hide()
+  async cancelar() {
+    await this.modalService.hide()
     this.detalle = {}
     this.listaAsientos = []
 

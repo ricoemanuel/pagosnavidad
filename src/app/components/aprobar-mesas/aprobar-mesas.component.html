@@ -76,24 +76,6 @@
 
     <mat-paginator [pageSizeOptions]="[5,10,25, 100,250]" aria-label="Select page of users"></mat-paginator>
 </div>
-<div class="centrar">
-    <table class="table table-striped tabla-ventas">
-        <thead>
-            <tr>
-                <th scope="col">Función</th>
-                <th scope="col">Niños</th>
-                <th scope="col">Adultos</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let id of toArray()">
-                <th scope="row">{{nombres[id]}}</th>
-                <td>{{conts[id]["ninos"]}}</td>
-                <td>{{conts[id]["adultos"]}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 <ng-template #template>
     
     <div class="detalle">

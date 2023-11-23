@@ -46,6 +46,18 @@
                 elemento.user.nombre}}
             </mat-cell>
         </ng-container>
+        <ng-container matColumnDef="correo">
+            <mat-header-cell *matHeaderCellDef> Correo </mat-header-cell>
+            <mat-cell *matCellDef="let elemento"> {{
+                elemento.user.email}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="celular">
+            <mat-header-cell *matHeaderCellDef> Celular </mat-header-cell>
+            <mat-cell *matCellDef="let elemento"> {{
+                elemento.user.telefono}}
+            </mat-cell>
+        </ng-container>
         <ng-container matColumnDef="personas">
             <mat-header-cell *matHeaderCellDef>Asistentes</mat-header-cell>
             <mat-cell *matCellDef="let elemento">
@@ -104,6 +116,29 @@
         <div class="row">
             <div class="col">
 
+                <label for="correo">Ingresa el nombre de la persona.</label>
+                <mat-form-field>
+                    <mat-label>Nombre*</mat-label>
+                    <input [(ngModel)]="ventaEdit.user.nombre" matInput type="text" id="correo">
+                </mat-form-field>
+            </div>
+            <div class="col">
+
+                <label for="transaccion">Ingresa el numero de la transacción</label>
+                <mat-form-field>
+                    <mat-label># de transacción</mat-label>
+                    <ng-container *ngIf="ventaEdit.transaccion">
+                        <input [(ngModel)]="ventaEdit.transaccion.id" matInput type="text" id="transaccion">
+                    </ng-container>
+                    <ng-container *ngIf="!ventaEdit.transaccion">
+                        <input [(ngModel)]="transaccion" matInput type="text" id="transaccion">
+                    </ng-container>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+
                 <label for="suma">Si vas a cambiar el número de personas, asegúrate de cambiar el valor.</label>
                 <mat-form-field>
                     <mat-label>Valor</mat-label>
@@ -154,7 +189,7 @@
         </ng-container>
         
         <div class="row">
-            <div class="col centrar"><button class="btn btn-success" (click)="guardar()">Pagar</button></div>
+            <div class="col centrar"><button class="btn btn-success" (click)="guardar()">Guardar</button></div>
             <div class="col centrar"><button class="btn btn-danger" (click)="cancelar()">Cancelar</button></div>
         </div> 
     </div>
