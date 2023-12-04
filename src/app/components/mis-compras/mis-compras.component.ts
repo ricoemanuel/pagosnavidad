@@ -122,7 +122,7 @@ export class MisComprasComponent implements OnInit {
         const pdf = new jsPDF('p', 'mm', [pdfWidth, pdfHeight]);
         const imgData = canvas.toDataURL('image/png');
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`halloween-${id}`);
+        pdf.save(`Navidad mágica-${id}`);
       });
     } else {
       console.error('No se encontró el elemento con el ID especificado.');
